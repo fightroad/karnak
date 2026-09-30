@@ -43,7 +43,8 @@ public class NodeActivityDashboard extends VerticalLayout {
 		this.filterSupplier = filterSupplier;
 
 		cards.setWidthFull();
-		cards.getStyle().set("flex-wrap", "wrap");
+		cards.setPadding(false);
+		cards.getStyle().set("flex-wrap", "nowrap");
 
 		grid.addColumn(NodeActivityModel::forwardAet).setHeader("转发 AE Title").setSortable(true).setFlexGrow(20);
 		grid.addColumn(NodeActivityModel::studies).setHeader("检查").setSortable(true);
@@ -97,9 +98,9 @@ public class NodeActivityDashboard extends VerticalLayout {
 		card.getStyle()
 			.set("display", "flex")
 			.set("flex-direction", "column")
-			.set("min-width", "120px")
-			.set("padding", "var(--vaadin-gap-m)")
-			.set("margin", "var(--vaadin-gap-xs)")
+			.set("flex", "1 1 0")
+			.set("min-width", "0")
+			.set("padding", "var(--vaadin-gap-s) var(--vaadin-gap-m)")
 			.set("border", "1px solid color-mix(in srgb, var(--vaadin-text-color) 10%, transparent)")
 			.set("border-radius", "var(--vaadin-radius-l)");
 		return card;
