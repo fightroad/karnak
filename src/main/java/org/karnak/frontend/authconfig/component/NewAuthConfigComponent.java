@@ -36,13 +36,13 @@ public class NewAuthConfigComponent extends HorizontalLayout {
 
 	public NewAuthConfigComponent() {
 		newNameField = new TextField();
-		newNameField.setLabel("Identifier");
-		newNameField.setPlaceholder("Enter an identifier");
+		newNameField.setLabel("标识符");
+		newNameField.setPlaceholder("请输入标识符");
 		newNameField.setWidthFull();
 
-		dialog = new NewItemDialog("New authentication config", "Add", newNameField);
+		dialog = new NewItemDialog("新建认证配置", "添加", newNameField).compact();
 
-		buttonNewAuthConfig = ButtonFactory.createAddButton("New authentication config");
+		buttonNewAuthConfig = ButtonFactory.createAddButton("新建认证配置");
 		buttonNewAuthConfig.addClickListener(click -> openDialog());
 
 		setPadding(false);

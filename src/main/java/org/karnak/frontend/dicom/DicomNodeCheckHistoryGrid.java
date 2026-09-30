@@ -51,7 +51,7 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 		setItemDetailsRenderer(createItemDetailsRenderer());
 
 		// Empty grid case
-		setEmptyStateText("No previous checks");
+		setEmptyStateText("无历史检查记录");
 
 		// Selection mode
 		setSelectionMode(SelectionMode.NONE);
@@ -63,16 +63,16 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 	}
 
 	private void addColumns() {
-		addColumn(DicomNodeCheckHistoryGrid::formatCheckedAt).setHeader("Checked At")
+		addColumn(DicomNodeCheckHistoryGrid::formatCheckedAt).setHeader("检查时间")
 			.setAutoWidth(true)
 			.setFlexGrow(0)
 			.setSortable(true);
-		addColumn(createDicomNodeRenderer()).setHeader("Dicom Node");
+		addColumn(createDicomNodeRenderer()).setHeader("DICOM 节点");
 		addColumn(DicomNodeCheckHistory::getCallingAeTitle).setHeader("Calling AE Title").setAutoWidth(true);
-		addColumn(createEchoStatusRenderer()).setHeader("Dicom Echo");
-		addColumn(createConnectionRenderer()).setHeader("Connection Time (ms)");
-		addColumn(createExecutionRenderer()).setHeader("Execution Time (ms)");
-		addColumn(createNetworkStatusRenderer()).setHeader("Check Network");
+		addColumn(createEchoStatusRenderer()).setHeader("DICOM Echo");
+		addColumn(createConnectionRenderer()).setHeader("连接时间 (ms)");
+		addColumn(createExecutionRenderer()).setHeader("执行时间 (ms)");
+		addColumn(createNetworkStatusRenderer()).setHeader("网络检查");
 	}
 
 	private static String formatCheckedAt(DicomNodeCheckHistory item) {
@@ -120,7 +120,7 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 
 	private static void initBadge(Badge badge, boolean isSuccessful) {
 		badge.addThemeVariants(isSuccessful ? BadgeVariant.SUCCESS : BadgeVariant.ERROR);
-		badge.setText(isSuccessful ? "Success" : "Error");
+		badge.setText(isSuccessful ? "成功" : "失败");
 	}
 
 	private static ComponentRenderer<Div, DicomNodeCheckHistory> createConnectionRenderer() {
@@ -166,23 +166,23 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 	}
 
 	private static VerticalLayout createDicomStatusLayout(DicomNodeCheckHistory item) {
-		VerticalLayout layout = detailsSection("DICOM Status");
+		VerticalLayout layout = detailsSection("DICOM 状态");
 
 		UnorderedList unorderedList = new UnorderedList();
 
 		if (item.getEchoErrorMessage() != null) {
-			unorderedList.add(new ListItem("Unexpected error: " + item.getEchoErrorMessage()));
+			unorderedList.add(new ListItem("意外错误：" + item.getEchoErrorMessage()));
 		}
 		else if (item.getEchoRejectionReason() != null) {
-			unorderedList.add(new ListItem("Association rejected: " + item.getEchoRejectionReason()));
+			unorderedList.add(new ListItem("关联被拒绝：" + item.getEchoRejectionReason()));
 		}
 		else if (item.getEchoVerificationUnsupportedMessage() != null) {
 			unorderedList.add(new ListItem(item.getEchoVerificationUnsupportedMessage()));
 			addPeerIdentity(unorderedList, item);
 		}
 		else {
-			addIfPresent(unorderedList, "Status code: ", item.getEchoStatusHex());
-			addIfPresent(unorderedList, "Status message: ", item.getEchoStatusMessage());
+			addIfPresent(unorderedList, "状态码：", item.getEchoStatusHex());
+			addIfPresent(unorderedList, "状态消息：", item.getEchoStatusMessage());
 			addPeerIdentity(unorderedList, item);
 		}
 
@@ -192,8 +192,8 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 	}
 
 	private static void addPeerIdentity(UnorderedList list, DicomNodeCheckHistory item) {
-		addIfPresent(list, "Peer implementation: ", item.getRemoteImplVersionName());
-		addIfPresent(list, "Peer class UID: ", item.getRemoteImplClassUid());
+		addIfPresent(list, "对端实现：", item.getRemoteImplVersionName());
+		addIfPresent(list, "对端类 UID：", item.getRemoteImplClassUid());
 	}
 
 	private static void addIfPresent(UnorderedList list, String label, String value) {
@@ -203,7 +203,7 @@ public class DicomNodeCheckHistoryGrid extends Grid<DicomNodeCheckHistory> {
 	}
 
 	private static VerticalLayout createNetworkStatusLayout(DicomNodeCheckHistory item) {
-		VerticalLayout layout = detailsSection("Network Status");
+		VerticalLayout layout = detailsSection("网络状态");
 
 		UnorderedList unorderedList = new UnorderedList();
 		addIfPresent(unorderedList, "", item.getNetworkHostnameMessage());

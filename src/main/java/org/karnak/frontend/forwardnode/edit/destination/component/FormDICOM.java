@@ -92,15 +92,17 @@ public class FormDICOM extends VerticalLayout {
 		transcodeOnlyUncompressedComponent.init(this.binder);
 
 		setSizeFull();
+		setPadding(false);
+		setSpacing(true);
 		buttonSaveDeleteCancel.getStyle().set("padding-bottom", "var(--vaadin-gap-l)");
 
-		aeTitle = new TextField("AETitle");
-		description = new TextField("Description");
-		hostname = new TextField("Hostname");
-		port = new TextField("Port");
-		concurrentConnections = new TextField("Concurrent connections");
-		useAETitleCheckbox = new Checkbox("Use AETitle destination");
-		activate = new Checkbox("Enable destination");
+		aeTitle = new TextField("AE Title");
+		description = new TextField("描述");
+		hostname = new TextField("主机名");
+		port = new TextField("端口");
+		concurrentConnections = new TextField("并发连接数");
+		useAETitleCheckbox = new Checkbox("使用目的地 AE Title");
+		activate = new Checkbox("启用目的地");
 
 		// Define layout
 		VerticalLayout destinationLayout = new VerticalLayout(
@@ -111,11 +113,8 @@ public class FormDICOM extends VerticalLayout {
 		VerticalLayout useaetdestLayout = new VerticalLayout(new HorizontalLayout(useAETitleCheckbox));
 		VerticalLayout activateLayout = new VerticalLayout(activate);
 
-		// Set padding
-		destinationLayout.setPadding(true);
-		transferLayout.setPadding(true);
-		useaetdestLayout.setPadding(true);
-		activateLayout.setPadding(true);
+		// Compact card insets (was default VerticalLayout padding)
+		compactCardPadding(destinationLayout, transferLayout, useaetdestLayout, activateLayout);
 
 		// Add components
 		add(UIS.setWidthFull(new BoxShadowComponent(destinationLayout)),
@@ -168,6 +167,13 @@ public class FormDICOM extends VerticalLayout {
 		return Boolean.TRUE.equals(conformanceReportComponent.getVirtualDestination().getValue());
 	}
 
+	private static void compactCardPadding(VerticalLayout... layouts) {
+		for (VerticalLayout layout : layouts) {
+			layout.setPadding(false);
+			layout.getStyle().set("padding", "0.5rem 0.75rem");
+		}
+	}
+
 	private void setElements() {
 		aeTitle.setWidth("30%");
 
@@ -182,12 +188,11 @@ public class FormDICOM extends VerticalLayout {
 		concurrentConnections.setWidth("30%");
 		concurrentConnections.addThemeVariants(TextFieldVariant.ALIGN_RIGHT);
 		UIS.setTooltip(concurrentConnections,
-				"Number of parallel DICOM associations to this destination (1 = single connection). "
-						+ "Increase to speed up heavy multi-source forwarding, but keep it within the "
-						+ "destination PACS's concurrent-association limit.");
+				"与此目的地建立的并行 DICOM 关联数（1 = 单连接）。"
+						+ "多源转发负载较高时可增大此值，但请勿超过目的地 PACS 的并发关联上限。");
 
 		UIS.setTooltip(useAETitleCheckbox,
-				"if \"true\" then use the destination AETitle as the calling AETitle instead of the Forward Node AETitle");
+				"若启用，则使用目的地 AE Title 作为 Calling AE Title，而非转发节点 AE Title");
 	}
 
 	private void setBinder() {
@@ -195,26 +200,26 @@ public class FormDICOM extends VerticalLayout {
 		// are
 		// not mandatory: every delivery validator is bypassed while "virtual" is checked.
 		binder.forField(aeTitle)
-			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "AETitle is mandatory")
-			.withValidator(value -> isVirtual() || value.length() <= 16, "AETitle has more than 16 characters")
-			.withValidator(value -> isVirtual() || UIS.containsNoWhitespace(value), "AETitle contains white spaces")
+			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "AE Title 为必填项")
+			.withValidator(value -> isVirtual() || value.length() <= 16, "AE Title 超过 16 个字符")
+			.withValidator(value -> isVirtual() || UIS.containsNoWhitespace(value), "AE Title 包含空格")
 			.bind(DestinationEntity::getAeTitle, DestinationEntity::setAeTitle);
 
 		binder.forField(description).bind(DestinationEntity::getDescription, DestinationEntity::setDescription);
 		binder.forField(hostname)
-			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "Hostname is mandatory")
+			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "主机名为必填项")
 			.bind(DestinationEntity::getHostname, DestinationEntity::setHostname);
 		binder.forField(port)
 			.withConverter(new HStringToIntegerConverter())
-			.withValidator(value -> isVirtual() || Objects.nonNull(value), "Port is mandatory")
-			.withValidator(value -> isVirtual() || (1 <= value && value <= 65535), "Port should be between 1 and 65535")
+			.withValidator(value -> isVirtual() || Objects.nonNull(value), "端口为必填项")
+			.withValidator(value -> isVirtual() || (1 <= value && value <= 65535), "端口应在 1 至 65535 之间")
 			.bind(DestinationEntity::getPort, DestinationEntity::setPort);
 
 		binder.forField(concurrentConnections)
 			.withConverter(new HStringToIntegerConverter())
-			.withValidator(value -> isVirtual() || Objects.nonNull(value), "Concurrent connections is mandatory")
+			.withValidator(value -> isVirtual() || Objects.nonNull(value), "并发连接数为必填项")
 			.withValidator(value -> isVirtual() || (1 <= value && value <= 50),
-					"Concurrent connections should be between 1 and 50")
+					"并发连接数应在 1 至 50 之间")
 			.bind(DestinationEntity::getConcurrentConnections, DestinationEntity::setConcurrentConnections);
 
 		binder.forField(useAETitleCheckbox).bind(DestinationEntity::getUseaetdest, DestinationEntity::setUseaetdest);

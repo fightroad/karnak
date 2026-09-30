@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.karnak.backend.data.entity.DestinationEntity;
 import org.karnak.backend.data.repo.DestinationRepo;
+import org.karnak.backend.util.DicomNodeUtil;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,7 +38,7 @@ class GatewayDicomNodeSourceTest {
 
 	@Test
 	void group_name_is_the_gateway_destinations_label() {
-		assertEquals("Gateway destinations", gatewaySource.getGroupName());
+		assertEquals(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME, gatewaySource.getGroupName());
 	}
 
 	@Test

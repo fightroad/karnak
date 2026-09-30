@@ -16,9 +16,9 @@ import org.weasis.core.util.annotations.Generated;
 @Generated()
 public class TabSourcesDestination extends Tabs {
 
-	public String LABEL_SOURCES = "Sources";
+	public String LABEL_SOURCES = "源节点";
 
-	public String LABEL_DESTINATIONS = "Destinations";
+	public String LABEL_DESTINATIONS = "目的地";
 
 	public TabSourcesDestination() {
 		Tab sourcesTab = new Tab(LABEL_SOURCES);

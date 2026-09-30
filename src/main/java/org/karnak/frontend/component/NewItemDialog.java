@@ -55,9 +55,23 @@ public class NewItemDialog extends Dialog {
 		// Confirm on Enter, but only while this popup is open.
 		confirm.addClickShortcut(Key.ENTER).listenOn(this);
 
-		Button cancel = new Button("Cancel", event -> close());
+		Button cancel = new Button("取消", event -> close());
 
 		getFooter().add(cancel, confirm);
+	}
+
+	/** Single-field create dialogs: fits one labeled input without a scrollbar. */
+	public NewItemDialog compact() {
+		setWidth("360px");
+		setHeight("195px");
+		return this;
+	}
+
+	/** Multi-field create dialogs (e.g. profile name/version). */
+	public NewItemDialog formSized() {
+		setWidth("420px");
+		setHeight("360px");
+		return this;
 	}
 
 	/**

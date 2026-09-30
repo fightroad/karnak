@@ -51,14 +51,14 @@ public class DicomNodeEditorDialog extends Dialog {
 	public DicomNodeEditorDialog(@Nullable DicomNodeConfigEntity node, List<String> nodeTypes, List<String> knownGroups,
 			String defaultNodeType) {
 		this.nodeId = (node != null) ? node.getId() : null;
-		this.descriptionFld = new TextField("Description");
+		this.descriptionFld = new TextField("描述");
 		this.aetFld = createMandatoryAetField();
-		this.hostnameFld = createMandatoryField("Hostname");
+		this.hostnameFld = createMandatoryField("主机名");
 		this.portFld = createPortField();
 		this.nodeTypeFld = createNodeTypeField(nodeTypes);
 		this.nodeGroupFld = createNodeGroupField(knownGroups);
 
-		setHeaderTitle((node != null) ? "Edit DICOM Node" : "Add DICOM Node");
+		setHeaderTitle((node != null) ? "编辑 DICOM 节点" : "添加 DICOM 节点");
 
 		if (node != null) {
 			fillFields(node);
@@ -93,28 +93,28 @@ public class DicomNodeEditorDialog extends Dialog {
 
 	private static PortField createPortField() {
 		PortField field = new PortField();
-		field.setLabel("Port");
+		field.setLabel("端口");
 		field.setRequiredIndicatorVisible(true);
 		field.setValueChangeMode(ValueChangeMode.EAGER);
 		return field;
 	}
 
 	private static ComboBox<String> createNodeTypeField(List<String> nodeTypes) {
-		ComboBox<String> comboBox = new ComboBox<>("Node Type");
+		ComboBox<String> comboBox = new ComboBox<>("节点类型");
 		comboBox.setItems(nodeTypes);
 		comboBox.setAllowCustomValue(true);
 		comboBox.setRequiredIndicatorVisible(true);
-		comboBox.setHelperText("what the node is used for");
+		comboBox.setHelperText("节点的用途");
 		comboBox.addCustomValueSetListener(event -> comboBox.setValue(event.getDetail()));
 		return comboBox;
 	}
 
 	private static ComboBox<String> createNodeGroupField(List<String> knownGroups) {
-		ComboBox<String> comboBox = new ComboBox<>("Group");
+		ComboBox<String> comboBox = new ComboBox<>("分组");
 		comboBox.setItems(knownGroups);
 		comboBox.setAllowCustomValue(true);
 		comboBox.setClearButtonVisible(true);
-		comboBox.setHelperText("optional - pick a group or type a new one");
+		comboBox.setHelperText("可选 - 选择分组或输入新分组");
 		comboBox.addCustomValueSetListener(event -> comboBox.setValue(event.getDetail()));
 		return comboBox;
 	}
@@ -135,9 +135,9 @@ public class DicomNodeEditorDialog extends Dialog {
 	}
 
 	private void addButtons() {
-		Button cancelBtn = new Button("Cancel", event -> close());
+		Button cancelBtn = new Button("取消", event -> close());
 
-		Button saveBtn = new Button("Save", event -> save());
+		Button saveBtn = new Button("保存", event -> save());
 		saveBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
 		getFooter().add(cancelBtn, saveBtn);

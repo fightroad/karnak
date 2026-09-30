@@ -25,11 +25,11 @@ public class ButtonSaveDeleteCancel extends HorizontalLayout {
 
 	private final Button cancel;
 
-	private static final String LABEL_SAVE = "Save";
+	private static final String LABEL_SAVE = "保存";
 
-	private static final String LABEL_CANCEL = "Cancel";
+	private static final String LABEL_CANCEL = "取消";
 
-	private static final String LABEL_DELETE = "Delete";
+	private static final String LABEL_DELETE = "删除";
 
 	public ButtonSaveDeleteCancel() {
 		save = new Button(LABEL_SAVE);

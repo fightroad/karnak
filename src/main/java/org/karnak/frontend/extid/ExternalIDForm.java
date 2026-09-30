@@ -31,7 +31,7 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class ExternalIDForm extends VerticalLayout {
 
-	private static final String ERROR_MESSAGE_PATIENT = "Length must be between 1 and 50.";
+	private static final String ERROR_MESSAGE_PATIENT = "长度必须在 1 到 50 之间。";
 
 	private final Binder<PatientModel> binder;
 
@@ -62,34 +62,34 @@ public class ExternalIDForm extends VerticalLayout {
 	}
 
 	private void setElements() {
-		externalIdField = new TextField("External Pseudonym");
+		externalIdField = new TextField("外部伪名");
 		externalIdField.setWidthFull();
 		externalIdField.setRequired(true);
 
-		patientIdField = new TextField("Patient ID");
+		patientIdField = new TextField("患者 ID");
 		patientIdField.setWidthFull();
 		patientIdField.setRequired(true);
 
-		patientFirstNameField = new TextField("Patient first name");
+		patientFirstNameField = new TextField("患者名");
 		patientFirstNameField.setWidthFull();
-		patientLastNameField = new TextField("Patient last name");
+		patientLastNameField = new TextField("患者姓");
 		patientLastNameField.setWidthFull();
-		issuerOfPatientIdField = new TextField("Issuer of patient ID");
+		issuerOfPatientIdField = new TextField("患者 ID 签发者");
 		issuerOfPatientIdField.setWidthFull();
 	}
 
 	public void setBinder() {
 		binder.forField(externalIdField)
-			.withValidator(StringUtils::isNotBlank, "External Pseudonym is empty")
+			.withValidator(StringUtils::isNotBlank, "外部伪名不能为空")
 			.withValidator(new StringLengthValidator(ERROR_MESSAGE_PATIENT, 1, 50))
 			.bind("pseudonym");
 
 		binder.forField(patientIdField)
-			.withValidator(StringUtils::isNotBlank, "Patient ID is empty")
+			.withValidator(StringUtils::isNotBlank, "患者 ID 不能为空")
 			.withValidator(new StringLengthValidator(ERROR_MESSAGE_PATIENT, 1, 50))
 			.bind("patientId");
 
-		String maxLengthMessage = "Length must be between 0 and 50.";
+		String maxLengthMessage = "长度必须在 0 到 50 之间。";
 		binder.forField(patientFirstNameField)
 			.withValidator(new StringLengthValidator(maxLengthMessage, 0, 50))
 			.bind("patientFirstName");

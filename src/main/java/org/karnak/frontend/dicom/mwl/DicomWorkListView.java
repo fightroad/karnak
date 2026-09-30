@@ -226,7 +226,7 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 	}
 
 	private void buildWlConfigurationTitle() {
-		wlConfigurationTitle = new H6("Worklist Node Configuration");
+		wlConfigurationTitle = new H6("Worklist 节点配置");
 		wlConfigurationTitle.getStyle().set("margin-top", "0px");
 		wlConfigurationTitle.getStyle().set("margin-bottom", "10px");
 	}
@@ -259,18 +259,18 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 	}
 
 	private void buildWlHostnameFld() {
-		workListHostnameFld = new TextField("Worklist Hostname");
+		workListHostnameFld = new TextField("Worklist 主机名");
 		workListHostnameFld.setValueChangeMode(ValueChangeMode.EAGER);
 	}
 
 	private void buildWlPortFld() {
 		workListPortFld = new PortField();
-		workListPortFld.setLabel("Worklist Port");
+		workListPortFld.setLabel("Worklist 端口");
 		workListPortFld.setValueChangeMode(ValueChangeMode.EAGER);
 	}
 
 	private void buildSelectWorkListBtn() {
-		selectWorkListBtn = new Button("Select Worklist Node");
+		selectWorkListBtn = new Button("选择 Worklist 节点");
 		selectWorkListBtn.getStyle().set("cursor", "pointer");
 
 		selectWorkListBtn.addClickListener(e -> openDicomWorklistSelectionDialog());
@@ -278,7 +278,7 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 
 	private void openDicomWorklistSelectionDialog() {
 		DicomNodeSelectionDialog dialog = new DicomNodeSelectionDialog(dicomNodeUtil.getWorkListNodeTypes(),
-				"Select Worklist Node", "Worklist node");
+				"选择 Worklist 节点", "Worklist 节点");
 
 		dialog.addSelectDicomNodeListener((SelectDicomNodeEvent event) -> {
 			ConfigNode selectedWorkList = event.getSelectedDicomNode();
@@ -292,7 +292,7 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 	}
 
 	private void buildWlQueryTitle() {
-		wlQueryTitle = new H6("Worklist Query");
+		wlQueryTitle = new H6("Worklist 查询");
 		wlQueryTitle.getStyle().set("margin-bottom", "10px");
 		wlQueryTitle.getStyle().set("margin-top", "10px");
 	}
@@ -321,33 +321,33 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 
 	private void buildScheduledModalitySelector() {
 		scheduledModalitySelector = new Select<>();
-		scheduledModalitySelector.setLabel("Scheduled Modality");
+		scheduledModalitySelector.setLabel("计划模态");
 		scheduledModalitySelector.setItems(Modality.values());
 		scheduledModalitySelector.setValue(Modality.ALL);
 	}
 
 	private void buildPatientIdfld() {
-		patientIdfld = new TextField("Patient ID");
+		patientIdfld = new TextField("患者 ID");
 	}
 
 	private void buildAdmissionIdFld() {
-		admissionIdFld = new TextField("Admission ID");
+		admissionIdFld = new TextField("入院 ID");
 	}
 
 	private void buildScheduledFromFld() {
-		scheduledFromFld = new DatePicker("Scheduled From");
+		scheduledFromFld = new DatePicker("计划开始");
 	}
 
 	private void buildScheduledToFld() {
-		scheduledToFld = new DatePicker("Scheduled To");
+		scheduledToFld = new DatePicker("计划结束");
 	}
 
 	private void buildPatientNameFld() {
-		patientNameFld = new TextField("Patient Name");
+		patientNameFld = new TextField("患者姓名");
 	}
 
 	private void buildAccessionNumberFld() {
-		accessionNumberFld = new TextField("Accession Number");
+		accessionNumberFld = new TextField("检查号");
 	}
 
 	private void buildButtonBar() {
@@ -363,14 +363,14 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 	}
 
 	private void buildClearBtn() {
-		clearBtn = new Button("Reset Form");
+		clearBtn = new Button("重置表单");
 		clearBtn.getStyle().set("cursor", "pointer");
 
 		clearBtn.addClickListener(e -> binderForWorkListQuery.readBean(workListQueryData));
 	}
 
 	private void buildQueryBtn() {
-		queryBtn = new Button("Run Query");
+		queryBtn = new Button("执行查询");
 		queryBtn.getStyle().set("cursor", "pointer");
 		queryBtn.setEnabled(false);
 		queryBtn.addThemeVariants(ButtonVariant.PRIMARY);
@@ -398,7 +398,7 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 	}
 
 	private void buildQueryResultTitleBar() {
-		queryResultTitle = new H6("Query Result");
+		queryResultTitle = new H6("查询结果");
 		queryResultTitle.getStyle().set("margin-top", "0px");
 		queryResultTitle.getStyle().set("padding-bottom", "var(--vaadin-gap-m)");
 	}
@@ -412,20 +412,20 @@ public class DicomWorkListView extends AbstractView implements HasUrlParameter<S
 
 	private void bindFields() {
 		binderForWorkListQuery.forField(callingAetFld)
-			.asRequired("Ce champ est obligatoire")
+			.asRequired("此字段为必填项")
 			.bind(WorkListQueryData::getCallingAet, WorkListQueryData::setCallingAet);
 
 		binderForWorkListQuery.forField(workListAetFld)
-			.asRequired("Ce champ est obligatoire")
+			.asRequired("此字段为必填项")
 			.bind(WorkListQueryData::getWorkListAet, WorkListQueryData::setWorkListAet);
 
 		binderForWorkListQuery.forField(workListHostnameFld)
-			.asRequired("Ce champ est obligatoire")
+			.asRequired("此字段为必填项")
 			.bind(WorkListQueryData::getWorkListHostname, WorkListQueryData::setWorkListHostname);
 
 		binderForWorkListQuery.forField(workListPortFld)
-			.asRequired("Ce champ est obligatoire")
-			.withValidator(new IntegerRangeValidator("Le port est invalide", 1, 65535))
+			.asRequired("此字段为必填项")
+			.withValidator(new IntegerRangeValidator("端口号无效", 1, 65535))
 			.bind(WorkListQueryData::getWorkListPort, WorkListQueryData::setWorkListPort);
 
 		binderForWorkListQuery.bind(scheduledStationAetFld, WorkListQueryData::getScheduledStationAet,

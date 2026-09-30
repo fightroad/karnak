@@ -40,13 +40,13 @@ public class WarningNoProjectsDefined extends Dialog {
 	private void setContent() {
 		removeAll();
 		Div divTitle = new Div();
-		divTitle.setText("No projects created");
+		divTitle.setText("尚未创建项目");
 		divTitle.addClassNames("karnak-dialog-title", "karnak-error-text");
 
 		Div divContent = new Div();
 		Div divIntro = new Div();
 		divIntro.setText(
-				"No projects are defined. You can't use the tag morphing or de-identification until you have created a project.");
+				"尚未定义任何项目。创建项目之前无法使用 Tag 变形或去标识功能。");
 		divIntro.getStyle().set("padding-bottom", "10px");
 		divContent.add(divIntro);
 		btnValidate.setWidth("150px");

@@ -45,7 +45,7 @@ public class NewSwitchingAlbum extends Div {
 
 		TextFieldsBindSwitchingAlbum textFieldsBindSwitchingAlbum = new TextFieldsBindSwitchingAlbum();
 		binder = textFieldsBindSwitchingAlbum.getBinder();
-		buttonAdd = new Button("Add");
+		buttonAdd = new Button("添加");
 		textAuthorizationDestination = textFieldsBindSwitchingAlbum.getTextAuthorizationDestination();
 		textAuthorizationSource = textFieldsBindSwitchingAlbum.getTextAuthorizationSource();
 		textCondition = textFieldsBindSwitchingAlbum.getTextCondition();
@@ -72,16 +72,16 @@ public class NewSwitchingAlbum extends Div {
 			.set("max-height", "5em");
 		textUrlAPI.setWidth("20%");
 		textUrlAPI.getStyle().set("padding-right", "10px");
-		textUrlAPI.setPlaceholder("Url API");
+		textUrlAPI.setPlaceholder("API 地址");
 		textAuthorizationDestination.setWidth("20%");
 		textAuthorizationDestination.getStyle().set("padding-right", "10px");
-		textAuthorizationDestination.setPlaceholder("Valid token of destination");
+		textAuthorizationDestination.setPlaceholder("有效的目的令牌");
 		textAuthorizationSource.setWidth("20%");
 		textAuthorizationSource.getStyle().set("padding-right", "10px");
-		textAuthorizationSource.setPlaceholder("Valid token of source");
+		textAuthorizationSource.setPlaceholder("有效的来源令牌");
 		textCondition.setWidth("20%");
 		textCondition.getStyle().set("padding-right", "10px");
-		textCondition.setPlaceholder("Condition");
+		textCondition.setPlaceholder("条件");
 	}
 
 	public void clear() {

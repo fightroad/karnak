@@ -52,13 +52,13 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 	 */
 	public void setCapabilityProbeAction(Consumer<DicomNodeCheckResult> action) {
 		this.capabilityProbeAction = action;
-		addColumn(new ComponentRenderer<>(this::createCapabilityButton)).setHeader("Capabilities")
+		addColumn(new ComponentRenderer<>(this::createCapabilityButton)).setHeader("能力")
 			.setAutoWidth(true)
 			.setFlexGrow(0);
 	}
 
 	private Button createCapabilityButton(DicomNodeCheckResult result) {
-		Button button = new Button("Probe", (event) -> capabilityProbeAction.accept(result));
+		Button button = new Button("探测", (event) -> capabilityProbeAction.accept(result));
 		button.addThemeVariants(ButtonVariant.SMALL, ButtonVariant.TERTIARY);
 		return button;
 	}
@@ -69,7 +69,7 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 		setItemDetailsRenderer(createItemDetailsRenderer());
 
 		// Empty grid case
-		setEmptyStateText("No results found");
+		setEmptyStateText("未找到结果");
 
 		// Selection mode
 		setSelectionMode(SelectionMode.NONE);
@@ -81,11 +81,11 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 	}
 
 	private void addColumns() {
-		addColumn(createDicomNodeRenderer()).setHeader("Dicom Node");
-		addColumn(createDicomStatusRenderer()).setHeader("Dicom Echo");
-		addColumn(createConnectionRenderer()).setHeader("Connection Time (ms)");
-		addColumn(createExecutionRenderer()).setHeader("Execution Time (ms)");
-		addColumn(createNetworkStatusRenderer()).setHeader("Check Network");
+		addColumn(createDicomNodeRenderer()).setHeader("DICOM 节点");
+		addColumn(createDicomStatusRenderer()).setHeader("DICOM Echo");
+		addColumn(createConnectionRenderer()).setHeader("连接时间 (ms)");
+		addColumn(createExecutionRenderer()).setHeader("执行时间 (ms)");
+		addColumn(createNetworkStatusRenderer()).setHeader("网络检查");
 	}
 
 	private static ComponentRenderer<Div, DicomNodeCheckResult> createDicomNodeRenderer() {
@@ -133,7 +133,7 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 
 	private static void initBadge(Badge badge, boolean isSuccessful) {
 		badge.addThemeVariants(isSuccessful ? BadgeVariant.SUCCESS : BadgeVariant.ERROR);
-		badge.setText(isSuccessful ? "Success" : "Error");
+		badge.setText(isSuccessful ? "成功" : "失败");
 	}
 
 	private static ComponentRenderer<Div, DicomNodeCheckResult> createConnectionRenderer() {
@@ -191,29 +191,29 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 	}
 
 	private static VerticalLayout createDicomStatusLayout(DicomEchoResult dicomEchoResult) {
-		VerticalLayout layout = detailsSection("DICOM Status");
+		VerticalLayout layout = detailsSection("DICOM 状态");
 
 		if (dicomEchoResult != null) {
 			UnorderedList unorderedList = new UnorderedList();
 
 			if (dicomEchoResult.isUnexpectedError()) {
-				unorderedList.add(new ListItem("Unexpected error: " + dicomEchoResult.getUnexpectedErrorMessage()));
+				unorderedList.add(new ListItem("意外错误：" + dicomEchoResult.getUnexpectedErrorMessage()));
 			}
 			else if (dicomEchoResult.isRejected()) {
-				unorderedList.add(new ListItem("Association rejected: " + dicomEchoResult.getRejectionReason()));
+				unorderedList.add(new ListItem("关联被拒绝：" + dicomEchoResult.getRejectionReason()));
 			}
 			else if (dicomEchoResult.isVerificationUnsupported()) {
 				unorderedList.add(new ListItem(dicomEchoResult.getVerificationUnsupportedMessage()));
-				addIfPresent(unorderedList, "Peer implementation: ",
+				addIfPresent(unorderedList, "对端实现：",
 						dicomEchoResult.getRemoteImplementationVersionName());
-				addIfPresent(unorderedList, "Peer class UID: ", dicomEchoResult.getRemoteImplementationClassUid());
+				addIfPresent(unorderedList, "对端类 UID：", dicomEchoResult.getRemoteImplementationClassUid());
 			}
 			else {
-				unorderedList.add(new ListItem("Status code: " + dicomEchoResult.getDicomStatusInHex()));
-				addIfPresent(unorderedList, "Status message: ", dicomEchoResult.getDicomStatusMessage());
-				addIfPresent(unorderedList, "Peer implementation: ",
+				unorderedList.add(new ListItem("状态码：" + dicomEchoResult.getDicomStatusInHex()));
+				addIfPresent(unorderedList, "状态消息：", dicomEchoResult.getDicomStatusMessage());
+				addIfPresent(unorderedList, "对端实现：",
 						dicomEchoResult.getRemoteImplementationVersionName());
-				addIfPresent(unorderedList, "Peer class UID: ", dicomEchoResult.getRemoteImplementationClassUid());
+				addIfPresent(unorderedList, "对端类 UID：", dicomEchoResult.getRemoteImplementationClassUid());
 			}
 
 			layout.add(unorderedList);
@@ -229,7 +229,7 @@ public class DicomNodeCheckResultGrid extends Grid<DicomNodeCheckResult> {
 	}
 
 	private static VerticalLayout createNetworkStatusLayout(NetworkCheckResult networkCheckResult) {
-		VerticalLayout layout = detailsSection("Network Status");
+		VerticalLayout layout = detailsSection("网络状态");
 
 		if (networkCheckResult != null) {
 			UnorderedList unorderedList = new UnorderedList();

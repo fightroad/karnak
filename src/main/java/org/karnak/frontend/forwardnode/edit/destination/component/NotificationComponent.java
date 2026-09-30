@@ -75,8 +75,8 @@ public class NotificationComponent extends VerticalLayout {
 		// Size
 		setWidthFull();
 
-		// In order to not have a padding around the component
-		setPadding(true);
+		setPadding(false);
+		getStyle().set("padding", "0.5rem 0.75rem");
 
 		// Build notification components
 		buildComponents();
@@ -207,11 +207,11 @@ public class NotificationComponent extends VerticalLayout {
 	 * Notify interval
 	 */
 	private void buildNotifyInterval() {
-		notifyInterval = new TextField(String.format("Notif.: interval (Default: %s)", Notification.DEFAULT_INTERVAL));
+		notifyInterval = new TextField(String.format("通知：间隔（默认：%s）", Notification.DEFAULT_INTERVAL));
 		notifyInterval.setWidth("32%");
 		notifyInterval.addThemeVariants(TextFieldVariant.ALIGN_RIGHT);
 		UIS.setTooltip(notifyInterval, String.format(
-				"Interval in seconds for sending a notification (when no new image is arrived in the archive folder). Default value: %s",
+				"发送通知的间隔秒数（归档文件夹中无新图像到达时）。默认值：%s",
 				Notification.DEFAULT_INTERVAL));
 	}
 
@@ -220,10 +220,10 @@ public class NotificationComponent extends VerticalLayout {
 	 */
 	private void buildNotifyObjectValues() {
 		notifyObjectValues = new TextField(
-				String.format("Notif.: subject values (Default: %s)", Notification.DEFAULT_SUBJECT_VALUES));
+				String.format("通知：主题值（默认：%s）", Notification.DEFAULT_SUBJECT_VALUES));
 		notifyObjectValues.setWidth("32%");
 		UIS.setTooltip(notifyObjectValues, String.format(
-				"Values injected in the pattern [PatientID StudyDescription StudyDate StudyInstanceUID]. Default value: %s",
+				"注入模式 [PatientID StudyDescription StudyDate StudyInstanceUID] 的值。默认值：%s",
 				Notification.DEFAULT_SUBJECT_VALUES));
 	}
 
@@ -232,10 +232,10 @@ public class NotificationComponent extends VerticalLayout {
 	 */
 	private void buildNotifyObjectPattern() {
 		notifyObjectPattern = new TextField(
-				String.format("Notif.: subject pattern (Default: %s)", Notification.DEFAULT_SUBJECT_PATTERN));
+				String.format("通知：主题模式（默认：%s）", Notification.DEFAULT_SUBJECT_PATTERN));
 		notifyObjectPattern.setWidth("32%");
 		UIS.setTooltip(notifyObjectPattern, String.format(
-				"Pattern of the email object, see https://dzone.com/articles/java-string-format-examples. Default value: %s",
+				"邮件主题的模式，参见 https://dzone.com/articles/java-string-format-examples。默认值：%s",
 				Notification.DEFAULT_SUBJECT_PATTERN));
 	}
 
@@ -244,10 +244,10 @@ public class NotificationComponent extends VerticalLayout {
 	 */
 	private void buildNotifyObjectErrorPrefix() {
 		notifyObjectErrorPrefix = new TextField(
-				String.format("Notif.: error subject prefix (Default: %s)", Notification.DEFAULT_SUBJECT_ERROR_PREFIX));
+				String.format("通知：错误主题前缀（默认：%s）", Notification.DEFAULT_SUBJECT_ERROR_PREFIX));
 		notifyObjectErrorPrefix.setWidth("49%");
 		UIS.setTooltip(notifyObjectErrorPrefix,
-				String.format("Prefix of the email object when containing an issue. Default value: %s",
+				String.format("邮件主题在包含问题时的前缀。默认值：%s",
 						Notification.DEFAULT_SUBJECT_ERROR_PREFIX));
 	}
 
@@ -255,11 +255,11 @@ public class NotificationComponent extends VerticalLayout {
 	 * Notify Object Rejection Prefix
 	 */
 	private void buildNotifyObjectRejectionPrefix() {
-		notifyObjectRejectionPrefix = new TextField(String.format("Notif.: rejection subject prefix (Default: %s)",
+		notifyObjectRejectionPrefix = new TextField(String.format("通知：拒收主题前缀（默认：%s）",
 				Notification.DEFAULT_SUBJECT_REJECTION_PREFIX));
 		notifyObjectRejectionPrefix.setWidth("49%");
 		UIS.setTooltip(notifyObjectRejectionPrefix,
-				String.format("Prefix of the email object in case of rejections. Default value: %s",
+				String.format("拒收时邮件主题的前缀。默认值：%s",
 						Notification.DEFAULT_SUBJECT_REJECTION_PREFIX));
 	}
 
@@ -267,7 +267,7 @@ public class NotificationComponent extends VerticalLayout {
 	 * Notify
 	 */
 	private void buildNotify() {
-		notify = new TextField("Notif.: list of emails");
+		notify = new TextField("通知：邮箱列表");
 		notify.setWidth("100%");
 		notify.getStyle().set("padding-top", "0");
 		notify.getStyle().set("padding", "0");
@@ -277,7 +277,7 @@ public class NotificationComponent extends VerticalLayout {
 	 * Activate Notification
 	 */
 	private void buildActivateNotification() {
-		activateNotification = new Checkbox("Activate notification");
+		activateNotification = new Checkbox("启用通知");
 		// By default deactivate
 		activateNotification.setValue(false);
 	}
@@ -315,7 +315,7 @@ public class NotificationComponent extends VerticalLayout {
 		// List of emails
 		binder.forField(getNotify()).withValidator((s, valueContext) -> {
 			if (StringUtils.isBlank(s) && getActivateNotification().getValue()) {
-				return ValidationResult.error("Should have at least one address email");
+				return ValidationResult.error("至少需要一个邮箱地址");
 			}
 			return ValidationResult.ok();
 		}).bind(DestinationEntity::getNotify, DestinationEntity::setNotify);

@@ -57,7 +57,7 @@ class DicomNodeUtilTest {
 	void returns_dynamic_source_groups_first_then_service_node_types() {
 		var workstations = new DicomNodeList("Workstations");
 		var pacsWeb = new DicomNodeList("PACS Public WEB");
-		when(gatewaySource.getGroupName()).thenReturn("Gateway destinations");
+		when(gatewaySource.getGroupName()).thenReturn(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME);
 		when(gatewaySource.getNodes()).thenReturn(List.of());
 		when(dicomNodeConfigService.getWorkStationNodeTypes(true)).thenReturn(List.of(workstations, pacsWeb));
 
@@ -65,21 +65,21 @@ class DicomNodeUtilTest {
 
 		assertNotNull(result);
 		assertEquals(3, result.size());
-		assertEquals("Gateway destinations", result.get(0).getName());
+		assertEquals(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME, result.get(0).getName());
 		assertEquals("Workstations", result.get(1).getName());
 		assertEquals("PACS Public WEB", result.get(2).getName());
 	}
 
 	@Test
 	void dynamic_source_nodes_become_read_only_config_nodes_labelled_by_their_group() {
-		when(gatewaySource.getGroupName()).thenReturn("Gateway destinations");
+		when(gatewaySource.getGroupName()).thenReturn(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME);
 		when(gatewaySource.getNodes()).thenReturn(List.of(new DicomNode("PACS_AE", "pacs.host", 11112, "Main PACS"),
 				new DicomNode("VIEWER_AE", "viewer.host", 104, null)));
 
 		var groups = dicomNodeUtil.getDynamicNodeGroups();
 
 		assertEquals(1, groups.size());
-		assertEquals("Gateway destinations", groups.getFirst().getName());
+		assertEquals(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME, groups.getFirst().getName());
 
 		ConfigNode first = groups.getFirst().getFirst();
 		assertEquals("Main PACS", first.getName());
@@ -87,7 +87,7 @@ class DicomNodeUtilTest {
 		assertEquals("pacs.host", first.getHostname());
 		assertEquals(11112, first.getPort());
 		assertNull(first.getId());
-		assertEquals("Gateway destinations", first.getNodeType());
+		assertEquals(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME, first.getNodeType());
 
 		// A node without a description falls back to its AE Title for the display name.
 		assertEquals("VIEWER_AE", groups.getFirst().get(1).getName());

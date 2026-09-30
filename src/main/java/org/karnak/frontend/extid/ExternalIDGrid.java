@@ -42,13 +42,13 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class ExternalIDGrid extends Grid<PatientModel> {
 
-	private static final String ERROR_MESSAGE_PATIENT = "Length must be between 1 and 50.";
+	private static final String ERROR_MESSAGE_PATIENT = "长度必须在 1 到 50 之间。";
 
-	private static final String LABEL_SAVE = "Save";
+	private static final String LABEL_SAVE = "保存";
 
-	private static final String LABEL_CANCEL = "Cancel";
+	private static final String LABEL_CANCEL = "取消";
 
-	private static final String LABEL_FILTER = "Filter";
+	private static final String LABEL_FILTER = "筛选";
 
 	private final Binder<PatientModel> binder;
 
@@ -159,16 +159,16 @@ public class ExternalIDGrid extends Grid<PatientModel> {
 	}
 
 	private void setElements() {
-		extidColumn = addColumn(PatientModel::getPseudonym).setHeader("External Pseudonym").setSortable(true);
-		patientIdColumn = addColumn(PatientModel::getPatientId).setHeader("Patient ID").setSortable(true);
-		patientFirstNameColumn = addColumn(PatientModel::getPatientFirstName).setHeader("Patient first name")
+		extidColumn = addColumn(PatientModel::getPseudonym).setHeader("外部伪名").setSortable(true);
+		patientIdColumn = addColumn(PatientModel::getPatientId).setHeader("患者 ID").setSortable(true);
+		patientFirstNameColumn = addColumn(PatientModel::getPatientFirstName).setHeader("患者名")
 			.setSortable(true);
-		patientLastNameColumn = addColumn(PatientModel::getPatientLastName).setHeader("Patient last name")
+		patientLastNameColumn = addColumn(PatientModel::getPatientLastName).setHeader("患者姓")
 			.setSortable(true);
-		issuerOfPatientIDColumn = addColumn(PatientModel::getIssuerOfPatientId).setHeader("Issuer of patient ID")
+		issuerOfPatientIDColumn = addColumn(PatientModel::getIssuerOfPatientId).setHeader("患者 ID 签发者")
 			.setSortable(true);
 		Grid.Column<PatientModel> editorColumn = addComponentColumn(patient -> {
-			Button edit = new Button("Edit");
+			Button edit = new Button("编辑");
 			edit.addClassName("edit");
 			edit.addClickListener(e -> {
 				editor.editItem(patient);
@@ -198,13 +198,13 @@ public class ExternalIDGrid extends Grid<PatientModel> {
 		patientLastNameColumn.setEditorComponent(patientLastNameField);
 		issuerOfPatientIDColumn.setEditorComponent(issuerOfPatientIdField);
 
-		deleteAllSelectedPatientsButton = new Button("Delete selected patients");
+		deleteAllSelectedPatientsButton = new Button("删除所选患者");
 		deleteAllSelectedPatientsButton.addThemeVariants(ButtonVariant.ERROR, ButtonVariant.PRIMARY);
 		deleteAllSelectedPatientsButton.addClickListener(e -> {
 			if (selectedPatients != null && !selectedPatients.isEmpty()) {
 				Div dialogContent = new Div();
 				dialogContent.add(new Text(
-						"Do you confirm the deletion of the " + selectedPatients.size() + " selected patients ?"));
+						"确定删除所选的 " + selectedPatients.size() + " 名患者吗？"));
 				WarningConfirmDialog dialog = new WarningConfirmDialog(dialogContent);
 				dialog.addConfirmationListener(componentEvent -> {
 					for (PatientModel p : selectedPatients) {
@@ -222,7 +222,7 @@ public class ExternalIDGrid extends Grid<PatientModel> {
 		});
 
 		deleteColumn = addComponentColumn(patient -> {
-			deletePatientButton = new Button("Delete");
+			deletePatientButton = new Button("删除");
 			deletePatientButton.addThemeVariants(ButtonVariant.ERROR, ButtonVariant.PRIMARY);
 			deletePatientButton.addClickListener(e -> {
 				externalIDCache.remove(PatientClientUtil.generateKey(patient, projectEntity.getId()));
@@ -267,18 +267,18 @@ public class ExternalIDGrid extends Grid<PatientModel> {
 		validationStatus.setId("validation");
 		validationStatus.addClassName("karnak-error-text");
 		binder.forField(externalIdField)
-			.withValidator(StringUtils::isNotBlank, "External Pseudonym is empty")
+			.withValidator(StringUtils::isNotBlank, "外部伪名不能为空")
 			.withValidator(new StringLengthValidator(ERROR_MESSAGE_PATIENT, 1, 50))
 			.withStatusLabel(validationStatus)
 			.bind("pseudonym");
 
 		binder.forField(patientIdField)
-			.withValidator(StringUtils::isNotBlank, "Patient ID is empty")
+			.withValidator(StringUtils::isNotBlank, "患者 ID 不能为空")
 			.withValidator(new StringLengthValidator(ERROR_MESSAGE_PATIENT, 1, 50))
 			.withStatusLabel(validationStatus)
 			.bind("patientId");
 
-		String maxLengthMessage = "Length must be between 0 and 50.";
+		String maxLengthMessage = "长度必须在 0 到 50 之间。";
 		binder.forField(patientFirstNameField)
 			.withValidator(new StringLengthValidator(maxLengthMessage, 0, 50))
 			.bind("patientFirstName");

@@ -68,9 +68,9 @@ public class ProfileYamlEditor extends VerticalLayout {
 			.set("margin", "5px 0")
 			.set("white-space", "pre-wrap");
 
-		saveButton = new Button("Save", VaadinIcon.CHECK.create(), event -> save());
+		saveButton = new Button("保存", VaadinIcon.CHECK.create(), event -> save());
 		saveButton.addThemeVariants(ButtonVariant.PRIMARY);
-		resetButton = new Button("Reset", VaadinIcon.REFRESH.create(), event -> reload());
+		resetButton = new Button("重置", VaadinIcon.REFRESH.create(), event -> reload());
 
 		HorizontalLayout actions = new HorizontalLayout(saveButton, resetButton);
 		actions.setWidthFull();
@@ -83,7 +83,7 @@ public class ProfileYamlEditor extends VerticalLayout {
 
 	private Div infoMessage() {
 		Div message = new Div(new Span(
-				"Edit the whole profile as YAML (same format as the import/export file), then Save. Saving replaces the profile content in place."));
+				"以 YAML 编辑整个配置文件（与导入/导出文件格式相同），然后保存。保存将就地替换配置文件内容。"));
 		message.getStyle()
 			.set("color", "var(--vaadin-text-color-secondary)")
 			.set("font-size", "var(--aura-font-size-s)")
@@ -122,12 +122,12 @@ public class ProfileYamlEditor extends VerticalLayout {
 		List<String> errors = profileLogic.saveProfileYaml(profileEntity.getId(), yamlArea.getValue());
 		if (errors.isEmpty()) {
 			errorBox.setVisible(false);
-			Notification notification = Notification.show("Profile saved");
+			Notification notification = Notification.show("配置文件已保存");
 			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 		}
 		else {
 			errorBox.removeAll();
-			errorBox.add(new Span("The profile could not be saved:"));
+			errorBox.add(new Span("配置文件无法保存："));
 			errors.forEach(message -> errorBox.add(new Div(new Span("• " + message))));
 			errorBox.setVisible(true);
 		}

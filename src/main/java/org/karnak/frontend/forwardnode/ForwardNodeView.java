@@ -34,19 +34,19 @@ import org.weasis.core.util.annotations.Generated;
  */
 @Route(value = ForwardNodeView.ROUTE, layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-@PageTitle("Karnak - Forward node")
+@PageTitle("Karnak - 转发节点")
 @RolesAllowed("admin")
 @Generated()
 @NullUnmarked
 public class ForwardNodeView extends HorizontalLayout implements HasUrlParameter<String> {
 
-	public static final String VIEW_NAME = "Gateway";
+	public static final String VIEW_NAME = "转发节点";
 
 	public static final String ROUTE = "forwardnode";
 
-	public static final String SAVE = "Save";
+	public static final String SAVE = "保存";
 
-	public static final String DELETE = "Delete";
+	public static final String DELETE = "删除";
 
 	// Forward Node Logic
 	private final ForwardNodeLogic forwardNodeLogic;
@@ -183,9 +183,9 @@ public class ForwardNodeView extends HorizontalLayout implements HasUrlParameter
 	private void addEventDeleteButtonLayoutEdit() {
 		layoutEditForwardNode.getButtonForwardNodeSaveDeleteCancel().getDelete().addClickListener(event -> {
 			if (layoutEditForwardNode.getCurrentForwardNodeEntity() != null) {
-				ConfirmDialog dialog = new ConfirmDialog("Are you sure to delete the forward node "
-						+ layoutEditForwardNode.getCurrentForwardNodeEntity().getFwdAeTitle() + " ?"
-						+ "<br>It will also delete the related entries from the monitoring view.");
+				ConfirmDialog dialog = new ConfirmDialog("确定要删除转发节点 "
+						+ layoutEditForwardNode.getCurrentForwardNodeEntity().getFwdAeTitle() + " 吗？"
+						+ "<br>同时将删除监控视图中的相关条目。");
 				dialog.addConfirmationListener(componentEvent -> {
 					forwardNodeLogic.deleteForwardNode(layoutEditForwardNode.getCurrentForwardNodeEntity());
 					forwardNodeLogic.refreshAll();

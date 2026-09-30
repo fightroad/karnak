@@ -45,8 +45,8 @@ public class ProfileEditorPanel extends VerticalLayout {
 
 		tabSheet.setSizeFull();
 		tabSheet.getStyle().set("min-height", "0");
-		tabSheet.add("Profile elements", elementView);
-		tabSheet.add("YAML editor", yamlEditor);
+		tabSheet.add("配置文件元素", elementView);
+		tabSheet.add("YAML 编辑器", yamlEditor);
 
 		add(tabSheet);
 		setFlexGrow(1, tabSheet);

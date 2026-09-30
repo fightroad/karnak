@@ -64,15 +64,15 @@ public class DicomWorkListGrid extends Grid<Attributes> {
 			layout.setSpacing(false);
 			layout.getStyle().set("font-size", "var(--aura-font-size-s)");
 
-			H6 title = new H6("Details");
+			H6 title = new H6("详情");
 			title.getStyle().set("margin-top", "0px");
 			layout.add(title);
 
 			UnorderedList details = new UnorderedList();
-			addDetail(details, "Accession Number", getText(attributes, Tag.AccessionNumber));
-			addDetail(details, "Admission ID", getText(attributes, Tag.AdmissionID));
-			addDetail(details, "Requested Procedure", getText(attributes, Tag.RequestedProcedureDescription));
-			addDetail(details, "Referring Physician", getText(attributes, Tag.ReferringPhysicianName));
+			addDetail(details, "检查号", getText(attributes, Tag.AccessionNumber));
+			addDetail(details, "入院 ID", getText(attributes, Tag.AdmissionID));
+			addDetail(details, "申请检查", getText(attributes, Tag.RequestedProcedureDescription));
+			addDetail(details, "申请医师", getText(attributes, Tag.ReferringPhysicianName));
 			addDetail(details, "Study Instance UID", getText(attributes, Tag.StudyInstanceUID));
 			layout.add(details);
 
@@ -82,15 +82,15 @@ public class DicomWorkListGrid extends Grid<Attributes> {
 	}
 
 	private HorizontalLayout buildActions(Attributes attributes) {
-		Button viewBtn = new Button("View DICOM Details", event -> new DicomPane(attributes).open());
+		Button viewBtn = new Button("查看 DICOM 详情", event -> new DicomPane(attributes).open());
 		viewBtn.addThemeVariants(ButtonVariant.SMALL);
 
-		Anchor textDownload = downloadAnchor("Download as Text",
+		Anchor textDownload = downloadAnchor("下载为文本",
 				DownloadHandler
 					.fromInputStream(event -> new DownloadResponse(paneLogic.getWorklistItemInputStreamText(attributes),
 							"worklistItem.txt", "text/plain", -1)));
 
-		Anchor dicomDownload = downloadAnchor("Download as DICOM",
+		Anchor dicomDownload = downloadAnchor("下载为 DICOM",
 				DownloadHandler.fromInputStream(
 						event -> new DownloadResponse(paneLogic.getWorklistItemInputStreamInDicom(attributes),
 								"worklistItem.dcm", "application/dicom", -1)));

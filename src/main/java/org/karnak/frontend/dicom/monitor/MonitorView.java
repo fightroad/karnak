@@ -115,13 +115,13 @@ public class MonitorView extends AbstractView {
 
 	public void displayResults(List<DicomNodeCheckResult> results) {
 		resultGrid.setItems(results);
-		resultNote.setText(results.size() + " node(s) checked - select a row to view the details");
+		resultNote.setText("已检查 " + results.size() + " 个节点 - 选择行查看详情");
 		resultLayout.setVisible(true);
 	}
 
 	public void displayWebResults(List<WebNodeCheckResult> results) {
 		webGrid.setItems(results);
-		webNote.setText(results.size() + " DICOMweb destination(s) checked - select a row to view the details");
+		webNote.setText("已检查 " + results.size() + " 个 DICOMweb 目标 - 选择行查看详情");
 		webGrid.setVisible(true);
 		webResultLayout.setVisible(true);
 	}
@@ -147,7 +147,7 @@ public class MonitorView extends AbstractView {
 		VerticalLayout webSection = sectionWrapper(webLayout, webResultLayout);
 		webSection.setVisible(false);
 
-		Tab tabDicomNodes = new Tab("DICOM Nodes");
+		Tab tabDicomNodes = new Tab("DICOM 节点");
 		Tab tabDicomWeb = new Tab("DICOMweb");
 		Tabs sectionTabs = new Tabs(tabDicomNodes, tabDicomWeb);
 		sectionTabs.setWidthFull();
@@ -169,7 +169,7 @@ public class MonitorView extends AbstractView {
 	}
 
 	private void buildDicomEchoLayoutTitle() {
-		dicomEchoLayoutTitle = new H6("Dicom Echo");
+		dicomEchoLayoutTitle = new H6("DICOM Echo 测试");
 		dicomEchoLayoutTitle.getStyle().set("margin-top", "0px");
 		dicomEchoLayoutTitle.getStyle().set("margin-bottom", "10px");
 	}
@@ -190,7 +190,7 @@ public class MonitorView extends AbstractView {
 
 	private void buildDicomNodeListSelector() {
 		dicomEchoNodeListSelector = new Select<>();
-		dicomEchoNodeListSelector.setLabel("Group");
+		dicomEchoNodeListSelector.setLabel("分组");
 		dicomEchoNodeListSelector.setEmptySelectionAllowed(false);
 
 		var dicomNodeTypes = dicomNodeUtil.getAllNodeTypesIncludingWorklist();
@@ -215,21 +215,21 @@ public class MonitorView extends AbstractView {
 	}
 
 	private void buildDicomEchoBtn() {
-		dicomEchoBtn = new Button("Check DICOM Nodes");
+		dicomEchoBtn = new Button("检查 DICOM 节点");
 		dicomEchoBtn.addThemeVariants(ButtonVariant.PRIMARY);
 		dicomEchoBtn.addClickListener(event -> runCheck());
 	}
 
 	private void runCheck() {
 		if (callingAetFld.isEmpty()) {
-			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "A calling AE Title is required"));
+			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "必须填写 Calling AE Title"));
 			return;
 		}
 
 		DicomNodeList selected = dicomEchoNodeListSelector.getValue();
 		if (selected == null || selected.isEmpty()) {
 			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT,
-					"The selected group has no DICOM node to check"));
+					"所选分组中没有可检查的 DICOM 节点"));
 			return;
 		}
 
@@ -271,7 +271,7 @@ public class MonitorView extends AbstractView {
 	}
 
 	private void buildResultTitle() {
-		resultTitle = new H6("Result");
+		resultTitle = new H6("结果");
 		resultTitle.getStyle().set("margin-top", "0px");
 		resultTitle.getStyle().set("padding-bottom", "0px");
 	}
@@ -299,20 +299,20 @@ public class MonitorView extends AbstractView {
 					"0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12)");
 		webLayout.getStyle().set("border-radius", "4px");
 
-		H6 webTitle = new H6("DICOMweb destinations (STOW-RS)");
+		H6 webTitle = new H6("DICOMweb 目标 (STOW-RS)");
 		webTitle.getStyle().set("margin-top", "0px");
 		webTitle.getStyle().set("margin-bottom", "10px");
 
-		webGroupFld = new ComboBox<>("Group");
+		webGroupFld = new ComboBox<>("分组");
 		var webGroups = new ArrayList<String>();
 		webGroups.add(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME);
 		webGroups.addAll(webDestinationConfigService.getKnownGroups());
 		webGroupFld.setItems(webGroups);
-		webGroupFld.setPlaceholder("All groups");
+		webGroupFld.setPlaceholder("所有分组");
 		webGroupFld.setClearButtonVisible(true);
-		webGroupFld.setHelperText("empty = all groups");
+		webGroupFld.setHelperText("留空 = 所有分组");
 
-		webBtn = new Button("Check DICOMweb", (event) -> runWebCheck());
+		webBtn = new Button("检查 DICOMweb", (event) -> runWebCheck());
 		webBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
 		HorizontalLayout webBar = new HorizontalLayout(webGroupFld, webBtn);
@@ -351,7 +351,7 @@ public class MonitorView extends AbstractView {
 		List<WebDestinationNode> destinations = collectWebDestinations();
 		if (destinations.isEmpty()) {
 			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT,
-					"No DICOMweb (STOW-RS) destination is configured"));
+					"未配置 DICOMweb (STOW-RS) 目标"));
 			return;
 		}
 
@@ -390,7 +390,7 @@ public class MonitorView extends AbstractView {
 
 	private void openCapabilitiesDialog(DicomNodeCheckResult result) {
 		if (callingAetFld.isEmpty()) {
-			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "A calling AE Title is required"));
+			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "必须填写 Calling AE Title"));
 			return;
 		}
 
@@ -401,10 +401,10 @@ public class MonitorView extends AbstractView {
 		panel.display(capabilities);
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("DICOM Capabilities — " + result.getCalledNodeDescription());
+		dialog.setHeaderTitle("DICOM 能力 — " + result.getCalledNodeDescription());
 		dialog.setWidth("900px");
 		dialog.add(panel);
-		Button closeBtn = new Button("Close", (event) -> dialog.close());
+		Button closeBtn = new Button("关闭", (event) -> dialog.close());
 		dialog.getFooter().add(closeBtn);
 		dialog.open();
 	}

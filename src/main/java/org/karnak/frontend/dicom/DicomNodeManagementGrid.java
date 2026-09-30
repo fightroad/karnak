@@ -56,10 +56,10 @@ public class DicomNodeManagementGrid extends Grid<DicomNodeConfigEntity> {
 	}
 
 	private void init() {
-		setEmptyStateText("No DICOM nodes configured");
+		setEmptyStateText("未配置 DICOM 节点");
 		setSelectionMode(SelectionMode.NONE);
 
-		addColumn(DicomNodeConfigEntity::getDescription).setHeader("Description")
+		addColumn(DicomNodeConfigEntity::getDescription).setHeader("描述")
 			.setFlexGrow(3)
 			.setWidth("120px")
 			.setSortable(true);
@@ -67,20 +67,20 @@ public class DicomNodeManagementGrid extends Grid<DicomNodeConfigEntity> {
 			.setFlexGrow(2)
 			.setWidth("100px")
 			.setSortable(true);
-		addColumn(DicomNodeConfigEntity::getHostname).setHeader("Hostname")
+		addColumn(DicomNodeConfigEntity::getHostname).setHeader("主机名")
 			.setFlexGrow(2)
 			.setWidth("100px")
 			.setSortable(true);
-		addColumn(DicomNodeConfigEntity::getPort).setHeader("Port").setFlexGrow(1).setWidth("70px");
-		addColumn(DicomNodeConfigEntity::getNodeType).setHeader("Node Type")
+		addColumn(DicomNodeConfigEntity::getPort).setHeader("端口").setFlexGrow(1).setWidth("70px");
+		addColumn(DicomNodeConfigEntity::getNodeType).setHeader("节点类型")
 			.setFlexGrow(1)
 			.setWidth("90px")
 			.setSortable(true);
-		addColumn(DicomNodeConfigEntity::getNodeGroup).setHeader("Group")
+		addColumn(DicomNodeConfigEntity::getNodeGroup).setHeader("分组")
 			.setFlexGrow(1)
 			.setWidth("80px")
 			.setSortable(true);
-		addColumn(createActionsRenderer()).setHeader("Actions").setFlexGrow(0).setWidth("100px");
+		addColumn(createActionsRenderer()).setHeader("操作").setFlexGrow(0).setWidth("100px");
 
 		this.sort(GridSortOrder.asc(aetitle).build());
 	}
@@ -93,11 +93,11 @@ public class DicomNodeManagementGrid extends Grid<DicomNodeConfigEntity> {
 
 			Button editBtn = new Button(VaadinIcon.EDIT.create(), event -> editHandler.accept(node));
 			editBtn.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.SMALL);
-			editBtn.setAriaLabel("Edit");
+			editBtn.setAriaLabel("编辑");
 
 			Button deleteBtn = new Button(VaadinIcon.TRASH.create(), event -> deleteHandler.accept(node));
 			deleteBtn.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.SMALL, ButtonVariant.ERROR);
-			deleteBtn.setAriaLabel("Delete");
+			deleteBtn.setAriaLabel("删除");
 
 			actions.add(editBtn, deleteBtn);
 

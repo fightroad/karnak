@@ -45,7 +45,7 @@ public class Menu extends FlexLayout {
 		setClassName("menu-bar");
 
 		// Button for toggling the menu visibility on small screens
-		final Button showMenu = new Button("Menu", event -> {
+		final Button showMenu = new Button("菜单", event -> {
 			if (tabs.getClassNames().contains(SHOW_TABS)) {
 				tabs.removeClassName(SHOW_TABS);
 			}
@@ -71,10 +71,11 @@ public class Menu extends FlexLayout {
 		add(themeLayout);
 
 		// logout menu item
-		Button logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
+		Button logoutButton = new Button("退出登录", VaadinIcon.SIGN_OUT.create());
 		logoutButton.addClickListener(event -> SecurityUtil.signOut());
 
 		logoutButton.addThemeVariants(ButtonVariant.ERROR);
+		logoutButton.addClassName("menu-logout-button");
 		add(logoutButton);
 	}
 

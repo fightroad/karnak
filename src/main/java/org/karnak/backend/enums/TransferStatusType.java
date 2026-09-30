@@ -19,8 +19,8 @@ import org.jspecify.annotations.NullUnmarked;
 @NullUnmarked
 public enum TransferStatusType {
 
-	ALL(null, null, "All"), SENT(true, false, "Sent"), NOT_SENT(false, null, "Not Sent"),
-	EXCLUDED(false, false, "Excluded"), ERROR(false, true, "Error");
+	ALL(null, null, "全部"), SENT(true, false, "已发送"), NOT_SENT(false, null, "未发送"),
+	EXCLUDED(false, false, "已排除"), ERROR(false, true, "错误");
 
 	/**
 	 * Predicate value for the sent attribute

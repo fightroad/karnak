@@ -111,7 +111,7 @@ public class MonitoringLogic {
 			csvBuilt = transferMonitoringService.buildCsv(filter, exportSettings);
 		}
 		catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException | IOException e) {
-			String message = "Error when creating monitoring export CSV file";
+			String message = "创建监控导出 CSV 文件时出错";
 			log.error(message, e.getMessage());
 			NotificationUtil.displayErrorMessage(message, Position.BOTTOM_CENTER);
 		}

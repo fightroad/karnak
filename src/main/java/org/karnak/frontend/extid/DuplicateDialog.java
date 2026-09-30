@@ -51,11 +51,11 @@ public class DuplicateDialog extends Dialog {
 
 	public void setGridElement() {
 		grid = new Grid<>();
-		grid.addColumn(PatientModel::getPseudonym).setHeader("External pseudonym").setSortable(true);
-		grid.addColumn(PatientModel::getPatientId).setHeader("Patient ID").setSortable(true);
-		grid.addColumn(PatientModel::getPatientFirstName).setHeader("Patient first name").setSortable(true);
-		grid.addColumn(PatientModel::getPatientLastName).setHeader("Patient last name").setSortable(true);
-		grid.addColumn(PatientModel::getIssuerOfPatientId).setHeader("Issuer of patient ID").setSortable(true);
+		grid.addColumn(PatientModel::getPseudonym).setHeader("外部伪名").setSortable(true);
+		grid.addColumn(PatientModel::getPatientId).setHeader("患者 ID").setSortable(true);
+		grid.addColumn(PatientModel::getPatientFirstName).setHeader("患者名").setSortable(true);
+		grid.addColumn(PatientModel::getPatientLastName).setHeader("患者姓").setSortable(true);
+		grid.addColumn(PatientModel::getIssuerOfPatientId).setHeader("患者 ID 签发者").setSortable(true);
 		grid.setItems(duplicateList);
 	}
 

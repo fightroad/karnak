@@ -22,25 +22,25 @@ public class WarningDeleteProfileUsed extends Dialog {
 	public void setText(ProfileEntity profileEntity) {
 		removeAll();
 		Div divTitle = new Div();
-		divTitle.setText(String.format("The profile %s can't be removed", profileEntity.getName()));
+		divTitle.setText(String.format("无法删除配置文件 %s", profileEntity.getName()));
 		divTitle.addClassNames("karnak-dialog-title", "karnak-error-text");
 
 		Div divContent = new Div();
 		Div divIntro = new Div();
-		divIntro.setText("The profile is used in the following project(s)");
+		divIntro.setText("该配置文件正被以下项目使用");
 		divIntro.getStyle().set("padding-bottom", "10px");
 
 		divContent.add(divIntro);
 		if (profileEntity.getProjectEntities() != null) {
 			for (ProjectEntity projectEntity : profileEntity.getProjectEntities()) {
 				Div divProject = new Div();
-				divProject.setText(String.format("Project: %s", projectEntity.getName()));
+				divProject.setText(String.format("项目: %s", projectEntity.getName()));
 				divProject.getStyle().set("padding-left", "20px").set("padding-bottom", "5px");
 				divContent.add(divProject);
 			}
 		}
 
-		Button cancelButton = new Button("Cancel", event -> close());
+		Button cancelButton = new Button("取消", event -> close());
 
 		cancelButton.getStyle().set("margin-left", "75%");
 		add(divTitle, divContent, cancelButton);
@@ -49,13 +49,13 @@ public class WarningDeleteProfileUsed extends Dialog {
 	public void setErrorMessage(String errorMessage) {
 		removeAll();
 		Div divTitle = new Div();
-		divTitle.setText("Warning");
+		divTitle.setText("警告");
 		divTitle.addClassNames("karnak-dialog-title", "karnak-error-text");
 
 		Div divContent = new Div();
 		divContent.setText(errorMessage);
 
-		Button cancelButton = new Button("Cancel", event -> close());
+		Button cancelButton = new Button("取消", event -> close());
 		cancelButton.getStyle().set("margin-left", "75%");
 		add(divTitle, divContent, cancelButton);
 	}

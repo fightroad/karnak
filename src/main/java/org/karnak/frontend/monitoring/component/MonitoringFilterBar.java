@@ -48,8 +48,8 @@ public class MonitoringFilterBar extends HorizontalLayout {
 	/** Quick date-range presets. */
 	public enum RangePreset {
 
-		LAST_5_MIN("Last 5 minutes"), LAST_15_MIN("Last 15 minutes"), LAST_HOUR("Last hour"), LAST_24H("Last 24 hours"),
-		TODAY("Today"), LAST_7_DAYS("Last 7 days"), LAST_15_DAYS("Last 15 days"), ALL("All"), CUSTOM("Custom");
+		LAST_5_MIN("最近 5 分钟"), LAST_15_MIN("最近 15 分钟"), LAST_HOUR("最近 1 小时"), LAST_24H("最近 24 小时"),
+		TODAY("今天"), LAST_7_DAYS("最近 7 天"), LAST_15_DAYS("最近 15 天"), ALL("全部"), CUSTOM("自定义");
 
 		private final String label;
 
@@ -69,9 +69,9 @@ public class MonitoringFilterBar extends HorizontalLayout {
 
 	private final transient Runnable onChange;
 
-	private final ComboBox<RangePreset> presetComboBox = new ComboBox<>("Range");
+	private final ComboBox<RangePreset> presetComboBox = new ComboBox<>("时间范围");
 
-	private final EnhancedDateRangePicker rangePicker = new EnhancedDateRangePicker("Custom range");
+	private final EnhancedDateRangePicker rangePicker = new EnhancedDateRangePicker("自定义范围");
 
 	private boolean updating;
 
@@ -89,7 +89,7 @@ public class MonitoringFilterBar extends HorizontalLayout {
 		rangePicker.setClearButtonVisible(true);
 		rangePicker.addValueChangeListener(event -> onRangeEdited());
 
-		ComboBox<TransferStatusType> statusComboBox = new ComboBox<>("Status");
+		ComboBox<TransferStatusType> statusComboBox = new ComboBox<>("状态");
 		statusComboBox.setItems(TransferStatusType.values());
 		statusComboBox.setItemLabelGenerator(TransferStatusType::getLabel);
 		statusComboBox.setValue(TransferStatusType.ALL);
@@ -98,9 +98,9 @@ public class MonitoringFilterBar extends HorizontalLayout {
 			fireChange();
 		});
 
-		TextField studyUidField = new TextField("Study UID");
+		TextField studyUidField = new TextField("检查 UID");
 		configureTextFilter(studyUidField, filter::setStudyUid);
-		TextField serieUidField = new TextField("Series UID");
+		TextField serieUidField = new TextField("序列 UID");
 		configureTextFilter(serieUidField, filter::setSerieUid);
 
 		setAlignItems(Alignment.BASELINE);

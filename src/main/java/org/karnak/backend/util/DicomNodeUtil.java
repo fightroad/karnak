@@ -35,7 +35,7 @@ public class DicomNodeUtil {
 	 * cannot be edited or deleted as DICOM node configurations, and the group itself
 	 * cannot be renamed or removed).
 	 */
-	public static final String GATEWAY_DESTINATIONS_GROUP_NAME = "Gateway destinations";
+	public static final String GATEWAY_DESTINATIONS_GROUP_NAME = "网关目的地";
 
 	private final DicomNodeConfigService dicomNodeConfigService;
 

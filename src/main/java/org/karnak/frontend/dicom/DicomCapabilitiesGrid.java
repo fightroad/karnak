@@ -27,13 +27,13 @@ public class DicomCapabilitiesGrid extends Grid<SopClassCapability> {
 		super(SopClassCapability.class, false);
 
 		setSelectionMode(SelectionMode.NONE);
-		setEmptyStateText("The peer accepted none of the proposed SOP Classes");
+		setEmptyStateText("对端未接受任何提议的 SOP Class");
 		addThemeVariants(GridVariant.WRAP_CELL_CONTENT);
 
-		addColumn(SopClassCapability::category).setHeader("Category").setAutoWidth(true).setFlexGrow(0);
+		addColumn(SopClassCapability::category).setHeader("类别").setAutoWidth(true).setFlexGrow(0);
 		addColumn(SopClassCapability::sopClassName).setHeader("SOP Class").setAutoWidth(true).setFlexGrow(0);
 		addColumn((capability) -> String.join(", ", capability.transferSyntaxes()))
-			.setHeader("Accepted Transfer Syntaxes");
+			.setHeader("已接受的传输语法");
 	}
 
 	public void setCapabilities(List<SopClassCapability> capabilities) {

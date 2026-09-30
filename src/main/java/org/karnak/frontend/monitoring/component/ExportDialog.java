@@ -53,14 +53,14 @@ public class ExportDialog extends Dialog {
 	 */
 	public ExportDialog(SerializableSupplier<byte[]> csvSupplier) {
 		setModality(ModalityMode.STRICT);
-		setHeaderTitle("Export CSV");
+		setHeaderTitle("导出 CSV");
 
 		buildComponents(csvSupplier);
 	}
 
 	private void buildComponents(SerializableSupplier<byte[]> csvSupplier) {
 		// Separator field
-		separatorTextField = new TextField("Separator");
+		separatorTextField = new TextField("分隔符");
 		separatorTextField.setValue(exportSettings.getDelimiter());
 		separatorTextField.setWidthFull();
 		separatorTextField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -73,7 +73,7 @@ public class ExportDialog extends Dialog {
 			}
 			else {
 				separatorTextField.setInvalid(true);
-				separatorTextField.setErrorMessage("Separator must contain exactly one character");
+				separatorTextField.setErrorMessage("分隔符必须恰好包含一个字符");
 			}
 			downloadButton.setEnabled(valid);
 		});
@@ -81,10 +81,10 @@ public class ExportDialog extends Dialog {
 		fieldsLayout.setPadding(false);
 
 		// Buttons
-		cancelButton = new Button("Cancel");
+		cancelButton = new Button("取消");
 		cancelButton.addClickListener(event -> close());
 
-		downloadButton = new Button("Download", new Icon(VaadinIcon.DOWNLOAD_ALT));
+		downloadButton = new Button("下载", new Icon(VaadinIcon.DOWNLOAD_ALT));
 		downloadButton.addThemeVariants(ButtonVariant.PRIMARY);
 		downloadButton.addClickListener(event -> close());
 

@@ -59,11 +59,11 @@ public class ProfileElementEditor extends Dialog {
 
 	private final transient Runnable onSaved;
 
-	private final TextField nameField = new TextField("Name");
+	private final TextField nameField = new TextField("名称");
 
-	private final ComboBox<ProfileItemType> typeComboBox = new ComboBox<>("Type");
+	private final ComboBox<ProfileItemType> typeComboBox = new ComboBox<>("类型");
 
-	private final TextField conditionField = new TextField("Condition (optional)");
+	private final TextField conditionField = new TextField("条件（可选）");
 
 	private final VerticalLayout dynamicSection = new VerticalLayout();
 
@@ -92,7 +92,7 @@ public class ProfileElementEditor extends Dialog {
 		this.elementId = existing != null ? existing.getId() : null;
 		this.onSaved = onSaved;
 
-		setHeaderTitle(existing != null ? "Edit element" : "Add element");
+		setHeaderTitle(existing != null ? "编辑元素" : "添加元素");
 		setWidth("1240px");
 
 		nameField.setWidthFull();
@@ -120,9 +120,9 @@ public class ProfileElementEditor extends Dialog {
 		body.setPadding(false);
 		add(body);
 
-		Button save = new Button("Save", event -> save());
+		Button save = new Button("保存", event -> save());
 		save.getElement().getThemeList().add("primary");
-		Button cancel = new Button("Cancel", event -> close());
+		Button cancel = new Button("取消", event -> close());
 		getFooter().add(cancel, save);
 
 		prefill(existing);
@@ -140,14 +140,14 @@ public class ProfileElementEditor extends Dialog {
 
 	private static String shortLabel(ProfileItemType type) {
 		return switch (type) {
-			case ACTION_TAGS -> "Apply action to specific tags";
-			case ACTION_DATES -> "Shift / format dates";
-			case REPLACE_UID -> "Replace UIDs";
-			case BASIC_DICOM -> "Basic DICOM confidentiality profile";
-			case CLEAN_PIXEL_DATA -> "Clean pixel data";
-			case DEFACING -> "Defacing (clean recognizable visual features)";
-			case ADD_TAG -> "Add a tag";
-			case ACTION_PRIVATETAGS -> "Apply action to private tags";
+			case ACTION_TAGS -> "对指定 Tag 执行操作";
+			case ACTION_DATES -> "偏移 / 格式化日期";
+			case REPLACE_UID -> "替换 UID";
+			case BASIC_DICOM -> "DICOM 基本保密配置";
+			case CLEAN_PIXEL_DATA -> "清理像素数据";
+			case DEFACING -> "去面部特征（清理可识别视觉特征）";
+			case ADD_TAG -> "添加 Tag";
+			case ACTION_PRIVATETAGS -> "对私有 Tag 执行操作";
 			default -> type.getClassAlias();
 		};
 	}
@@ -190,8 +190,8 @@ public class ProfileElementEditor extends Dialog {
 		switch (type) {
 			case ACTION_TAGS, ACTION_PRIVATETAGS -> {
 				dynamicSection.add(buildActionComboBox(DeidActionType.values(), existing));
-				includedTags = new TagPickerField(dicomStandardService, "Tags", true, TagPickerField.PathMode.ANY);
-				excludedTags = new TagPickerField(dicomStandardService, "Excluded tags", true,
+				includedTags = new TagPickerField(dicomStandardService, "Tag", true, TagPickerField.PathMode.ANY);
+				excludedTags = new TagPickerField(dicomStandardService, "排除的 Tag", true,
 						TagPickerField.PathMode.ANY);
 				prefillTags(existing);
 				dynamicSection.add(includedTags, excludedTags);
@@ -199,15 +199,15 @@ public class ProfileElementEditor extends Dialog {
 			case REPLACE_UID -> {
 				dynamicSection.add(buildActionComboBox(new DeidActionType[] { DeidActionType.NEW_UID,
 						DeidActionType.REMOVE, DeidActionType.REPLACE_NULL }, existing));
-				includedTags = new TagPickerField(dicomStandardService, "Tags", true, TagPickerField.PathMode.ANY);
+				includedTags = new TagPickerField(dicomStandardService, "Tag", true, TagPickerField.PathMode.ANY);
 				prefillTags(existing);
 				dynamicSection.add(includedTags);
 			}
 			case ACTION_DATES -> {
-				dateOptionComboBox = new ComboBox<>("Option", DATE_OPTIONS);
+				dateOptionComboBox = new ComboBox<>("选项", DATE_OPTIONS);
 				dateOptionComboBox.setWidthFull();
 				dateOptionComboBox.addValueChangeListener(event -> buildDateArgs(event.getValue(), existing));
-				includedTags = new TagPickerField(dicomStandardService, "Tags (optional)", true,
+				includedTags = new TagPickerField(dicomStandardService, "Tag（可选）", true,
 						TagPickerField.PathMode.ANY);
 				prefillTags(existing);
 				dynamicSection.add(dateOptionComboBox, dateArgsSection, includedTags);
@@ -219,7 +219,7 @@ public class ProfileElementEditor extends Dialog {
 				if (existing != null && !existing.getIncludedTagEntities().isEmpty()) {
 					singleTag.setTags(List.of(existing.getIncludedTagEntities().getFirst().getTagValue()));
 				}
-				TextField valueField = new TextField("Value");
+				TextField valueField = new TextField("值");
 				valueField.setWidthFull();
 				valueField.setValue(argValue(existing, "value"));
 				argValueSuppliers.put("value", valueField::getValue);
@@ -232,7 +232,7 @@ public class ProfileElementEditor extends Dialog {
 	}
 
 	private ComboBox<DeidActionType> buildActionComboBox(DeidActionType[] options, ProfileElementEntity existing) {
-		actionComboBox = new ComboBox<>("Action");
+		actionComboBox = new ComboBox<>("操作");
 		actionComboBox.setItems(options);
 		actionComboBox.setWidthFull();
 		if (existing != null) {
@@ -263,21 +263,21 @@ public class ProfileElementEditor extends Dialog {
 		}
 		switch (option) {
 			case "shift" -> {
-				addIntArg("seconds", "Seconds", existing);
-				addIntArg("days", "Days", existing);
+				addIntArg("seconds", "秒", existing);
+				addIntArg("days", "天", existing);
 			}
 			case "shift_range" -> {
-				addIntArg("max_seconds", "Max seconds", existing);
-				addIntArg("max_days", "Max days", existing);
-				addIntArg("min_seconds", "Min seconds (optional)", existing);
-				addIntArg("min_days", "Min days (optional)", existing);
+				addIntArg("max_seconds", "最大秒数", existing);
+				addIntArg("max_days", "最大天数", existing);
+				addIntArg("min_seconds", "最小秒数（可选）", existing);
+				addIntArg("min_days", "最小天数（可选）", existing);
 			}
 			case "shift_by_tag" -> {
-				addTextArg("days_tag", "Days tag", existing);
-				addTextArg("seconds_tag", "Seconds tag", existing);
+				addTextArg("days_tag", "天数 Tag", existing);
+				addTextArg("seconds_tag", "秒数 Tag", existing);
 			}
 			case "date_format" -> {
-				ComboBox<String> remove = new ComboBox<>("Remove", List.of("day", "month_day"));
+				ComboBox<String> remove = new ComboBox<>("移除", List.of("day", "month_day"));
 				remove.setWidthFull();
 				remove.setValue(argValueOrNull(existing, "remove"));
 				argValueSuppliers.put("remove", remove::getValue);
@@ -317,7 +317,7 @@ public class ProfileElementEditor extends Dialog {
 		errorLabel.setText("");
 		ProfileItemType type = typeComboBox.getValue();
 		if (type == null) {
-			errorLabel.setText("Please choose a type");
+			errorLabel.setText("请选择类型");
 			return;
 		}
 		if (nameField.getValue() == null || nameField.getValue().isBlank()) {
@@ -326,7 +326,7 @@ public class ProfileElementEditor extends Dialog {
 				nameField.setValue(shortLabel(type));
 			}
 			else {
-				errorLabel.setText("Please give the element a name");
+				errorLabel.setText("请为元素指定名称");
 				return;
 			}
 		}

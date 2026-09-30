@@ -31,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.karnak.backend.data.entity.WebDestinationConfigEntity;
 import org.karnak.backend.data.repo.WebDestinationConfigRepo;
 import org.karnak.backend.enums.DicomWebServiceType;
+import org.karnak.backend.util.DicomNodeUtil;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -81,7 +82,8 @@ class WebDestinationConfigServiceTest {
 	@Test
 	void save_rejects_the_dynamic_gateway_group() {
 		assertThrows(IllegalArgumentException.class,
-				() -> service.save("Cloud", "https://stow/dicom-web", Set.of(), "Gateway destinations"));
+				() -> service.save("Cloud", "https://stow/dicom-web", Set.of(),
+						DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME));
 		verify(repository, never()).save(any(WebDestinationConfigEntity.class));
 	}
 

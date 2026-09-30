@@ -22,11 +22,11 @@ import org.weasis.core.util.annotations.Generated;
 public class ProfileGrid extends GroupTreeGrid<ProfileEntity> {
 
 	public ProfileGrid() {
-		var nameColumn = addPrimaryColumn("Name", profile -> new Span(profile.getName()),
+		var nameColumn = addPrimaryColumn("名称", profile -> new Span(profile.getName()),
 				CollatorUtils.comparing(ProfileEntity::getName));
 		nameColumn.setFlexGrow(1);
 		// Keep the version column narrow so the name column gets most of the space.
-		addItemTextColumn("Version", ProfileEntity::getVersion, CollatorUtils.comparing(ProfileEntity::getVersion))
+		addItemTextColumn("版本", ProfileEntity::getVersion, CollatorUtils.comparing(ProfileEntity::getVersion))
 			.setFlexGrow(0)
 			.setWidth("5em");
 

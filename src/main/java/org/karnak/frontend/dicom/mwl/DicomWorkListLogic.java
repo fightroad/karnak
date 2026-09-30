@@ -82,7 +82,7 @@ public class DicomWorkListLogic {
 		view.loadAttributes(state.getDicomRSP());
 
 		if (state.getStatus() != Status.Success) {
-			String errorMsg = "Cannot get a worklist! DICOM error status: " + Integer.toHexString(state.getStatus());
+			String errorMsg = "无法获取 Worklist！DICOM 错误状态：" + Integer.toHexString(state.getStatus());
 			Message message = new Message(MessageLevel.ERROR, MessageFormat.TEXT, errorMsg);
 			view.displayMessage(message);
 		}

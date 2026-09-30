@@ -44,17 +44,17 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class CSVDialog extends Dialog {
 
-	private static final String EXTERNAL_PSEUDONYM = "External Pseudonym";
+	private static final String EXTERNAL_PSEUDONYM = "外部伪名";
 
-	private static final String PATIENT_ID = "Patient ID";
+	private static final String PATIENT_ID = "患者 ID";
 
-	private static final String PATIENT_FIRST_NAME = "Patient first name";
+	private static final String PATIENT_FIRST_NAME = "患者名";
 
-	private static final String PATIENT_LAST_NAME = "Patient last name";
+	private static final String PATIENT_LAST_NAME = "患者姓";
 
-	private static final String ISSUER_OF_PATIENT_ID = "Issuer of patient ID";
+	private static final String ISSUER_OF_PATIENT_ID = "患者 ID 签发者";
 
-	private static final String TITLE = "Upload CSV that contains the correspondence table with the externals pseudonyms";
+	private static final String TITLE = "上传包含外部伪名对应表的 CSV";
 
 	private final String[] selectValues = { "", EXTERNAL_PSEUDONYM, PATIENT_ID, PATIENT_FIRST_NAME, PATIENT_LAST_NAME,
 			ISSUER_OF_PATIENT_ID };
@@ -124,14 +124,14 @@ public class CSVDialog extends Dialog {
 			.set("padding-bottom", "10px")
 			.set("color", "var(--aura-red-text)");
 
-		fromLineField = new NumberField("From line ");
+		fromLineField = new NumberField("起始行");
 		fromLineField.setValue(1d);
 		fromLineField.setStepButtonsVisible(true);
 		fromLineField.setMin(1);
 		fromLineField.setMax((double) allRows.size() + 1);
 		fromLineField.getStyle().set("margin-bottom", "10px");
 
-		readCSVButton = new Button("Upload CSV", event -> {
+		readCSVButton = new Button("上传 CSV", event -> {
 			if (selectValuesPositionHashMap.get(EXTERNAL_PSEUDONYM).equals(-1)
 					|| selectValuesPositionHashMap.get(PATIENT_ID).equals(-1)) {
 				generateErrorMsg();
@@ -144,7 +144,7 @@ public class CSVDialog extends Dialog {
 		readCSVButton.addThemeVariants(ButtonVariant.PRIMARY);
 		readCSVButton.setIcon(VaadinIcon.PLUS_CIRCLE.create());
 
-		cancelButton = new Button("Cancel", event -> close());
+		cancelButton = new Button("取消", event -> close());
 	}
 
 	public void buildGrid() {
@@ -225,7 +225,7 @@ public class CSVDialog extends Dialog {
 			})
 			.filter(StringUtil::hasText);
 		final String concatFieldNotSelected = streamFieldNotSelected.collect(Collectors.joining(", "));
-		errorMsg.setText(String.format("These fields are not selected: %s", concatFieldNotSelected));
+		errorMsg.setText(String.format("以下字段未选择：%s", concatFieldNotSelected));
 	}
 
 	private void readCSVPatients() {

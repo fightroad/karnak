@@ -24,7 +24,7 @@ import org.weasis.core.util.annotations.Generated;
 @Generated()
 public class DestinationCondition extends Div {
 
-	private static final String LABEL_CONDITION = "Condition (Leave blank if no condition)";
+	private static final String LABEL_CONDITION = "条件（无需条件时留空）";
 
 	private final TextField condition;
 
@@ -60,7 +60,7 @@ public class DestinationCondition extends Div {
 				return expressionError.isValid();
 			}
 			return true;
-		}, "Condition not valid").withValidationStatusHandler(status -> {
+		}, "条件无效").withValidationStatusHandler(status -> {
 			if (!status.isError()) {
 				textErrorConditionMsg.setText("");
 			}

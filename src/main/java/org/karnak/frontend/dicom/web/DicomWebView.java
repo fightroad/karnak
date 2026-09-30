@@ -100,37 +100,37 @@ public class DicomWebView extends AbstractView {
 		title.getStyle().set("margin-top", "0px");
 		title.getStyle().set("margin-bottom", "10px");
 
-		urlFld = new TextField("DICOMweb base URL");
+		urlFld = new TextField("DICOMweb 基础 URL");
 		urlFld.setWidthFull();
 		urlFld.setPlaceholder("https://host:443/dicom-web");
 		urlFld.setValueChangeMode(ValueChangeMode.EAGER);
 
-		servicesFld = new CheckboxGroup<>("Services to probe");
+		servicesFld = new CheckboxGroup<>("要探测的服务");
 		servicesFld.setItems(DicomWebServiceType.values());
 		servicesFld.setItemLabelGenerator(DicomWebServiceType::getDisplayName);
-		servicesFld.setHelperText("none selected means all services");
+		servicesFld.setHelperText("未选择表示所有服务");
 		servicesFld.setValue(EnumSet.allOf(DicomWebServiceType.class));
 		servicesFld.addThemeVariants(CheckboxGroupVariant.AURA_HORIZONTAL);
 		servicesFld.getStyle().set("margin-top", "10px");
 
-		groupFilterFld = new ComboBox<>("Group");
+		groupFilterFld = new ComboBox<>("分组");
 		groupFilterFld.setClearButtonVisible(true);
-		groupFilterFld.setPlaceholder("All groups");
+		groupFilterFld.setPlaceholder("所有分组");
 		groupFilterFld.setWidth("14em");
 		groupFilterFld.addValueChangeListener(event -> applyGroupFilter(event.getValue()));
-		checkGroupBtn = new Button("Check group", (event) -> runGroupCheck());
+		checkGroupBtn = new Button("检查分组", (event) -> runGroupCheck());
 
-		savedEndpointFld = new ComboBox<>("Saved endpoint");
+		savedEndpointFld = new ComboBox<>("已保存端点");
 		savedEndpointFld.setItemLabelGenerator(DicomWebView::endpointLabel);
 		savedEndpointFld.setClearButtonVisible(true);
-		savedEndpointFld.setPlaceholder("Select to fill the form");
+		savedEndpointFld.setPlaceholder("选择以填充表单");
 		savedEndpointFld.setWidth("22em");
 		savedEndpointFld.addValueChangeListener(event -> applyEndpoint(event.getValue()));
 
-		checkBtn = new Button("Check URL", (event) -> runCheck());
+		checkBtn = new Button("检查 URL", (event) -> runCheck());
 		checkBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
-		saveBtn = new Button("Save as endpoint", (event) -> saveAsEndpoint());
+		saveBtn = new Button("保存为端点", (event) -> saveAsEndpoint());
 
 		HorizontalLayout bar = new HorizontalLayout(groupFilterFld, checkGroupBtn, savedEndpointFld, urlFld, checkBtn,
 				saveBtn);
@@ -185,7 +185,7 @@ public class DicomWebView extends AbstractView {
 
 	private void saveAsEndpoint() {
 		if (urlFld.isEmpty()) {
-			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "A DICOMweb URL is required"));
+			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "必须填写 DICOMweb URL"));
 			return;
 		}
 
@@ -199,12 +199,11 @@ public class DicomWebView extends AbstractView {
 				webDestinationConfigService.save(event.getDescription(), event.getUrl(), event.getServices(),
 						event.getGroup());
 				refreshSavedEndpoints();
-				displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT,
-						"DICOMweb endpoint saved to the configuration"));
+				displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOMweb 端点已保存到配置"));
 			}
 			catch (Exception ex) {
 				displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-						"Cannot save the DICOMweb endpoint: " + ex.getMessage()));
+						"无法保存 DICOMweb 端点：" + ex.getMessage()));
 			}
 		});
 		dialog.open();
@@ -219,7 +218,7 @@ public class DicomWebView extends AbstractView {
 		resultLayout = boxed(new VerticalLayout());
 		resultLayout.setVisible(false);
 
-		H6 title = new H6("Result");
+		H6 title = new H6("结果");
 		title.getStyle().set("margin-top", "0px");
 
 		resultNote = new Div();
@@ -236,7 +235,7 @@ public class DicomWebView extends AbstractView {
 
 	private void runCheck() {
 		if (urlFld.isEmpty()) {
-			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "A DICOMweb URL is required"));
+			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "必须填写 DICOMweb URL"));
 			return;
 		}
 
@@ -250,7 +249,7 @@ public class DicomWebView extends AbstractView {
 		List<WebDestinationNode> destinations = collectWebDestinations();
 		if (destinations.isEmpty()) {
 			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT,
-					"No DICOMweb (STOW-RS) destination is configured for the selected group"));
+					"所选分组未配置 DICOMweb (STOW-RS) 目标"));
 			return;
 		}
 
@@ -289,7 +288,7 @@ public class DicomWebView extends AbstractView {
 
 	private void displayResults(List<WebNodeCheckResult> results) {
 		resultGrid.setItems(results);
-		resultNote.setText(results.size() + " destination(s) checked - select a row to view the details");
+		resultNote.setText("已检查 " + results.size() + " 个目标 - 选择行查看详情");
 		resultLayout.setVisible(true);
 	}
 

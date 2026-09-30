@@ -45,16 +45,16 @@ public class NodeActivityDashboard extends VerticalLayout {
 		cards.setWidthFull();
 		cards.getStyle().set("flex-wrap", "wrap");
 
-		grid.addColumn(NodeActivityModel::forwardAet).setHeader("Forward AETitle").setSortable(true).setFlexGrow(20);
-		grid.addColumn(NodeActivityModel::studies).setHeader("Studies").setSortable(true);
-		grid.addColumn(NodeActivityModel::series).setHeader("Series").setSortable(true);
-		grid.addColumn(NodeActivityModel::instances).setHeader("Instances").setSortable(true);
-		grid.addColumn(NodeActivityModel::retries).setHeader("Retries").setSortable(true);
-		grid.addColumn(NodeActivityModel::sent).setHeader("Sent").setSortable(true);
-		grid.addColumn(NodeActivityModel::errors).setHeader("Errors").setSortable(true);
-		grid.addColumn(NodeActivityModel::excluded).setHeader("Excluded").setSortable(true);
-		grid.addColumn(NodeActivityModel::deidentified).setHeader("De-identified").setSortable(true);
-		grid.addColumn(NodeActivityModel::tagMorphed).setHeader("Tag-morphed").setSortable(true);
+		grid.addColumn(NodeActivityModel::forwardAet).setHeader("转发 AE Title").setSortable(true).setFlexGrow(20);
+		grid.addColumn(NodeActivityModel::studies).setHeader("检查").setSortable(true);
+		grid.addColumn(NodeActivityModel::series).setHeader("序列").setSortable(true);
+		grid.addColumn(NodeActivityModel::instances).setHeader("实例").setSortable(true);
+		grid.addColumn(NodeActivityModel::retries).setHeader("重试").setSortable(true);
+		grid.addColumn(NodeActivityModel::sent).setHeader("已发送").setSortable(true);
+		grid.addColumn(NodeActivityModel::errors).setHeader("错误").setSortable(true);
+		grid.addColumn(NodeActivityModel::excluded).setHeader("已排除").setSortable(true);
+		grid.addColumn(NodeActivityModel::deidentified).setHeader("已去标识").setSortable(true);
+		grid.addColumn(NodeActivityModel::tagMorphed).setHeader("标签变形").setSortable(true);
 		grid.setWidthFull();
 
 		add(cards, grid);
@@ -67,15 +67,15 @@ public class NodeActivityDashboard extends VerticalLayout {
 		grid.setItems(nodes);
 
 		cards.removeAll();
-		cards.add(card("Studies", sum(nodes, NodeActivityModel::studies), false),
-				card("Series", sum(nodes, NodeActivityModel::series), false),
-				card("Instances", sum(nodes, NodeActivityModel::instances), false),
-				card("Retries", sum(nodes, NodeActivityModel::retries), false),
-				card("Sent", sum(nodes, NodeActivityModel::sent), false),
-				card("Errors", sum(nodes, NodeActivityModel::errors), true),
-				card("Excluded", sum(nodes, NodeActivityModel::excluded), false),
-				card("De-identified", sum(nodes, NodeActivityModel::deidentified), false),
-				card("Tag-morphed", sum(nodes, NodeActivityModel::tagMorphed), false));
+		cards.add(card("检查", sum(nodes, NodeActivityModel::studies), false),
+				card("序列", sum(nodes, NodeActivityModel::series), false),
+				card("实例", sum(nodes, NodeActivityModel::instances), false),
+				card("重试", sum(nodes, NodeActivityModel::retries), false),
+				card("已发送", sum(nodes, NodeActivityModel::sent), false),
+				card("错误", sum(nodes, NodeActivityModel::errors), true),
+				card("已排除", sum(nodes, NodeActivityModel::excluded), false),
+				card("已去标识", sum(nodes, NodeActivityModel::deidentified), false),
+				card("标签变形", sum(nodes, NodeActivityModel::tagMorphed), false));
 	}
 
 	private long sum(List<NodeActivityModel> nodes, java.util.function.ToLongFunction<NodeActivityModel> extractor) {

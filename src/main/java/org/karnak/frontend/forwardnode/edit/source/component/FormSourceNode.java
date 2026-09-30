@@ -36,10 +36,10 @@ public class FormSourceNode extends VerticalLayout {
 	public FormSourceNode(Binder<DicomSourceNodeEntity> binder, ButtonSaveDeleteCancel buttonSaveDeleteCancel) {
 		setSizeFull();
 		this.binder = binder;
-		aeTitle = new TextField("AETitle");
-		description = new TextField("Description");
-		hostname = new TextField("Hostname");
-		checkHostname = new Checkbox("Check the hostname");
+		aeTitle = new TextField("AE Title");
+		description = new TextField("描述");
+		hostname = new TextField("主机名");
+		checkHostname = new Checkbox("检查主机名");
 
 		setElements();
 		setBinder();
@@ -54,12 +54,12 @@ public class FormSourceNode extends VerticalLayout {
 		description.setWidth("70%");
 		hostname.setWidth("70%");
 		UIS.setTooltip(checkHostname,
-				"if checked, check the hostname during the DICOM association and if not match the connection is abort");
+				"勾选后，在 DICOM 关联期间检查主机名；若不匹配则中止连接");
 	}
 
 	private void setBinder() {
 		binder.forField(aeTitle)
-			.withValidator(StringUtils::isNotBlank, "AETitle is mandatory")
+			.withValidator(StringUtils::isNotBlank, "AE Title 为必填项")
 			.bind(DicomSourceNodeEntity::getAeTitle, DicomSourceNodeEntity::setAeTitle);
 		binder.forField(description).bind(DicomSourceNodeEntity::getDescription, DicomSourceNodeEntity::setDescription);
 

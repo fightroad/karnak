@@ -83,12 +83,12 @@ public class EditProject extends VerticalLayout {
 		textProjectName = textFieldsBindProject.getTextResearchName();
 		profileDropDown = textFieldsBindProject.getProfileDropDown();
 		projectSecret = new ProjectSecret(textFieldsBindProject.getSecretComboBox());
-		textProjectName.setLabel("Project Name");
+		textProjectName.setLabel("项目名称");
 		textProjectName.setWidthFull();
-		profileDropDown.setLabel("De-identification Profile");
+		profileDropDown.setLabel("去标识配置文件");
 		profileDropDown.setWidthFull();
-		buttonUpdate = new Button("Update");
-		buttonRemove = new Button("Delete");
+		buttonUpdate = new Button("更新");
+		buttonRemove = new Button("删除");
 		buttonRemove.addThemeVariants(ButtonVariant.ERROR, ButtonVariant.PRIMARY);
 		horizontalLayoutButtons = new HorizontalLayout(buttonUpdate, buttonRemove);
 	}

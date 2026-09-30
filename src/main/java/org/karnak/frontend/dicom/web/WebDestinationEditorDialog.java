@@ -51,12 +51,12 @@ public class WebDestinationEditorDialog extends Dialog {
 
 	public WebDestinationEditorDialog(@Nullable WebDestinationConfigEntity endpoint, List<String> knownGroups) {
 		this.endpointId = (endpoint != null) ? endpoint.getId() : null;
-		this.descriptionFld = new TextField("Description");
+		this.descriptionFld = new TextField("描述");
 		this.urlFld = createUrlField();
 		this.servicesFld = createServicesField();
 		this.groupFld = createGroupField(knownGroups);
 
-		setHeaderTitle((endpointId != null) ? "Edit DICOMweb Endpoint" : "Add DICOMweb Endpoint");
+		setHeaderTitle((endpointId != null) ? "编辑 DICOMweb 端点" : "添加 DICOMweb 端点");
 
 		if (endpoint != null) {
 			fillFields(endpoint);
@@ -71,7 +71,7 @@ public class WebDestinationEditorDialog extends Dialog {
 	}
 
 	private static TextField createUrlField() {
-		TextField field = new TextField("DICOMweb base URL");
+		TextField field = new TextField("DICOMweb 基础 URL");
 		field.setRequired(true);
 		field.setRequiredIndicatorVisible(true);
 		field.setPlaceholder("https://host:443/dicom-web");
@@ -80,10 +80,10 @@ public class WebDestinationEditorDialog extends Dialog {
 	}
 
 	private static CheckboxGroup<DicomWebServiceType> createServicesField() {
-		CheckboxGroup<DicomWebServiceType> group = new CheckboxGroup<>("Services to probe");
+		CheckboxGroup<DicomWebServiceType> group = new CheckboxGroup<>("要探测的服务");
 		group.setItems(DicomWebServiceType.values());
 		group.setItemLabelGenerator(DicomWebServiceType::getDisplayName);
-		group.setHelperText("none selected means all services");
+		group.setHelperText("未选择表示所有服务");
 		// Aura stacks checkbox-group options vertically by default; lay them out in a row
 		// as they were under Lumo.
 		group.addThemeVariants(CheckboxGroupVariant.AURA_HORIZONTAL);
@@ -91,11 +91,11 @@ public class WebDestinationEditorDialog extends Dialog {
 	}
 
 	private static ComboBox<String> createGroupField(List<String> knownGroups) {
-		ComboBox<String> comboBox = new ComboBox<>("Group");
+		ComboBox<String> comboBox = new ComboBox<>("分组");
 		comboBox.setItems(knownGroups);
 		comboBox.setAllowCustomValue(true);
 		comboBox.setClearButtonVisible(true);
-		comboBox.setHelperText("optional - pick a group or type a new one");
+		comboBox.setHelperText("可选 - 选择分组或输入新分组");
 		comboBox.addCustomValueSetListener(event -> comboBox.setValue(event.getDetail()));
 		return comboBox;
 	}
@@ -116,9 +116,9 @@ public class WebDestinationEditorDialog extends Dialog {
 	}
 
 	private void addButtons() {
-		Button cancelBtn = new Button("Cancel", event -> close());
+		Button cancelBtn = new Button("取消", event -> close());
 
-		Button saveBtn = new Button("Save", event -> save());
+		Button saveBtn = new Button("保存", event -> save());
 		saveBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
 		getFooter().add(cancelBtn, saveBtn);

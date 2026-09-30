@@ -29,11 +29,11 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class WarningConfirmDialog extends Composite<Dialog> {
 
-	private static final String DEFAULT_TITLE = "Warning";
+	private static final String DEFAULT_TITLE = "警告";
 
-	private static final String DEFAULT_VALIDATE = "Validate";
+	private static final String DEFAULT_VALIDATE = "确认";
 
-	private static final String DEFAULT_CANCEL = "Cancel";
+	private static final String DEFAULT_CANCEL = "取消";
 
 	private final Div messageLayout;
 

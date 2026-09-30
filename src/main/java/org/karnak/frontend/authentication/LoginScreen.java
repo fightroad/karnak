@@ -13,6 +13,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -29,7 +30,7 @@ import org.weasis.core.util.annotations.Generated;
  */
 @Slf4j
 @Route(LoginScreen.ROUTE)
-@PageTitle("Karnak - Login")
+@PageTitle("Karnak - 登录")
 @AnonymousAllowed
 @Generated()
 public class LoginScreen extends FlexLayout implements BeforeEnterObserver {
@@ -66,6 +67,7 @@ public class LoginScreen extends FlexLayout implements BeforeEnterObserver {
 
 	private Component buildLoginMainComponent() {
 		loginForm.setAction(ROUTE);
+		loginForm.setI18n(createChineseLoginI18n());
 
 		loginForm.setForgotPasswordButtonVisible(false);
 
@@ -76,6 +78,24 @@ public class LoginScreen extends FlexLayout implements BeforeEnterObserver {
 		loginInformation.add(logoKarnak, new H1(KARNAK_TITLE), loginForm);
 
 		return loginInformation;
+	}
+
+	private static LoginI18n createChineseLoginI18n() {
+		LoginI18n i18n = LoginI18n.createDefault();
+		LoginI18n.Form form = i18n.getForm();
+		form.setTitle("登录");
+		form.setUsername("用户名");
+		form.setPassword("密码");
+		form.setSubmit("登录");
+		form.setForgotPassword("忘记密码");
+		i18n.setForm(form);
+		LoginI18n.ErrorMessage errorMessage = i18n.getErrorMessage();
+		errorMessage.setTitle("登录失败");
+		errorMessage.setMessage("用户名或密码错误，请重试。");
+		errorMessage.setUsername("用户名不能为空");
+		errorMessage.setPassword("密码不能为空");
+		i18n.setErrorMessage(errorMessage);
+		return i18n;
 	}
 
 	private void focusUsernameField() {

@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.karnak.backend.data.entity.DicomNodeConfigEntity;
 import org.karnak.backend.data.repo.DicomNodeConfigRepo;
+import org.karnak.backend.util.DicomNodeUtil;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
@@ -140,7 +141,8 @@ class DicomNodeConfigServiceTest {
 	@Test
 	void save_node_rejects_only_the_dynamic_gateway_destinations_group() {
 		assertThrows(IllegalArgumentException.class,
-				() -> dicomNodeConfigService.saveNode("n", "AET", "h", 104, "WORKSTATION", "Gateway destinations"));
+				() -> dicomNodeConfigService.saveNode("n", "AET", "h", 104, "WORKSTATION",
+						DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME));
 		verify(dicomNodeConfigRepo, never()).save(any(DicomNodeConfigEntity.class));
 	}
 
@@ -227,7 +229,8 @@ class DicomNodeConfigServiceTest {
 
 	@Test
 	void delete_group_rejects_only_the_dynamic_gateway_destinations_group() {
-		assertThrows(IllegalArgumentException.class, () -> dicomNodeConfigService.deleteGroup("Gateway destinations"));
+		assertThrows(IllegalArgumentException.class,
+				() -> dicomNodeConfigService.deleteGroup(DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME));
 	}
 
 	@Test
@@ -355,7 +358,8 @@ class DicomNodeConfigServiceTest {
 	@Test
 	void import_rejects_the_dynamic_group_as_a_target() {
 		assertThrows(IllegalArgumentException.class,
-				() -> dicomNodeConfigService.importCsv(stream(""), ',', "Gateway destinations", false));
+				() -> dicomNodeConfigService.importCsv(stream(""), ',', DicomNodeUtil.GATEWAY_DESTINATIONS_GROUP_NAME,
+						false));
 	}
 
 	@Test

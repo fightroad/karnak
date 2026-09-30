@@ -38,7 +38,7 @@ public class TextFieldsBindProject {
 
 	public TextFieldsBindProject() {
 		this.textResearchName = new TextField();
-		this.secretComboBox = new ComboBox<>("Project Secret");
+		this.secretComboBox = new ComboBox<>("项目密钥");
 		this.profileDropDown = new ProfileDropDown();
 		this.binder = setBinder();
 	}
@@ -46,7 +46,7 @@ public class TextFieldsBindProject {
 	private Binder<ProjectEntity> setBinder() {
 		Binder<ProjectEntity> binderBean = new BeanValidationBinder<>(ProjectEntity.class);
 		binderBean.forField(textResearchName)
-			.withValidator(StringUtils::isNotBlank, "Name is mandatory")
+			.withValidator(StringUtils::isNotBlank, "名称为必填项")
 			.bind(ProjectEntity::getName, ProjectEntity::setName);
 
 		binderBean.forField(secretComboBox)
@@ -55,7 +55,7 @@ public class TextFieldsBindProject {
 			.bind(ProjectEntity::retrieveActiveSecret, ProjectEntity::applyActiveSecret);
 
 		binderBean.forField(profileDropDown)
-			.withValidator(Objects::nonNull, "Choose the de-identification profile\n")
+			.withValidator(Objects::nonNull, "请选择去标识配置文件\n")
 			.bind(ProjectEntity::getProfileEntity, ProjectEntity::setProfileEntity);
 		return binderBean;
 	}
@@ -70,7 +70,7 @@ public class TextFieldsBindProject {
 				return ValidationResult.ok();
 			}
 			else {
-				return ValidationResult.error("Secret is not valid");
+				return ValidationResult.error("密钥无效");
 			}
 		};
 	}
@@ -86,7 +86,7 @@ public class TextFieldsBindProject {
 				return ValidationResult.ok();
 			}
 			else {
-				return ValidationResult.error("Secret is mandatory");
+				return ValidationResult.error("密钥为必填项");
 			}
 		};
 	}

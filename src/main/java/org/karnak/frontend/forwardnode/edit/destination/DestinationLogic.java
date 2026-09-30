@@ -40,11 +40,11 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class DestinationLogic extends ListDataProvider<DestinationEntity> {
 
-	public static final String TRANSFER_IN_PROGRESS = "Transfer in progress";
+	public static final String TRANSFER_IN_PROGRESS = "传输进行中";
 
-	public static final String SAVE = "Save";
+	public static final String SAVE = "保存";
 
-	public static final String DELETE = "Delete";
+	public static final String DELETE = "删除";
 
 	// View
 	private final AtomicReference<DestinationView> destinationViewRef = new AtomicReference<>();

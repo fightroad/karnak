@@ -51,7 +51,7 @@ public class DicomNodeSelectionDialog extends Dialog {
 		setWidth("420px");
 
 		if (this.groups.isEmpty()) {
-			add(new Div("No node is configured yet."));
+			add(new Div("尚未配置任何节点。"));
 		}
 		else {
 			add(buildForm(nodeLabel));
@@ -66,7 +66,7 @@ public class DicomNodeSelectionDialog extends Dialog {
 	private FormLayout buildForm(String nodeLabel) {
 		nodeSelector = new ComboBox<>(nodeLabel);
 		nodeSelector.setClearButtonVisible(true);
-		nodeSelector.setPlaceholder("Select a node");
+		nodeSelector.setPlaceholder("选择节点");
 		nodeSelector.setItemLabelGenerator(item -> item.getName() + " [" + item.getAet() + " | " + item.getHostname()
 				+ " | " + item.getPort() + "]");
 		nodeSelector.setRenderer(getDivConfigNodeComponentRenderer());
@@ -82,8 +82,8 @@ public class DicomNodeSelectionDialog extends Dialog {
 		// with a single group it would be a redundant control (e.g. the worklist nodes).
 		if (groups.size() > 1) {
 			groupSelector = new Select<>();
-			groupSelector.setLabel("Group");
-			groupSelector.setPlaceholder("Select a group");
+			groupSelector.setLabel("分组");
+			groupSelector.setPlaceholder("选择分组");
 			groupSelector.setItems(groups);
 			groupSelector.addValueChangeListener(event -> populateNodes(event.getValue()));
 			form.add(groupSelector, nodeSelector);
@@ -103,9 +103,9 @@ public class DicomNodeSelectionDialog extends Dialog {
 	}
 
 	private void addButtons() {
-		Button cancelBtn = new Button("Cancel", event -> close());
+		Button cancelBtn = new Button("取消", event -> close());
 
-		selectBtn = new Button("Select", event -> {
+		selectBtn = new Button("选择", event -> {
 			if (nodeSelector != null && nodeSelector.getValue() != null) {
 				fireEvent(new SelectDicomNodeEvent(this, false, nodeSelector.getValue()));
 			}

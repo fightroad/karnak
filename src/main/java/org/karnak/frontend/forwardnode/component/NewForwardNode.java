@@ -34,13 +34,13 @@ public class NewForwardNode extends HorizontalLayout {
 	private final NewItemDialog dialog;
 
 	public NewForwardNode() {
-		newAETitleForwardNode = new TextField("Forward AETitle");
-		newAETitleForwardNode.setPlaceholder("Forward AETitle");
+		newAETitleForwardNode = new TextField("转发 AE Title");
+		newAETitleForwardNode.setPlaceholder("转发 AE Title");
 		newAETitleForwardNode.setWidthFull();
 
-		dialog = new NewItemDialog("New forward node", "Add", newAETitleForwardNode);
+		dialog = new NewItemDialog("新建转发节点", "添加", newAETitleForwardNode).compact();
 
-		newForwardNodeBtn = ButtonFactory.createAddButton("New forward node");
+		newForwardNodeBtn = ButtonFactory.createAddButton("新建转发节点");
 		newForwardNodeBtn.addClickListener(click -> openDialog());
 		// CTRL+N will create a new window which is unavoidable
 		newForwardNodeBtn.addClickShortcut(Key.KEY_N, KeyModifier.ALT);

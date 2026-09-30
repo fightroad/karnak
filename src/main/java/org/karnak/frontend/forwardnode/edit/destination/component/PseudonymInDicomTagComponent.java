@@ -41,9 +41,9 @@ public class PseudonymInDicomTagComponent extends Div {
 	}
 
 	public void setElements() {
-		delimiter = new TextField("Delimiter");
+		delimiter = new TextField("分隔符");
 		tag = new TextField("Tag");
-		position = new NumberField("Position");
+		position = new NumberField("位置");
 		position.setStepButtonsVisible(true);
 		position.setMin(0);
 		position.setStep(1);

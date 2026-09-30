@@ -29,7 +29,7 @@ public class ProfileErrorView extends VerticalLayout {
 
 	public void setView(List<ProfileError> profileErrors) {
 		removeAll();
-		add(new H2("Errors occurred in profile elements"));
+		add(new H2("配置文件元素发生错误"));
 		for (ProfileError profileError : profileErrors) {
 			ProfileElementEntity profileElementEntity = profileError.getProfileElement();
 			Div profileName = setProfileName(
@@ -38,7 +38,7 @@ public class ProfileErrorView extends VerticalLayout {
 
 			if (profileError.getError() != null) {
 				profileName.add(setErrorIcon());
-				add(setProfileError("Error : " + profileError.getError()));
+				add(setProfileError("错误：" + profileError.getError()));
 			}
 			else {
 				profileName.add(setSuccessIcon());
@@ -49,14 +49,14 @@ public class ProfileErrorView extends VerticalLayout {
 
 	public void setView(String text) {
 		removeAll();
-		add(new H2("Error occurred"));
+		add(new H2("发生错误"));
 		add(setProfileError(text));
 	}
 
 	public void setProfileShowHide(ProfileElementEntity profileElementEntity) {
 		ProfileShowHide profileShowHide = new ProfileShowHide(new ProfileElementView(profileElementEntity), false);
-		profileShowHide.setTextHide("Hide profile");
-		profileShowHide.setTextShow("Show profile");
+		profileShowHide.setTextHide("隐藏配置");
+		profileShowHide.setTextShow("显示配置");
 		add(profileShowHide);
 		profileShowHide.setView();
 	}

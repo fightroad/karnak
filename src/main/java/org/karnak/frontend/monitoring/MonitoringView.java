@@ -41,12 +41,12 @@ import org.weasis.core.util.annotations.Generated;
  * and a Dashboard tab showing per-forward-node activity.
  */
 @Route(value = MonitoringView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - Monitoring")
+@PageTitle("Karnak - 监控")
 @RolesAllowed("admin")
 @Generated()
 public class MonitoringView extends VerticalLayout {
 
-	public static final String VIEW_NAME = "Monitoring";
+	public static final String VIEW_NAME = "监控";
 
 	public static final String ROUTE = "monitoring";
 
@@ -99,11 +99,11 @@ public class MonitoringView extends VerticalLayout {
 		exportDialog = new ExportDialog(
 				() -> monitoringLogic.buildCsv(getCurrentFilter(), exportDialog.getExportSettings()));
 
-		expandErrorsButton = new Button("Expand errors", new Icon(VaadinIcon.WARNING));
+		expandErrorsButton = new Button("展开错误", new Icon(VaadinIcon.WARNING));
 		activityPanel = buildActivityPanel();
 
-		activityTab = new Tab(VaadinIcon.LIST_OL.create(), new Text("Activity"));
-		dashboardTab = new Tab(VaadinIcon.DASHBOARD.create(), new Text("Dashboard"));
+		activityTab = new Tab(VaadinIcon.LIST_OL.create(), new Text("传输明细"));
+		dashboardTab = new Tab(VaadinIcon.DASHBOARD.create(), new Text("仪表盘"));
 		tabs = new Tabs(activityTab, dashboardTab);
 		tabs.addSelectedChangeListener(event -> showSelectedTab());
 
@@ -120,23 +120,23 @@ public class MonitoringView extends VerticalLayout {
 			}
 			else {
 				treeGrid.expandErrors();
-				expandErrorsButton.setText("Collapse errors");
+				expandErrorsButton.setText("折叠错误");
 				expandErrorsButton.setIcon(new Icon(VaadinIcon.CHEVRON_UP));
 				errorsExpanded = true;
 			}
 		});
 
-		Button refreshButton = new Button("Refresh", new Icon(VaadinIcon.REFRESH));
+		Button refreshButton = new Button("刷新", new Icon(VaadinIcon.REFRESH));
 		refreshButton.addClickListener(event -> {
 			filterBar.refreshRange();
 			treeGrid.refresh();
 			resetErrorsToggle();
 		});
 
-		Button exportButton = new Button("Export", new Icon(VaadinIcon.DOWNLOAD_ALT));
+		Button exportButton = new Button("导出", new Icon(VaadinIcon.DOWNLOAD_ALT));
 		exportButton.addClickListener(event -> exportDialog.open());
 
-		Button deleteButton = new Button("Delete All", new Icon(VaadinIcon.TRASH));
+		Button deleteButton = new Button("全部删除", new Icon(VaadinIcon.TRASH));
 		deleteButton.addThemeVariants(ButtonVariant.ERROR, ButtonVariant.PRIMARY);
 		deleteButton.addClickListener(event -> confirmDeleteAll());
 
@@ -162,16 +162,14 @@ public class MonitoringView extends VerticalLayout {
 	 */
 	private void resetErrorsToggle() {
 		errorsExpanded = false;
-		expandErrorsButton.setText("Expand errors");
+		expandErrorsButton.setText("展开错误");
 		expandErrorsButton.setIcon(new Icon(VaadinIcon.WARNING));
 	}
 
 	private void confirmDeleteAll() {
 		Div dialogContent = new Div();
-		dialogContent.add(new Text(
-				"You are about to delete all entries from monitoring. This action cannot be undone. Are you sure?"));
-		WarningConfirmDialog dialog = new WarningConfirmDialog("Delete all monitoring entries", dialogContent, "Delete",
-				"Cancel");
+		dialogContent.add(new Text("即将删除所有监控条目。此操作无法撤销。确定要继续吗？"));
+		WarningConfirmDialog dialog = new WarningConfirmDialog("删除所有监控条目", dialogContent, "删除", "取消");
 		dialog.addConfirmationListener(event -> {
 			monitoringLogic.deleteAllTransferStatus();
 			treeGrid.refresh();

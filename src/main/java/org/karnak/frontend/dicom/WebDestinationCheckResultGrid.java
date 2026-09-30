@@ -35,13 +35,13 @@ public class WebDestinationCheckResultGrid extends Grid<WebNodeCheckResult> {
 
 		setDetailsVisibleOnClick(true);
 		setItemDetailsRenderer(createDetailsRenderer());
-		setEmptyStateText("No DICOMweb destinations found");
+		setEmptyStateText("未找到 DICOMweb 目标");
 		setSelectionMode(SelectionMode.NONE);
 		addThemeVariants(GridVariant.WRAP_CELL_CONTENT);
 
-		addColumn(createDestinationRenderer()).setHeader("Destination");
-		addColumn(createStatusRenderer()).setHeader("Reachable");
-		addColumn(createHttpRenderer()).setHeader("HTTP Status").setAutoWidth(true).setFlexGrow(0);
+		addColumn(createDestinationRenderer()).setHeader("目的地");
+		addColumn(createStatusRenderer()).setHeader("可达");
+		addColumn(createHttpRenderer()).setHeader("HTTP 状态").setAutoWidth(true).setFlexGrow(0);
 		addColumn(createTlsRenderer()).setHeader("TLS");
 	}
 
@@ -64,7 +64,7 @@ public class WebDestinationCheckResultGrid extends Grid<WebNodeCheckResult> {
 			if (row != null) {
 				boolean successful = row.result().isSuccessful();
 				badge.addThemeVariants(successful ? BadgeVariant.SUCCESS : BadgeVariant.ERROR);
-				badge.setText(successful ? "Reachable" : "Unreachable");
+				badge.setText(successful ? "可达" : "不可达");
 			}
 			return badge;
 		});
@@ -86,13 +86,13 @@ public class WebDestinationCheckResultGrid extends Grid<WebNodeCheckResult> {
 			if (row != null) {
 				WebDestinationCheckResult result = row.result();
 				if (!result.isSecure()) {
-					div.setText("plain HTTP");
+					div.setText("明文 HTTP");
 				}
 				else {
 					TlsCertificateInfo tls = result.getTls();
 					div.setText(tls != null
-							? tls.protocol() + " — " + (tls.expired() ? "EXPIRED" : tls.daysUntilExpiry() + "d left")
-							: "handshake failed");
+							? tls.protocol() + " — " + (tls.expired() ? "已过期" : "剩余 " + tls.daysUntilExpiry() + " 天")
+							: "握手失败");
 				}
 			}
 			return div;
@@ -108,24 +108,24 @@ public class WebDestinationCheckResultGrid extends Grid<WebNodeCheckResult> {
 				WebDestinationCheckResult result = row.result();
 
 				if (result.isUnexpectedError()) {
-					list.add(new ListItem("Error: " + result.getUnexpectedErrorMessage()));
+					list.add(new ListItem("错误：" + result.getUnexpectedErrorMessage()));
 					return list;
 				}
 
 				String endpoint = result.getHost() + ":" + result.getPort();
-				list.add(new ListItem(result.isTcpReachable() ? "TCP connection to " + endpoint + " succeeded"
-						: "TCP connection to " + endpoint + " failed"));
+				list.add(new ListItem(result.isTcpReachable() ? "到 " + endpoint + " 的 TCP 连接成功"
+						: "到 " + endpoint + " 的 TCP 连接失败"));
 
 				if (result.isHttpResponded()) {
-					list.add(new ListItem("HTTP OPTIONS returned status " + result.getHttpStatus()));
+					list.add(new ListItem("HTTP OPTIONS 返回状态 " + result.getHttpStatus()));
 				}
 				else if (result.isTcpReachable()) {
-					list.add(new ListItem("No HTTP response from the endpoint"));
+					list.add(new ListItem("端点无 HTTP 响应"));
 				}
 
 				if (result.isSecure()) {
 					TlsCertificateInfo tls = result.getTls();
-					list.add(new ListItem(tls != null ? "TLS: " + tls.getSummary() : "TLS handshake failed"));
+					list.add(new ListItem(tls != null ? "TLS：" + tls.getSummary() : "TLS 握手失败"));
 				}
 
 				if (result.getAuth() != null) {

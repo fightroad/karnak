@@ -45,13 +45,13 @@ public class MonitoringDetailPanel extends VerticalLayout {
 	private record Field(String label, String value, boolean multiline, boolean header) {
 	}
 
-	private final Span title = new Span("Details");
+	private final Span title = new Span("详情");
 
-	private final Button copyButton = new Button("Copy", VaadinIcon.COPY.create());
+	private final Button copyButton = new Button("复制", VaadinIcon.COPY.create());
 
 	private final FormLayout form = new FormLayout();
 
-	private final Span placeholder = new Span("Select a destination, study, series or error to see its details.");
+	private final Span placeholder = new Span("请选择目的地、检查、序列或错误以查看详情。");
 
 	private transient String copyText = "";
 
@@ -92,7 +92,7 @@ public class MonitoringDetailPanel extends VerticalLayout {
 	public void show(MonitoringNode node) {
 		form.removeAll();
 		if (node == null) {
-			title.setText("Details");
+			title.setText("详情");
 			placeholder.setVisible(true);
 			copyButton.setEnabled(false);
 			copyText = "";
@@ -150,9 +150,9 @@ public class MonitoringDetailPanel extends VerticalLayout {
 	private String titleFor(MonitoringNode node) {
 		return switch (node) {
 			case DestinationNode d -> d.displayName();
-			case StudyNode s -> "Study " + StringUtils.defaultString(s.studyUid());
-			case SeriesNode se -> "Series " + StringUtils.defaultString(se.serieUid());
-			case ErrorNode e -> e.errors() > 0 ? "Error" : "Excluded";
+			case StudyNode s -> "检查 " + StringUtils.defaultString(s.studyUid());
+			case SeriesNode se -> "序列 " + StringUtils.defaultString(se.serieUid());
+			case ErrorNode e -> e.errors() > 0 ? "错误" : "已排除";
 		};
 	}
 
@@ -160,63 +160,63 @@ public class MonitoringDetailPanel extends VerticalLayout {
 		List<Field> fields = new ArrayList<>();
 		switch (node) {
 			case DestinationNode d -> {
-				text(fields, "Forward AET", d.forwardAet());
-				text(fields, "Destination", d.destinationLabel());
-				number(fields, "Studies", d.studies());
-				number(fields, "Series", d.series());
-				number(fields, "Instances", d.instances());
-				number(fields, "Retries", d.retries());
-				number(fields, "Sent", d.sent());
-				number(fields, "Errors", d.errors());
-				number(fields, "Excluded", d.excluded());
+				text(fields, "转发 AET", d.forwardAet());
+				text(fields, "目的地", d.destinationLabel());
+				number(fields, "检查", d.studies());
+				number(fields, "序列", d.series());
+				number(fields, "实例", d.instances());
+				number(fields, "重试", d.retries());
+				number(fields, "已发送", d.sent());
+				number(fields, "错误", d.errors());
+				number(fields, "已排除", d.excluded());
 			}
 			case StudyNode s -> {
-				section(fields, "Patient");
-				pair(fields, "Patient ID", s.patientIdOriginal(), s.patientIdToSend());
-				section(fields, "Study");
-				pair(fields, "Study UID", s.studyUid(), s.studyUidToSend());
-				pair(fields, "Accession number", s.accessionNumberOriginal(), s.accessionNumberToSend());
-				pair(fields, "Description", s.description(), s.descriptionToSend());
-				datePair(fields, "Study date", s.studyDateOriginal(), s.studyDateToSend());
-				section(fields, "Transfer");
-				number(fields, "Series", s.series());
-				number(fields, "Instances", s.instances());
-				number(fields, "Retries", s.retries());
-				number(fields, "Sent", s.sent());
-				number(fields, "Errors", s.errors());
-				number(fields, "Excluded", s.excluded());
-				date(fields, "First seen", s.firstSeen());
-				date(fields, "Last seen", s.lastSeen());
+				section(fields, "患者");
+				pair(fields, "患者 ID", s.patientIdOriginal(), s.patientIdToSend());
+				section(fields, "检查");
+				pair(fields, "检查 UID", s.studyUid(), s.studyUidToSend());
+				pair(fields, "检查号", s.accessionNumberOriginal(), s.accessionNumberToSend());
+				pair(fields, "描述", s.description(), s.descriptionToSend());
+				datePair(fields, "检查日期", s.studyDateOriginal(), s.studyDateToSend());
+				section(fields, "传输");
+				number(fields, "序列", s.series());
+				number(fields, "实例", s.instances());
+				number(fields, "重试", s.retries());
+				number(fields, "已发送", s.sent());
+				number(fields, "错误", s.errors());
+				number(fields, "已排除", s.excluded());
+				date(fields, "首次出现", s.firstSeen());
+				date(fields, "最后出现", s.lastSeen());
 			}
 			case SeriesNode se -> {
-				section(fields, "Patient");
-				pair(fields, "Patient ID", se.patientIdOriginal(), se.patientIdToSend());
-				section(fields, "Study");
-				pair(fields, "Study UID", se.studyUid(), se.studyUidToSend());
-				pair(fields, "Accession number", se.accessionNumberOriginal(), se.accessionNumberToSend());
-				pair(fields, "Description", se.studyDescriptionOriginal(), se.studyDescriptionToSend());
-				datePair(fields, "Study date", se.studyDateOriginal(), se.studyDateToSend());
-				section(fields, "Series");
-				pair(fields, "Series UID", se.serieUid(), se.serieUidToSend());
-				pair(fields, "Description", se.description(), se.descriptionToSend());
-				text(fields, "Modality", se.modality());
-				text(fields, "SOP classes", se.sopClassUids());
-				datePair(fields, "Series date", se.serieDateOriginal(), se.serieDateToSend());
-				section(fields, "Transfer");
-				number(fields, "Instances", se.instances());
-				number(fields, "Retries", se.retries());
-				number(fields, "Sent", se.sent());
-				number(fields, "Errors", se.errors());
-				number(fields, "Excluded", se.excluded());
-				date(fields, "First seen", se.firstSeen());
-				date(fields, "Last seen", se.lastSeen());
+				section(fields, "患者");
+				pair(fields, "患者 ID", se.patientIdOriginal(), se.patientIdToSend());
+				section(fields, "检查");
+				pair(fields, "检查 UID", se.studyUid(), se.studyUidToSend());
+				pair(fields, "检查号", se.accessionNumberOriginal(), se.accessionNumberToSend());
+				pair(fields, "描述", se.studyDescriptionOriginal(), se.studyDescriptionToSend());
+				datePair(fields, "检查日期", se.studyDateOriginal(), se.studyDateToSend());
+				section(fields, "序列");
+				pair(fields, "序列 UID", se.serieUid(), se.serieUidToSend());
+				pair(fields, "描述", se.description(), se.descriptionToSend());
+				text(fields, "模态", se.modality());
+				text(fields, "SOP Class", se.sopClassUids());
+				datePair(fields, "序列日期", se.serieDateOriginal(), se.serieDateToSend());
+				section(fields, "传输");
+				number(fields, "实例", se.instances());
+				number(fields, "重试", se.retries());
+				number(fields, "已发送", se.sent());
+				number(fields, "错误", se.errors());
+				number(fields, "已排除", se.excluded());
+				date(fields, "首次出现", se.firstSeen());
+				date(fields, "最后出现", se.lastSeen());
 			}
 			case ErrorNode e -> {
-				fields.add(new Field("Reason", StringUtils.defaultString(e.reason()), true, false));
-				number(fields, "Instances", e.instances());
-				number(fields, "Errors", e.errors());
-				number(fields, "Excluded", e.excluded());
-				number(fields, "Retries", e.retries());
+				fields.add(new Field("原因", StringUtils.defaultString(e.reason()), true, false));
+				number(fields, "实例", e.instances());
+				number(fields, "错误", e.errors());
+				number(fields, "已排除", e.excluded());
+				number(fields, "重试", e.retries());
 			}
 		}
 		return fields;
@@ -252,7 +252,7 @@ public class MonitoringDetailPanel extends VerticalLayout {
 			fields.add(new Field(label, original, false, false));
 		}
 		if (StringUtils.isNotBlank(toSend) && !Objects.equals(original, toSend)) {
-			fields.add(new Field(label + " (de-identified)", toSend, false, false));
+			fields.add(new Field(label + "（已去标识）", toSend, false, false));
 		}
 	}
 
@@ -262,7 +262,7 @@ public class MonitoringDetailPanel extends VerticalLayout {
 			fields.add(new Field(label, formatDate(original), false, false));
 		}
 		if (toSend != null && !Objects.equals(original, toSend)) {
-			fields.add(new Field(label + " (de-identified)", formatDate(toSend), false, false));
+			fields.add(new Field(label + "（已去标识）", formatDate(toSend), false, false));
 		}
 	}
 
@@ -272,7 +272,7 @@ public class MonitoringDetailPanel extends VerticalLayout {
 
 	private void copyToClipboard() {
 		copyButton.getElement().executeJs("navigator.clipboard.writeText($0).then(() => {}, () => {})", copyText);
-		Notification notification = Notification.show("Details copied to clipboard");
+		Notification notification = Notification.show("详情已复制到剪贴板");
 		notification.addThemeVariants(NotificationVariant.SUCCESS);
 		notification.setDuration(2000);
 		notification.setPosition(Position.MIDDLE);

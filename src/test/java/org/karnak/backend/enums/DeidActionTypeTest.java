@@ -23,15 +23,15 @@ class DeidActionTypeTest {
 	@Test
 	void exposes_the_symbol_and_label() {
 		assertEquals("K", DeidActionType.KEEP.getSymbol());
-		assertEquals("Keep", DeidActionType.KEEP.getLabel());
+		assertEquals("保留", DeidActionType.KEEP.getLabel());
 		assertEquals("U", DeidActionType.NEW_UID.getSymbol());
-		assertEquals("Generate a new UID", DeidActionType.NEW_UID.getLabel());
+		assertEquals("生成新 UID", DeidActionType.NEW_UID.getLabel());
 	}
 
 	@Test
 	void to_string_returns_the_label() {
-		assertEquals("Remove", DeidActionType.REMOVE.toString());
-		assertEquals("Replace with null", DeidActionType.REPLACE_NULL.toString());
+		assertEquals("删除", DeidActionType.REMOVE.toString());
+		assertEquals("替换为空", DeidActionType.REPLACE_NULL.toString());
 	}
 
 	@Test

@@ -27,7 +27,7 @@ public class DestinationComponentUtil extends VerticalLayout {
 	public ProjectDropDown buildProjectDropDown() {
 		ProjectDropDown projectDropDown = new ProjectDropDown();
 		projectDropDown.setItemLabelGenerator(ProjectEntity::getName);
-		projectDropDown.setLabel("Choose a project");
+		projectDropDown.setLabel("选择项目");
 		// Keep the project selector compact rather than spanning the whole card; a
 		// project name never needs the full destination-panel width.
 		projectDropDown.setWidth("300px");
@@ -39,8 +39,8 @@ public class DestinationComponentUtil extends VerticalLayout {
 	 */
 	public WarningNoProjectsDefined buildWarningNoProjectDefined() {
 		WarningNoProjectsDefined warningNoProjectsDefined = new WarningNoProjectsDefined();
-		warningNoProjectsDefined.setTextBtnCancel("Continue");
-		warningNoProjectsDefined.setTextBtnValidate("Create a project");
+		warningNoProjectsDefined.setTextBtnCancel("继续");
+		warningNoProjectsDefined.setTextBtnValidate("创建项目");
 		return warningNoProjectsDefined;
 	}
 
@@ -94,11 +94,11 @@ public class DestinationComponentUtil extends VerticalLayout {
 
 	public void setTextOnSelectionProject(ProjectEntity projectEntity, ProfileLabel profileLabel) {
 		if (projectEntity != null && projectEntity.getProfileEntity() != null) {
-			profileLabel.setShowValue(String.format("The profile %s [version %s] will be used",
+			profileLabel.setShowValue(String.format("将使用配置文件 %s [版本 %s]",
 					projectEntity.getProfileEntity().getName(), projectEntity.getProfileEntity().getVersion()));
 		}
 		else if (projectEntity != null && projectEntity.getProfileEntity() == null) {
-			profileLabel.setShowValue("No profiles defined in the project");
+			profileLabel.setShowValue("项目中未定义配置文件");
 		}
 		else {
 			profileLabel.removeAll();

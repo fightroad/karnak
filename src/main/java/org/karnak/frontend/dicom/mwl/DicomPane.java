@@ -83,7 +83,7 @@ public class DicomPane extends Composite<Dialog> {
 
 	private void buildTitleBar() {
 		titleBar = new Div();
-		titleBar.setText("Worklist Entry");
+		titleBar.setText("Worklist 条目");
 	}
 
 	private void buildContentField() {
@@ -106,7 +106,7 @@ public class DicomPane extends Composite<Dialog> {
 
 	private void buildDownloadTextAnchor() {
 		Button downloadTextBtn = new Button();
-		downloadTextBtn.setText("Download Text");
+		downloadTextBtn.setText("下载文本");
 		downloadTextBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
 		downloadTextAnchor = new Anchor();
@@ -119,7 +119,7 @@ public class DicomPane extends Composite<Dialog> {
 
 	private void buildDownloadDicomAnchor() {
 		Button downloadDicomBtn = new Button();
-		downloadDicomBtn.setText("Download DICOM");
+		downloadDicomBtn.setText("下载 DICOM");
 		downloadDicomBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
 		downloadDicomAnchor = new Anchor();
@@ -131,7 +131,7 @@ public class DicomPane extends Composite<Dialog> {
 	}
 
 	private void buildCancelButton() {
-		cancelButton = new Button("Cancel", event -> currentDialog.close());
+		cancelButton = new Button("取消", event -> currentDialog.close());
 	}
 
 }

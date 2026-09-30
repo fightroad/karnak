@@ -23,9 +23,9 @@ public class ProfileShowHide extends Div {
 
 	private Boolean show = true;
 
-	private String textShow = "Show";
+	private String textShow = "显示";
 
-	private String textHide = "Hide";
+	private String textHide = "隐藏";
 
 	public ProfileShowHide(Component component, Boolean show) {
 		this.component = component;

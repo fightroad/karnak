@@ -27,7 +27,7 @@ final class TagScopes {
 	 */
 	enum TagScope {
 
-		ANY_LEVEL("Any level"), ROOT_ONLY("Root only"), IN_SEQUENCE("Inside its sequence");
+		ANY_LEVEL("任意层级"), ROOT_ONLY("仅根级"), IN_SEQUENCE("位于其序列内");
 
 		private final String label;
 

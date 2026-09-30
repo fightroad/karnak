@@ -75,13 +75,13 @@ public class DestinationView extends VerticalLayout {
 	@Getter
 	private NewUpdateDestination newUpdateDestination;
 
-	private static final String LABEL_NEW_LOCAL_DICOM = "LOCAL";
+	private static final String LABEL_NEW_LOCAL_DICOM = "本地";
 
 	private static final String LABEL_NEW_DESTINATION_DICOM = "DICOM";
 
 	private static final String LABEL_NEW_DESTINATION_STOW = "STOW";
 
-	private static final String PLACEHOLDER_FILTER = "Filter properties of destination";
+	private static final String PLACEHOLDER_FILTER = "筛选目的地";
 
 	/**
 	 * Destination view constructor
@@ -108,7 +108,10 @@ public class DestinationView extends VerticalLayout {
 	 * Create components, layout and add the layout of the view
 	 */
 	private void buildComponentsLayout() {
-		setSizeFull();
+		// Match tab bar edges: no extra inset from VerticalLayout padding.
+		setPadding(false);
+		setSpacing(true);
+		setWidthFull();
 		filter = new TextField();
 		newDestinationDICOM = new Button(LABEL_NEW_DESTINATION_DICOM);
 		newDestinationSTOW = new Button(LABEL_NEW_DESTINATION_STOW);
@@ -125,6 +128,8 @@ public class DestinationView extends VerticalLayout {
 		HorizontalLayout layoutFilterButton = (newLocalDICOM != null)
 				? new HorizontalLayout(filter, newLocalDICOM, newDestinationDICOM, newDestinationSTOW)
 				: new HorizontalLayout(filter, newDestinationDICOM, newDestinationSTOW);
+		layoutFilterButton.setPadding(false);
+		layoutFilterButton.setWidthFull();
 		layoutFilterButton.setVerticalComponentAlignment(Alignment.START, filter);
 		layoutFilterButton.expand(filter);
 
@@ -143,19 +148,19 @@ public class DestinationView extends VerticalLayout {
 
 	private void setButtonNewLocalDICOM() {
 		newLocalDICOM = new Button(LABEL_NEW_LOCAL_DICOM);
-		newLocalDICOM.getElement().setAttribute("title", "New local folder destination");
+		newLocalDICOM.getElement().setAttribute("title", "新建本地文件夹目的地");
 		newLocalDICOM.addThemeVariants(ButtonVariant.PRIMARY);
 		newLocalDICOM.setIcon(VaadinIcon.PLUS_CIRCLE.create());
 	}
 
 	private void setButtonNewDestinationDICOM() {
-		newDestinationDICOM.getElement().setAttribute("title", "New destination of type dicom");
+		newDestinationDICOM.getElement().setAttribute("title", "新建 DICOM 类型目的地");
 		newDestinationDICOM.addThemeVariants(ButtonVariant.PRIMARY);
 		newDestinationDICOM.setIcon(VaadinIcon.PLUS_CIRCLE.create());
 	}
 
 	private void setButtonNewDestinationSTOW() {
-		newDestinationSTOW.getElement().setAttribute("title", "New destination of type stow");
+		newDestinationSTOW.getElement().setAttribute("title", "新建 STOW 类型目的地");
 		newDestinationSTOW.addThemeVariants(ButtonVariant.PRIMARY);
 		newDestinationSTOW.setIcon(VaadinIcon.PLUS_CIRCLE.create());
 	}

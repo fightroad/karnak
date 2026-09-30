@@ -30,13 +30,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.weasis.core.util.annotations.Generated;
 
 @Route(value = AuthConfigView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - Authentication Config")
+@PageTitle("Karnak - 认证配置")
 @Tag("auth-config-view")
 @RolesAllowed("admin")
 @Generated()
 public class AuthConfigView extends HorizontalLayout {
 
-	public static final String VIEW_NAME = "Authentication Config";
+	public static final String VIEW_NAME = "认证配置";
 
 	public static final String ROUTE = "auth-config";
 
@@ -80,8 +80,8 @@ public class AuthConfigView extends HorizontalLayout {
 	private void initComponents() {
 		authConfigGrid.setItems(authConfigLogic.getItems());
 		authConfigGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		authConfigGrid.addColumn(a -> a.getAuthConfigType().getCode()).setHeader("Type");
-		authConfigGrid.addColumn(AuthConfigEntity::getCode).setHeader("Identifier");
+		authConfigGrid.addColumn(a -> a.getAuthConfigType().getCode()).setHeader("类型");
+		authConfigGrid.addColumn(AuthConfigEntity::getCode).setHeader("标识符");
 
 		newAuthConfigComponent = new NewAuthConfigComponent();
 	}
@@ -108,8 +108,8 @@ public class AuthConfigView extends HorizontalLayout {
 		authConfigComponent.getDeleteBtn().addClickListener(buttonClickEvent -> {
 			Div dialogContent = new Div();
 			dialogContent
-				.add(new Text("Are you sure you want to delete the entry " + authConfigComponent.getAuthConfigCode()
-						+ "? Please make sure it is not used anywhere since it can result in errors."));
+				.add(new Text("确定删除条目 " + authConfigComponent.getAuthConfigCode()
+						+ " 吗？请确认它未被使用，否则可能导致错误。"));
 			WarningConfirmDialog dialog = new WarningConfirmDialog(dialogContent);
 			dialog.addConfirmationListener(componentEvent -> {
 				authConfigLogic.deleteAuthConfig(authConfigComponent.getAuthConfigCode());
@@ -134,12 +134,12 @@ public class AuthConfigView extends HorizontalLayout {
 		String name = newAuthConfigComponent.getNewNameField().getValue();
 		if (name == null || name.isEmpty()) {
 			newAuthConfigComponent.getNewNameField().setInvalid(true);
-			newAuthConfigComponent.getNewNameField().setErrorMessage("Identifier is required");
+			newAuthConfigComponent.getNewNameField().setErrorMessage("标识符为必填项");
 			return false;
 		}
 		else if (authConfigLogic.contains(name)) {
 			newAuthConfigComponent.getNewNameField().setInvalid(true);
-			newAuthConfigComponent.getNewNameField().setErrorMessage("This identifier already exists");
+			newAuthConfigComponent.getNewNameField().setErrorMessage("该标识符已存在");
 			return false;
 		}
 		newAuthConfigComponent.getNewNameField().setInvalid(false);

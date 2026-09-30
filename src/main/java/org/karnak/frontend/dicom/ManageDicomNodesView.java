@@ -85,13 +85,13 @@ public class ManageDicomNodesView extends AbstractView {
 		mainLayout.setSpacing(true);
 		mainLayout.getStyle().set("min-height", "0");
 
-		H6 title = new H6("DICOM Node Management");
+		H6 title = new H6("DICOM 节点管理");
 		title.getStyle().set("margin-top", "0px");
 
-		Button addBtn = new Button("Add Node", VaadinIcon.PLUS.create(), event -> openEditor(null));
+		Button addBtn = new Button("添加节点", VaadinIcon.PLUS.create(), event -> openEditor(null));
 		addBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
-		Button importExportBtn = new Button("Import / Export", VaadinIcon.EXCHANGE.create(),
+		Button importExportBtn = new Button("导入/导出", VaadinIcon.EXCHANGE.create(),
 				event -> openImportExportDialog());
 
 		HorizontalLayout toolbar = new HorizontalLayout(addBtn, importExportBtn);
@@ -152,11 +152,11 @@ public class ManageDicomNodesView extends AbstractView {
 						event.getNodeType(), event.getNodeGroup());
 			}
 			refresh();
-			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOM node saved"));
+			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOM 节点已保存"));
 		}
 		catch (Exception ex) {
 			displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot save the DICOM node: " + ex.getMessage()));
+					"无法保存 DICOM 节点：" + ex.getMessage()));
 		}
 	}
 
@@ -167,24 +167,24 @@ public class ManageDicomNodesView extends AbstractView {
 		try {
 			service.deleteNode(node.getId());
 			refresh();
-			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOM node deleted"));
+			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOM 节点已删除"));
 		}
 		catch (Exception ex) {
 			displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot delete the DICOM node: " + ex.getMessage()));
+					"无法删除 DICOM 节点：" + ex.getMessage()));
 		}
 	}
 
 	private void openImportExportDialog() {
 		List<String> knownGroups = service.getKnownGroups();
 
-		ComboBox<String> importGroup = groupCombo("Import into group", "blank = use the file's own group column",
+		ComboBox<String> importGroup = groupCombo("导入到分组", "留空 = 使用文件中的分组列",
 				knownGroups);
 		importGroup.setAllowCustomValue(true);
 		importGroup.addCustomValueSetListener(event -> importGroup.setValue(event.getDetail()));
-		Checkbox replace = new Checkbox("Replace existing in scope");
+		Checkbox replace = new Checkbox("替换范围内的现有项");
 
-		ComboBox<String> exportGroup = groupCombo("Export group", "blank = every group", knownGroups);
+		ComboBox<String> exportGroup = groupCombo("导出分组", "留空 = 所有分组", knownGroups);
 
 		Upload importUpload = new Upload((UploadHandler) event -> {
 			byte[] bytes;
@@ -202,8 +202,8 @@ public class ManageDicomNodesView extends AbstractView {
 				doImport(bytes, targetGroup, replaceExisting);
 			}
 		});
-		importUpload.setDropLabel(new Span("Drop a CSV file here"));
-		importUpload.setUploadButton(new Button("Import CSV", VaadinIcon.UPLOAD.create()));
+		importUpload.setDropLabel(new Span("将 CSV 文件拖放到此处"));
+		importUpload.setUploadButton(new Button("导入 CSV", VaadinIcon.UPLOAD.create()));
 		importUpload.setAcceptedFileTypes(".csv", "text/csv");
 		importUpload.setMaxFiles(1);
 
@@ -212,12 +212,12 @@ public class ManageDicomNodesView extends AbstractView {
 				new ByteArrayInputStream(service.exportCsv(emptyToNull(exportGroup.getValue()))), "dicom-nodes.csv",
 				"text/csv", -1)));
 		exportAnchor.getElement().setAttribute("download", true);
-		exportAnchor.add(new Button("Export CSV", VaadinIcon.DOWNLOAD.create()));
+		exportAnchor.add(new Button("导出 CSV", VaadinIcon.DOWNLOAD.create()));
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Import / Export DICOM Nodes");
+		dialog.setHeaderTitle("DICOM 节点导入/导出");
 		dialog.add(importExportContent(importGroup, replace, importUpload, exportGroup, exportAnchor));
-		dialog.getFooter().add(new Button("Close", event -> dialog.close()));
+		dialog.getFooter().add(new Button("关闭", event -> dialog.close()));
 		dialog.open();
 	}
 
@@ -228,8 +228,8 @@ public class ManageDicomNodesView extends AbstractView {
 		HorizontalLayout exportRow = new HorizontalLayout(exportGroup, exportAnchor);
 		exportRow.setAlignItems(Alignment.BASELINE);
 
-		VerticalLayout content = new VerticalLayout(sectionTitle("Import"), importOptions, importUpload,
-				sectionTitle("Export"), exportRow);
+		VerticalLayout content = new VerticalLayout(sectionTitle("导入"), importOptions, importUpload,
+				sectionTitle("导出"), exportRow);
 		content.setPadding(false);
 		content.setSpacing(true);
 		content.setWidth("30em");
@@ -245,7 +245,7 @@ public class ManageDicomNodesView extends AbstractView {
 	private static ComboBox<String> groupCombo(String label, String helper, List<String> groups) {
 		ComboBox<String> field = new ComboBox<>(label);
 		field.setItems(groups);
-		field.setPlaceholder("All groups");
+		field.setPlaceholder("所有分组");
 		field.setClearButtonVisible(true);
 		field.setHelperText(helper);
 		return field;
@@ -262,14 +262,14 @@ public class ManageDicomNodesView extends AbstractView {
 		}
 		catch (Exception ex) {
 			runOnUi(() -> displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot import the CSV file: " + ex.getMessage())));
+					"无法导入 CSV 文件：" + ex.getMessage())));
 		}
 	}
 
 	private void showImportReport(String targetGroup, DicomNodeConfigService.ImportReport report) {
-		String scope = (targetGroup != null) ? "group '" + targetGroup + "'" : "all groups";
-		String removed = (report.removed() > 0) ? " (" + report.removed() + " removed)" : "";
-		String summary = report.imported() + " DICOM node(s) imported into " + scope + removed;
+		String scope = (targetGroup != null) ? "分组 '" + targetGroup + "'" : "所有分组";
+		String removed = (report.removed() > 0) ? "（已删除 " + report.removed() + " 个）" : "";
+		String summary = "已导入 " + report.imported() + " 个 DICOM 节点到 " + scope + removed;
 
 		if (report.errors().isEmpty()) {
 			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, summary));
@@ -277,23 +277,22 @@ public class ManageDicomNodesView extends AbstractView {
 		}
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Import report");
-		dialog.add(new Div(summary + " - " + report.errors().size() + " row(s) skipped:"));
+		dialog.setHeaderTitle("导入报告");
+		dialog.add(new Div(summary + " - " + report.errors().size() + " 行已跳过："));
 		UnorderedList list = new UnorderedList();
 		report.errors().forEach(message -> list.add(new ListItem(message)));
 		dialog.add(list);
-		dialog.getFooter().add(new Button("Close", event -> dialog.close()));
+		dialog.getFooter().add(new Button("关闭", event -> dialog.close()));
 		dialog.open();
 	}
 
 	private void confirmReplaceAll(Runnable onConfirm) {
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Replace all DICOM nodes?");
-		dialog.add(new Div("This deletes every existing DICOM node (including worklist nodes) before importing "
-				+ "the file. This cannot be undone."));
+		dialog.setHeaderTitle("替换所有 DICOM 节点？");
+		dialog.add(new Div("此操作将在导入前删除所有现有 DICOM 节点（包括 Worklist 节点），且无法撤销。"));
 
-		Button cancel = new Button("Cancel", event -> dialog.close());
-		Button confirm = new Button("Delete all & import", event -> {
+		Button cancel = new Button("取消", event -> dialog.close());
+		Button confirm = new Button("全部删除并导入", event -> {
 			dialog.close();
 			onConfirm.run();
 		});

@@ -35,13 +35,13 @@ import org.weasis.core.util.annotations.Generated;
  * Project View
  */
 @Route(value = ProjectView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - Projects")
+@PageTitle("Karnak - 项目")
 @RolesAllowed("admin")
 @Generated()
 @NullUnmarked
 public class ProjectView extends HorizontalLayout implements HasUrlParameter<String> {
 
-	public static final String VIEW_NAME = "Projects";
+	public static final String VIEW_NAME = "项目";
 
 	public static final String ROUTE = "projects";
 

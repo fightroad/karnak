@@ -59,9 +59,9 @@ public class ProfileElementMainView extends VerticalLayout {
 
 	private void configureGrid() {
 		grid.addColumn(e -> e.getPosition() + 1).setHeader("#").setWidth("60px").setFlexGrow(0);
-		grid.addColumn(ProfileElementEntity::getName).setHeader("Name").setFlexGrow(2).setWidth("120px");
-		grid.addColumn(ProfileElementEntity::getCodename).setHeader("Type").setFlexGrow(2).setWidth("120px");
-		grid.addColumn(this::summary).setHeader("Summary").setFlexGrow(3).setWidth("150px");
+		grid.addColumn(ProfileElementEntity::getName).setHeader("名称").setFlexGrow(2).setWidth("120px");
+		grid.addColumn(ProfileElementEntity::getCodename).setHeader("类型").setFlexGrow(2).setWidth("120px");
+		grid.addColumn(this::summary).setHeader("摘要").setFlexGrow(3).setWidth("150px");
 		grid.addComponentColumn(this::rowActions).setHeader("").setAutoWidth(true).setFlexGrow(0);
 		grid.setSizeFull();
 		// Floor the grid height: it flex-shrinks down to this height before scrolling.
@@ -101,7 +101,7 @@ public class ProfileElementMainView extends VerticalLayout {
 		if (isBasicProfileMissing()) {
 			add(basicProfileMissingWarning());
 		}
-		Button addButton = ButtonFactory.createAddButton("Add element");
+		Button addButton = ButtonFactory.createAddButton("添加元素");
 		addButton.addClickListener(event -> openEditor(null));
 		add(addButton);
 		grid.setItems(orderedElements());
@@ -119,11 +119,11 @@ public class ProfileElementMainView extends VerticalLayout {
 		header.setAlignItems(FlexComponent.Alignment.CENTER);
 		header.setWidthFull();
 
-		String name = profileEntity.getName() != null ? profileEntity.getName() : "Profile";
+		String name = profileEntity.getName() != null ? profileEntity.getName() : "配置文件";
 		header.add(new H2(name));
 
 		if (editable) {
-			Button editButton = new Button("Edit metadata", new Icon(VaadinIcon.EDIT));
+			Button editButton = new Button("编辑元数据", new Icon(VaadinIcon.EDIT));
 			editButton.addThemeVariants(ButtonVariant.TERTIARY);
 			editButton.addClickListener(event -> openMetadataDialog());
 
@@ -137,10 +137,10 @@ public class ProfileElementMainView extends VerticalLayout {
 
 	/** Secondary line recalling the profile version and the minimum Karnak version. */
 	private Div metadataInfo() {
-		String version = profileEntity.getVersion() != null ? profileEntity.getVersion() : "Not defined";
+		String version = profileEntity.getVersion() != null ? profileEntity.getVersion() : "未定义";
 		String minVersion = profileEntity.getMinimumKarnakVersion() != null ? profileEntity.getMinimumKarnakVersion()
-				: "Not defined";
-		Div message = new Div(new Span("Version: " + version + " · Min Karnak version: " + minVersion));
+				: "未定义";
+		Div message = new Div(new Span("版本: " + version + " · 最低 Karnak 版本: " + minVersion));
 		message.getStyle()
 			.set("color", "var(--vaadin-text-color-secondary)")
 			.set("font-size", "var(--aura-font-size-s)")
@@ -150,9 +150,9 @@ public class ProfileElementMainView extends VerticalLayout {
 
 	/** Popup, shared with the "New profile" button, to edit the three metadata values. */
 	private void openMetadataDialog() {
-		TextField name = new TextField("Name");
-		TextField version = new TextField("Version");
-		TextField minVersion = new TextField("Min Karnak version (optional)");
+		TextField name = new TextField("名称");
+		TextField version = new TextField("版本");
+		TextField minVersion = new TextField("最低 Karnak 版本（可选）");
 		name.setValue(profileEntity.getName() != null ? profileEntity.getName() : "");
 		version.setValue(profileEntity.getVersion() != null ? profileEntity.getVersion() : "");
 		minVersion
@@ -160,11 +160,11 @@ public class ProfileElementMainView extends VerticalLayout {
 		name.setWidthFull();
 		version.setWidthFull();
 		minVersion.setWidthFull();
-		NewItemDialog dialog = new NewItemDialog("Edit profile", "Save", name, version, minVersion);
+		NewItemDialog dialog = new NewItemDialog("编辑配置文件", "保存", name, version, minVersion);
 		dialog.setOnConfirm(() -> {
 			if (name.getValue() == null || name.getValue().isBlank()) {
 				name.setInvalid(true);
-				name.setErrorMessage("A name is required");
+				name.setErrorMessage("名称为必填项");
 				return false;
 			}
 			profileLogic.updateProfileMetadata(profileEntity.getId(), name.getValue().trim(), version.getValue(),
@@ -201,11 +201,10 @@ public class ProfileElementMainView extends VerticalLayout {
 	}
 
 	private Div orderInfoMessage() {
-		Anchor documentation = new Anchor("https://weasis.org/karnak-documentation/en/profiles/",
-				"See the documentation");
+		Anchor documentation = new Anchor("https://weasis.org/karnak-documentation/en/profiles/", "查看文档");
 		documentation.setTarget("_blank");
 		Div message = new Div(
-				new Span("The order of the profile elements matters: they are applied from top to bottom. "),
+				new Span("配置文件元素的顺序很重要：它们从上到下依次应用。"),
 				documentation);
 		message.getStyle()
 			.set("color", "var(--vaadin-text-color-secondary)")
@@ -220,8 +219,8 @@ public class ProfileElementMainView extends VerticalLayout {
 
 	private Div basicProfileMissingWarning() {
 		Div warning = new Div(
-				new Text("No \"Basic DICOM confidentiality profile\" (" + ProfileItemType.BASIC_DICOM_ALIAS
-						+ ") is present. A de-identification profile should include it; it is always applied last."));
+				new Text("缺少 \"Basic DICOM confidentiality profile\"（" + ProfileItemType.BASIC_DICOM_ALIAS
+						+ "）。去标识配置应包含此元素；它始终最后应用。"));
 		warning.getStyle()
 			.set("color", "var(--aura-red-text)")
 			.set("background-color", "color-mix(in srgb, var(--aura-red) 10%, transparent)")
@@ -268,7 +267,7 @@ public class ProfileElementMainView extends VerticalLayout {
 
 	private void confirmDelete(ProfileElementEntity element) {
 		ConfirmDialog dialog = new ConfirmDialog(
-				"Delete the element \"" + element.getName() + "\"? This cannot be undone.");
+				"确定删除元素 \"" + element.getName() + "\" 吗？此操作无法撤销。");
 		dialog.addConfirmationListener(event -> profileLogic.deleteElement(profileEntity.getId(), element.getId()));
 		dialog.open();
 	}

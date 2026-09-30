@@ -26,7 +26,7 @@ import org.weasis.core.util.annotations.Generated;
 public class TagMorphingComponent extends VerticalLayout {
 
 	// Labels
-	private static final String LABEL_CHECKBOX_TAG_MORPHING = "Activate tag morphing";
+	private static final String LABEL_CHECKBOX_TAG_MORPHING = "启用 Tag 变形";
 
 	// Components
 	private Checkbox tagMorphingCheckbox;
@@ -87,7 +87,7 @@ public class TagMorphingComponent extends VerticalLayout {
 		destinationBinder.forField(tagMorphingCheckbox)
 			.bind(DestinationEntity::isActivateTagMorphing, DestinationEntity::setActivateTagMorphing);
 		destinationBinder.forField(projectDropDown)
-			.withValidator(project -> project != null || !tagMorphingCheckbox.getValue(), "Choose a project")
+			.withValidator(project -> project != null || !tagMorphingCheckbox.getValue(), "请选择项目")
 			.bind(DestinationEntity::getTagMorphingProjectEntity, DestinationEntity::setTagMorphingProjectEntity);
 	}
 
@@ -103,8 +103,8 @@ public class TagMorphingComponent extends VerticalLayout {
 	 * Add components
 	 */
 	private void addComponents() {
-		// Padding
-		setPadding(true);
+		setPadding(false);
+		getStyle().set("padding", "0.5rem 0.75rem");
 
 		// Keep the resolved-profile label tight under the project field
 		VerticalLayout content = new VerticalLayout();

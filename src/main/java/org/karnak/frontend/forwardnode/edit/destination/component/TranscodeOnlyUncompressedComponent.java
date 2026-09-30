@@ -52,7 +52,7 @@ public class TranscodeOnlyUncompressedComponent extends VerticalLayout {
 	 * Build components used in Transfer Syntax component
 	 */
 	private void buildComponents() {
-		transcodeOnlyUncompressedCheckBox = new Checkbox("Transcode only uncompressed");
+		transcodeOnlyUncompressedCheckBox = new Checkbox("仅转码非压缩格式");
 		transcodeOnlyUncompressedCheckBox.getElement().getStyle().set("margin-left", "66px");
 		transcodeOnlyUncompressedCheckBox.getElement().getStyle().set("line-height", "31.5px");
 		// Prevent the label from wrapping to two lines when the row shrinks

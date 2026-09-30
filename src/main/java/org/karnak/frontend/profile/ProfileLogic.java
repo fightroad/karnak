@@ -257,13 +257,12 @@ public class ProfileLogic extends ListDataProvider<ProfileEntity> implements Gro
 		}
 		catch (JsonProcessingException e) {
 			log.warn("Invalid YAML in uploaded profile", e);
-			profileView.getProfileErrorView().setView("Unable to read uploaded YAML file.\n" + formatYamlError(e));
+			profileView.getProfileErrorView().setView("无法读取上传的 YAML 文件。\n" + formatYamlError(e));
 		}
 		catch (IOException e) {
 			log.error("Unable to read uploaded YAML", e);
 			profileView.getProfileErrorView()
-				.setView("Unable to read uploaded YAML file.\n"
-						+ "Please make sure it is a YAML file and respects the YAML structure.");
+				.setView("无法读取上传的 YAML 文件。\n" + "请确认这是 YAML 文件，且结构正确。");
 		}
 	}
 
@@ -280,10 +279,10 @@ public class ProfileLogic extends ListDataProvider<ProfileEntity> implements Gro
 			ProfilePipeBody profilePipe = readProfileYaml(
 					new ByteArrayInputStream(yaml.getBytes(StandardCharsets.UTF_8)));
 			if (profilePipe == null) {
-				return List.of("The YAML content is empty.");
+				return List.of("YAML 内容为空。");
 			}
 			if (profilePipe.getProfileElements() == null) {
-				return List.of("The profile must contain a \"profileElements\" list.");
+				return List.of("配置文件必须包含 \"profileElements\" 列表。");
 			}
 			List<String> messages = profilePipeService.validateProfile(profilePipe)
 				.stream()
@@ -307,7 +306,7 @@ public class ProfileLogic extends ListDataProvider<ProfileEntity> implements Gro
 		}
 		catch (IOException e) {
 			log.error("Unable to read edited YAML", e);
-			return List.of("Unable to read the YAML content. Please check the YAML structure.");
+			return List.of("无法读取 YAML 内容，请检查 YAML 结构。");
 		}
 	}
 
@@ -319,9 +318,9 @@ public class ProfileLogic extends ListDataProvider<ProfileEntity> implements Gro
 	 */
 	private static String formatYamlError(JsonProcessingException e) {
 		JsonLocation location = e.getLocation();
-		String where = location != null ? "Line " + location.getLineNr() + ", column " + location.getColumnNr() + ": "
+		String where = location != null ? "第 " + location.getLineNr() + " 行，第 " + location.getColumnNr() + " 列："
 				: "";
-		String problem = e.getOriginalMessage() != null ? e.getOriginalMessage() : "invalid YAML structure";
+		String problem = e.getOriginalMessage() != null ? e.getOriginalMessage() : "YAML 结构无效";
 		return where + problem;
 	}
 
@@ -335,14 +334,13 @@ public class ProfileLogic extends ListDataProvider<ProfileEntity> implements Gro
 		var content = new Div();
 		var divTitle = new Div();
 		var btn = new Div();
-		divTitle.setText("Warning");
+		divTitle.setText("警告");
 		divTitle.addClassNames("karnak-dialog-title", "karnak-error-text");
 
-		var okBtn = new Button("Ok", e -> warningIssuer.close());
+		var okBtn = new Button("确定", e -> warningIssuer.close());
 		okBtn.getStyle().set("margin-top", "10px");
 
-		var txt = new Text(
-				"The Issuer of Patient ID is no longer linked to a profile. Please fill in this field in the destination in the de-identification menu.");
+		var txt = new Text("Patient ID 签发者已不再关联配置文件。请在去标识菜单中的目标设置里填写此字段。");
 
 		btn.getStyle().set("text-align", "right");
 		btn.add(okBtn);

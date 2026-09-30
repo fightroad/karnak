@@ -24,13 +24,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.weasis.core.util.annotations.Generated;
 
 @Route(value = HelpView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - Help")
+@PageTitle("Karnak - 帮助")
 @Tag("help-view")
 @RolesAllowed({ "admin", "user" })
 @Generated()
 public class HelpView extends VerticalLayout {
 
-	public static final String VIEW_NAME = "Help";
+	public static final String VIEW_NAME = "帮助";
 
 	public static final String ROUTE = "help";
 
@@ -39,17 +39,17 @@ public class HelpView extends VerticalLayout {
 	public HelpView(@Value("${spring.application.version:Development}") String appVersion) {
 		this.appVersion = appVersion;
 		setSizeFull();
-		H1 heading = new H1("Help");
+		H1 heading = new H1("帮助");
 
-		Anchor generalDoc = new Anchor("https://weasis.org/karnak-documentation/", "General documentation");
+		Anchor generalDoc = new Anchor("https://weasis.org/karnak-documentation/", "通用文档");
 		generalDoc.setTarget("_blank");
 
 		Anchor installation = new Anchor("https://weasis.org/karnak-documentation/en/userguide/",
-				"User guide: configuration and administration");
+				"用户指南：配置与管理");
 		installation.setTarget("_blank");
 
 		Anchor profile = new Anchor("https://weasis.org/karnak-documentation/en/profiles/",
-				"Build your own profile for de-identification or for tag morphing");
+				"构建去标识或标签变形的自定义配置文件");
 		profile.setTarget("_blank");
 
 		VerticalLayout layout = new VerticalLayout();
@@ -62,7 +62,7 @@ public class HelpView extends VerticalLayout {
 		aboutLayout.setSpacing(false);
 		aboutLayout.setPadding(false);
 
-		H2 aboutHeading = new H2("About");
+		H2 aboutHeading = new H2("关于");
 
 		String javaVersion = System.getProperty("java.version");
 		String javaVendor = System.getProperty("java.vendor");
@@ -74,11 +74,11 @@ public class HelpView extends VerticalLayout {
 		String springBootVersion = org.springframework.boot.SpringBootVersion.getVersion();
 
 		Span versionInfo = new Span("Karnak: " + appVersion);
-		Span vaadinInfo = new Span("Vaadin: " + (vaadinVersion != null ? vaadinVersion : "Unknown"));
-		Span springInfo = new Span("Spring: " + (springVersion != null ? springVersion : "Unknown"));
+		Span vaadinInfo = new Span("Vaadin: " + (vaadinVersion != null ? vaadinVersion : "未知"));
+		Span springInfo = new Span("Spring: " + (springVersion != null ? springVersion : "未知"));
 		Span springBootInfo = new Span("Spring Boot: " + springBootVersion);
 		Span javaInfo = new Span("Java: " + javaVersion + " (" + javaVendor + ")");
-		Span systemInfo = new Span("System: " + osName + " " + osVersion + " (" + osArch + ")");
+		Span systemInfo = new Span("系统: " + osName + " " + osVersion + " (" + osArch + ")");
 
 		aboutLayout.add(aboutHeading, versionInfo, vaadinInfo, springInfo, springBootInfo, javaInfo, systemInfo);
 		return aboutLayout;

@@ -35,15 +35,15 @@ import org.weasis.core.util.annotations.Generated;
 public class DeIdentificationComponent extends VerticalLayout {
 
 	// Labels
-	private static final String LABEL_CHECKBOX_DEIDENTIFICATION = "Activate de-identification";
+	private static final String LABEL_CHECKBOX_DEIDENTIFICATION = "启用去标识";
 
-	private static final String LABEL_DISCLAIMER_DEIDENTIFICATION = "In order to ensure complete de-identification, visual verification of metadata and images is necessary.";
+	private static final String LABEL_DISCLAIMER_DEIDENTIFICATION = "为确保完全去标识，需对元数据和图像进行目视验证。";
 
-	private static final String LABEL_DEFAULT_ISSUER = "If filled, it is combined with the Patient ID to ensure unique patient identification across different healthcare systems.";
+	private static final String LABEL_DEFAULT_ISSUER = "若填写，将与 Patient ID 组合，以确保在不同医疗系统中患者标识的唯一性。";
 
-	private static final String LABEL_CHECKBOX_SKIP_ISSUER = "Ignore Issuer of Patient ID";
+	private static final String LABEL_CHECKBOX_SKIP_ISSUER = "忽略 Issuer of Patient ID";
 
-	private static final String HELPER_SKIP_ISSUER = "When checked, the Issuer of Patient ID is not used to build the key that retrieves the pseudonym from the cache. Only applies to \"Pseudonym is already stored in KARNAK\".";
+	private static final String HELPER_SKIP_ISSUER = "勾选后，Issuer of Patient ID 不会用于构建从缓存检索伪名的键。仅适用于「伪名已存储在 KARNAK 中」。";
 
 	// Components
 	private Checkbox deIdentificationCheckbox;
@@ -109,8 +109,8 @@ public class DeIdentificationComponent extends VerticalLayout {
 	 * Add components
 	 */
 	private void addComponents() {
-		// Padding
-		setPadding(true);
+		setPadding(false);
+		getStyle().set("padding", "0.5rem 0.75rem");
 
 		// Group the skip checkbox + issuer text field in a dedicated block, with enough
 		// spacing that each control reads together with its own helper text. The
@@ -140,8 +140,8 @@ public class DeIdentificationComponent extends VerticalLayout {
 		content.setSpacing(false);
 		content.setWidthFull();
 		content.getStyle().set("gap", "1.25rem");
-		content.add(disclaimerLabel, sectionTitle("Project & profile"), projectGroup,
-				sectionTitle("Pseudonym generation"), pseudonymTypeSelect, pseudonymDicomTagDiv, pseudonymApi,
+		content.add(disclaimerLabel, sectionTitle("项目与配置文件"), projectGroup,
+				sectionTitle("伪名生成"), pseudonymTypeSelect, pseudonymDicomTagDiv, pseudonymApi,
 				issuerLayout);
 		deIdentificationDiv.add(content);
 
@@ -223,13 +223,19 @@ public class DeIdentificationComponent extends VerticalLayout {
 	 */
 	private void buildPseudonymTypeSelect() {
 		pseudonymTypeSelect = new Select<>();
-		pseudonymTypeSelect.setLabel("Pseudonym type");
+		pseudonymTypeSelect.setLabel("伪名类型");
 		// Keep the selector compact rather than spanning the whole panel; the option
 		// labels never need the full destination-panel width.
 		pseudonymTypeSelect.setWidth("350px");
 		pseudonymTypeSelect.setHelperText(
-				"How Karnak obtains the pseudonym: from its own cache, from a DICOM tag in the image, or from an external API.");
+				"Karnak 获取伪名的方式：从自有缓存、从图像中的 DICOM Tag，或从外部 API。");
 		pseudonymTypeSelect.setItems(CACHE_EXTID.getValue(), EXTID_IN_TAG.getValue(), EXTID_API.getValue());
+		pseudonymTypeSelect.setItemLabelGenerator(value -> switch (value) {
+			case String v when v.equals(CACHE_EXTID.getValue()) -> "伪名已存储在 KARNAK 中";
+			case String v when v.equals(EXTID_IN_TAG.getValue()) -> "伪名在 DICOM Tag 中";
+			case String v when v.equals(EXTID_API.getValue()) -> "从外部 API 获取伪名";
+			default -> value;
+		});
 	}
 
 	/**
@@ -246,10 +252,10 @@ public class DeIdentificationComponent extends VerticalLayout {
 	 */
 	private void buildIssuerOfPatientID() {
 		issuerOfPatientIDByDefault = new TextField();
-		issuerOfPatientIDByDefault.setLabel("Issuer of Patient ID by default");
+		issuerOfPatientIDByDefault.setLabel("默认 Issuer of Patient ID");
 		// Half-width is plenty for an issuer identifier; no need to span the whole panel.
 		issuerOfPatientIDByDefault.setWidth("50%");
-		issuerOfPatientIDByDefault.setPlaceholder("e.g. hospital identifier");
+		issuerOfPatientIDByDefault.setPlaceholder("例如：医院标识符");
 		issuerOfPatientIDByDefault.setHelperText(LABEL_DEFAULT_ISSUER);
 		// Only relevant to CACHE_EXTID ("Pseudonym is already stored in KARNAK"), where
 		// it
@@ -322,12 +328,12 @@ public class DeIdentificationComponent extends VerticalLayout {
 		destinationBinder.forField(skipIssuerOfPatientIdCheckbox)
 			.bind(DestinationEntity::isSkipIssuerOfPatientId, DestinationEntity::setSkipIssuerOfPatientId);
 		destinationBinder.forField(projectDropDown)
-			.withValidator(project -> project != null || !deIdentificationCheckbox.getValue(), "Choose a project")
+			.withValidator(project -> project != null || !deIdentificationCheckbox.getValue(), "请选择项目")
 			.bind(DestinationEntity::getDeIdentificationProjectEntity,
 					DestinationEntity::setDeIdentificationProjectEntity);
 
 		destinationBinder.forField(pseudonymTypeSelect)
-			.withValidator(Objects::nonNull, "Choose pseudonym type\n")
+			.withValidator(Objects::nonNull, "请选择伪名类型\n")
 			.bind(destination -> destination.getPseudonymType().getValue(), (destination, s) -> {
 				if (s.equals(EXTID_IN_TAG.getValue())) {
 					destination.setPseudonymType(EXTID_IN_TAG);

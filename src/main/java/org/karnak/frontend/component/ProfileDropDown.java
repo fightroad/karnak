@@ -18,7 +18,7 @@ public class ProfileDropDown extends ComboBox<ProfileEntity> {
 
 	public ProfileDropDown() {
 		// Place Holder
-		setPlaceholder("Select Profile");
+		setPlaceholder("选择配置文件");
 	}
 
 }

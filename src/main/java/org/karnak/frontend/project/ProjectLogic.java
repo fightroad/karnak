@@ -185,7 +185,7 @@ public class ProjectLogic extends ListDataProvider<ProjectEntity> implements Gro
 				List<DestinationEntity> destinationEntities = editProject.getProjectEntity().getAllDestinations();
 				if (destinationEntities != null && !destinationEntities.isEmpty()) {
 					ConfirmDialog dialog = new ConfirmDialog(
-							String.format("The project %s is used, are you sure you want to update it?",
+							String.format("项目 %s 正在使用中，确定要更新吗？",
 									editProject.getProjectEntity().getName()));
 					dialog.addConfirmationListener(componentEvent -> {
 						projectService.update(editProject.getProjectEntity());
@@ -237,7 +237,7 @@ public class ProjectLogic extends ListDataProvider<ProjectEntity> implements Gro
 		profiles.sort(CollatorUtils.comparingThen(ProfileEntity::getName, ProfileEntity::getVersion));
 
 		profileDropDown.setItems(profiles);
-		profileDropDown.setItemLabelGenerator(p -> String.format("%s [version %s]", p.getName(), p.getVersion()));
+		profileDropDown.setItemLabelGenerator(p -> String.format("%s [版本 %s]", p.getName(), p.getVersion()));
 	}
 
 	/**

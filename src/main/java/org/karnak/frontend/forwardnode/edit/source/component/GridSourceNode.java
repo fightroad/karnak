@@ -17,13 +17,14 @@ import org.weasis.core.util.annotations.Generated;
 public class GridSourceNode extends Grid<DicomSourceNodeEntity> {
 
 	public GridSourceNode() {
-		setSizeFull();
+		setWidthFull();
+		setAllRowsVisible(true);
 
-		addColumn(DicomSourceNodeEntity::getAeTitle).setHeader("AET title").setFlexGrow(20).setSortable(true);
+		addColumn(DicomSourceNodeEntity::getAeTitle).setHeader("AE Title").setFlexGrow(20).setSortable(true);
 
-		addColumn(DicomSourceNodeEntity::getHostname).setHeader("Hostname").setFlexGrow(20).setSortable(true);
+		addColumn(DicomSourceNodeEntity::getHostname).setHeader("主机名").setFlexGrow(20).setSortable(true);
 
-		addColumn(DicomSourceNodeEntity::getDescription).setHeader("Description").setFlexGrow(20).setSortable(true);
+		addColumn(DicomSourceNodeEntity::getDescription).setHeader("描述").setFlexGrow(20).setSortable(true);
 	}
 
 }

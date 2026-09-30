@@ -59,7 +59,8 @@ public class ConformanceReportComponent extends VerticalLayout {
 
 	public ConformanceReportComponent() {
 		setWidthFull();
-		setPadding(true);
+		setPadding(false);
+		getStyle().set("padding", "0.5rem 0.75rem");
 
 		buildComponents();
 		buildListeners();
@@ -77,61 +78,60 @@ public class ConformanceReportComponent extends VerticalLayout {
 	}
 
 	private void buildVirtualDestination() {
-		virtualDestination = new Checkbox("Virtual destination (report only, discard DICOM)");
+		virtualDestination = new Checkbox("虚拟目的地（仅报告，丢弃 DICOM）");
 		// By default deactivate
 		virtualDestination.setValue(false);
 		UIS.setTooltip(virtualDestination,
-				"Do not forward anything to the final node: validate each study and email the conformance report only. "
-						+ "The DICOM is routed to devnull and the delivery options (host/port or URL, transfer syntax, "
-						+ "notification, …) are disabled.");
+				"不向最终节点转发任何内容：仅验证每个检查并发送符合性报告邮件。"
+						+ "DICOM 被路由至 devnull，交付选项（主机/端口或 URL、传输语法、"
+						+ "通知等）将被禁用。");
 	}
 
 	private void buildBuildConformanceReport() {
-		buildConformanceReport = new Checkbox("Build DICOM conformance report");
+		buildConformanceReport = new Checkbox("生成 DICOM 符合性报告");
 		// By default deactivate
 		buildConformanceReport.setValue(false);
 		UIS.setTooltip(buildConformanceReport,
-				"Validate each study sent to this destination against the DICOM standard and email a conformance report");
+				"对此目的地发送的每个检查进行 DICOM 标准验证，并通过邮件发送符合性报告");
 	}
 
 	private void buildConformanceReportNotify() {
-		conformanceReportNotify = new TextField("Conformance report: list of emails");
+		conformanceReportNotify = new TextField("符合性报告：邮箱列表");
 		conformanceReportNotify.setWidth("100%");
-		conformanceReportNotify.setHelperText("Leave empty to reuse the notification emails");
+		conformanceReportNotify.setHelperText("留空则复用通知邮箱列表");
 		UIS.setTooltip(conformanceReportNotify,
-				"Comma separated list of emails the conformance report is sent to. When empty, the notification email list is used.");
+				"符合性报告发送目标的逗号分隔邮箱列表。留空时使用通知邮箱列表。");
 	}
 
 	private void buildCheckValueConformity() {
-		checkValueConformity = new Checkbox("Check value content conformity (VR rules)");
+		checkValueConformity = new Checkbox("检查值内容符合性（VR 规则）");
 		// By default deactivate: real-world data often deviates from VR length/format
 		// rules
 		checkValueConformity.setValue(false);
 		UIS.setTooltip(checkValueConformity,
-				"Also report values that violate their VR length or format rules (PS3.5), e.g. an over-long string or a malformed date");
+				"同时报告违反 VR 长度或格式规则（PS3.5）的值，例如过长的字符串或格式错误的日期");
 	}
 
 	private void buildDeepSequenceValidation() {
-		deepSequenceValidation = new Checkbox("Deep sequence validation (SR, functional groups)");
+		deepSequenceValidation = new Checkbox("深度序列验证（SR、功能组）");
 		// By default deactivate: deeper recursion enlarges the in-memory snapshot
 		deepSequenceValidation.setValue(false);
 		UIS.setTooltip(deepSequenceValidation,
-				"Recurse the conformance checks through every sequence level (e.g. the SR content tree or enhanced multiframe functional groups) instead of only the first one");
+				"在每个序列层级递归执行符合性检查（例如 SR 内容树或增强多帧功能组），而非仅检查第一层");
 	}
 
 	private void buildImageIdentityCheck() {
-		imageIdentityCheck = new Checkbox("Check for identifying data burned into the image");
+		imageIdentityCheck = new Checkbox("检查图像中烧录的标识数据");
 		// By default deactivate: relies on the external de-identification image service
 		imageIdentityCheck.setValue(false);
 		// Always-visible reminder: this option calls out to the external OCR service
 		imageIdentityCheck.setHelperText(
-				"Requires the de-identification image service to be running and reachable at OCR_URL (default http://localhost:8000)");
+				"需要去标识图像服务在 OCR_URL 处运行且可访问（默认 http://localhost:8000）");
 		UIS.setTooltip(imageIdentityCheck,
-				"Run OCR on each forwarded image (via the de-identification image service) and list, in the conformance "
-						+ "report, which patient-identifying DICOM tag values are still visible in the pixel data. "
-						+ "This requires the external de-identification image service to be running and reachable at OCR_URL "
-						+ "(default http://localhost:8000). When it is unavailable, the images cannot be analysed and the "
-						+ "report notes them as not analysed; the rest of the conformance report is unaffected.");
+				"对每个转发的图像运行 OCR（通过去标识图像服务），并在符合性报告中列出像素数据中仍可见的患者标识 DICOM Tag 值。"
+						+ "这需要外部去标识图像服务在 OCR_URL 处运行且可访问"
+						+ "（默认 http://localhost:8000）。服务不可用时无法分析图像，"
+						+ "报告将其标记为未分析；符合性报告的其余部分不受影响。");
 	}
 
 	private void buildOptionsDiv() {

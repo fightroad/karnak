@@ -45,21 +45,22 @@ public class DicomCapabilitiesPanel extends VerticalLayout {
 
 	public void display(DicomCapabilitiesResult capabilities) {
 		if (capabilities.isRejected()) {
-			summary.setText("Association rejected: " + capabilities.getRejectionReason());
+			summary.setText("关联被拒绝：" + capabilities.getRejectionReason());
 			grid.setCapabilities(List.of());
 		}
 		else if (capabilities.isUnexpectedError()) {
-			summary.setText("Capability probe failed: " + capabilities.getUnexpectedErrorMessage());
+			summary.setText("能力探测失败：" + capabilities.getUnexpectedErrorMessage());
 			grid.setCapabilities(List.of());
 		}
 		else {
 			StringBuilder text = new StringBuilder();
-			text.append(capabilities.getCapabilities().size())
-				.append(" SOP class(es) accepted — negotiated max PDU ")
+			text.append("已接受 ")
+				.append(capabilities.getCapabilities().size())
+				.append(" 个 SOP Class — 协商最大 PDU ")
 				.append(capabilities.getMaxPduLength())
-				.append(" bytes");
+				.append(" 字节");
 			if (capabilities.getRemoteImplementationVersionName() != null) {
-				text.append("; peer ").append(capabilities.getRemoteImplementationVersionName());
+				text.append("；对端 ").append(capabilities.getRemoteImplementationVersionName());
 			}
 			summary.setText(text.toString());
 			grid.setCapabilities(capabilities.getCapabilities());

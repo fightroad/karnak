@@ -127,11 +127,14 @@ public class LayoutEditForwardNode extends VerticalLayout {
 	 * Build layout
 	 */
 	private void buildLayout() {
-		layoutDestinationsSources.setSizeFull();
+		// Align content with the tab bar (no nested padding/full-height stretch)
+		layoutDestinationsSources.setPadding(false);
+		layoutDestinationsSources.setSpacing(false);
+		layoutDestinationsSources.setWidthFull();
 		// More breathing room above the tabs, and tighten the gap below them so the
 		// sources/destinations content sits closer to the tab bar.
 		tabSourcesDestination.getStyle().set("margin-top", "1rem").set("margin-bottom", "0");
-		layoutDestinationsSources.getStyle().set("padding-top", "0");
+		layoutDestinationsSources.getStyle().set("padding-top", "0.5rem");
 		getStyle().set("overflow-y", "auto");
 		setSizeFull();
 		setEditView();
@@ -290,7 +293,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 			Integer localPort = SystemPropertyUtil.retrieveIntegerSystemProperty("LOCAL_NODE_PORT", null);
 			String folder = SystemPropertyUtil.retrieveSystemProperty("LOCAL_NODE_STORAGE_PATH", null);
 			if (localPort != null && StringUtil.hasText(folder)) {
-				dicomEntity.setDescription("Local DICOM Folder: " + folder);
+				dicomEntity.setDescription("本地 DICOM 文件夹：" + folder);
 				dicomEntity.setAeTitle(localAET);
 				dicomEntity.setHostname("localhost");
 				dicomEntity.setPort(localPort);
@@ -394,8 +397,8 @@ public class LayoutEditForwardNode extends VerticalLayout {
 	private void addEventButtonDeleteNewUpdateSourceNode() {
 		newUpdateSourceNode.getButtonSaveDeleteCancel().getDelete().addClickListener(event -> {
 			if (newUpdateSourceNode.getCurrentSourceNode() != null) {
-				ConfirmDialog dialog = new ConfirmDialog("Are you sure to delete the DICOM source node "
-						+ newUpdateSourceNode.getCurrentSourceNode().getAeTitle() + "?");
+				ConfirmDialog dialog = new ConfirmDialog("确定要删除 DICOM 源节点 "
+						+ newUpdateSourceNode.getCurrentSourceNode().getAeTitle() + " 吗？");
 				dialog.addConfirmationListener(componentEvent -> {
 					NodeEvent nodeEvent = new NodeEvent(newUpdateSourceNode.getCurrentSourceNode(),
 							NodeEventType.REMOVE);
@@ -480,10 +483,10 @@ public class LayoutEditForwardNode extends VerticalLayout {
 
 	private void removeCurrentDestination() {
 		if (newUpdateDestination.getCurrentDestinationEntity() != null) {
-			ConfirmDialog dialog = new ConfirmDialog("Are you sure to delete the destination "
+			ConfirmDialog dialog = new ConfirmDialog("确定要删除目的地 "
 					+ newUpdateDestination.getCurrentDestinationEntity().getDescription() + " ["
-					+ newUpdateDestination.getCurrentDestinationEntity().getDestinationType() + "] ? "
-					+ "<br>It will also delete the related entries from the monitoring view.");
+					+ newUpdateDestination.getCurrentDestinationEntity().getDestinationType() + "] 吗？"
+					+ "<br>同时将删除监控视图中的相关条目。");
 			dialog.addConfirmationListener(componentEvent -> {
 				NodeEvent nodeEvent = new NodeEvent(newUpdateDestination.getCurrentDestinationEntity(),
 						NodeEventType.REMOVE);
@@ -561,7 +564,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 			.withValidator(
 					listOfSOPFilter -> !listOfSOPFilter.isEmpty()
 							|| !filterBySOPClassesForm.getFilterBySOPClassesCheckbox().getValue(),
-					"No filter are applied\n")
+					"未应用任何筛选\n")
 			.bind(DestinationEntity::retrieveSOPClassUIDFiltersName, (destination, sopClassNames) -> {
 				Set<SOPClassUIDEntity> newSOPClassUIDEntities = new HashSet<>();
 				sopClassNames.forEach(sopClasseName -> {
@@ -579,7 +582,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 	public void addBinderExtidInDicomTag(DeIdentificationComponent deIdentificationComponent) {
 		deIdentificationComponent.getDestinationBinder()
 			.forField(deIdentificationComponent.getPseudonymInDicomTagComponent().getTag())
-			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Must be a tag")
+			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "必须是 Tag")
 			.withValidator(tag -> {
 				if (!deIdentificationComponent.getDeIdentificationCheckbox().getValue()
 						|| !deIdentificationComponent.getPseudonymTypeSelect()
@@ -595,12 +598,12 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return false;
 				}
 				return !tag.isEmpty() && cleanTag.length() == 8;
-			}, "Choose a valid tag\n")
+			}, "请选择有效的 Tag\n")
 			.bind(DestinationEntity::getTag, DestinationEntity::setTag);
 
 		deIdentificationComponent.getDestinationBinder()
 			.forField(deIdentificationComponent.getPseudonymInDicomTagComponent().getDelimiter())
-			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Must be a delimiter")
+			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "必须是分隔符")
 			.withValidator(delimiter -> {
 				if (!deIdentificationComponent.getDeIdentificationCheckbox().getValue()
 						|| !deIdentificationComponent.getPseudonymTypeSelect()
@@ -613,7 +616,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return delimiter != null && !delimiter.isEmpty();
 				}
 				return true;
-			}, "A delimiter must be defined, when a position is present")
+			}, "存在位置时必须定义分隔符")
 			.bind(DestinationEntity::getDelimiter, DestinationEntity::setDelimiter);
 
 		deIdentificationComponent.getDestinationBinder()
@@ -634,14 +637,14 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return position != null && position >= 0;
 				}
 				return true;
-			}, "A position must be defined, when a delimiter is present")
+			}, "存在分隔符时必须定义位置")
 			.bind(DestinationEntity::getPosition, DestinationEntity::setPosition);
 	}
 
 	public void addBinderExtidFromApi(DeIdentificationComponent deIdentificationComponent) {
 		deIdentificationComponent.getDestinationBinder()
 			.forField(deIdentificationComponent.getPseudonymFromApiComponent().getUrl())
-			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Must be a URL")
+			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "必须是 URL")
 			.withValidator(url -> {
 				if (!deIdentificationComponent.getDeIdentificationCheckbox().getValue()
 						|| !deIdentificationComponent.getPseudonymTypeSelect()
@@ -650,12 +653,12 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return true;
 				}
 				return (url != null && !url.isEmpty());
-			}, "Please enter a valid URL\n")
+			}, "请输入有效的 URL\n")
 			.bind(DestinationEntity::getPseudonymUrl, DestinationEntity::setPseudonymUrl);
 
 		deIdentificationComponent.getDestinationBinder()
 			.forField(deIdentificationComponent.getPseudonymFromApiComponent().getMethod())
-			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Must be GET or POST method")
+			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "必须是 GET 或 POST 方法")
 			.withValidator(method -> {
 				if (!deIdentificationComponent.getDeIdentificationCheckbox().getValue()
 						|| !deIdentificationComponent.getPseudonymTypeSelect()
@@ -664,7 +667,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return true;
 				}
 				return method.equals("GET") || method.equals("POST");
-			}, "Method must be equal to GET or POST")
+			}, "方法必须为 GET 或 POST")
 			.bind(DestinationEntity::getMethod, DestinationEntity::setMethod);
 
 		deIdentificationComponent.getDestinationBinder()
@@ -681,7 +684,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return body != null && !body.isEmpty();
 				}
 				return true;
-			}, "Body is mandatory for a POST request")
+			}, "POST 请求必须填写 Body")
 			.bind(DestinationEntity::getBody, DestinationEntity::setBody);
 
 		deIdentificationComponent.getDestinationBinder()
@@ -694,7 +697,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 
 		deIdentificationComponent.getDestinationBinder()
 			.forField(deIdentificationComponent.getPseudonymFromApiComponent().getResponsePath())
-			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Response Path is mandatory")
+			.withConverter(String::valueOf, value -> (value == null) ? "" : value, "Response Path 为必填项")
 			.withValidator(responsePath -> {
 				if (!deIdentificationComponent.getDeIdentificationCheckbox().getValue()
 						|| !deIdentificationComponent.getPseudonymTypeSelect()
@@ -703,7 +706,7 @@ public class LayoutEditForwardNode extends VerticalLayout {
 					return true;
 				}
 				return responsePath != null && !responsePath.isEmpty();
-			}, "JSON Response path is mandatory")
+			}, "JSON Response Path 为必填项")
 			.bind(DestinationEntity::getResponsePath, DestinationEntity::setResponsePath);
 	}
 

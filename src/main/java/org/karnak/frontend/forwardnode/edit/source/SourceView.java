@@ -47,9 +47,9 @@ public class SourceView extends VerticalLayout {
 	@Getter
 	private GridSourceNode gridSourceNode;
 
-	private static final String LABEL_NEW_SOURCE_NODE = "Source";
+	private static final String LABEL_NEW_SOURCE_NODE = "新建源节点";
 
-	private static final String PLACEHOLDER_FILTER = "Filter properties of sources";
+	private static final String PLACEHOLDER_FILTER = "筛选源节点";
 
 	/**
 	 * Source view constructor
@@ -72,11 +72,16 @@ public class SourceView extends VerticalLayout {
 	 * Create components, layout and add the layout of the view
 	 */
 	private void buildComponentsLayout() {
-		setSizeFull();
+		// Match tab bar edges: no extra inset from VerticalLayout padding.
+		setPadding(false);
+		setSpacing(true);
+		setWidthFull();
 		gridSourceNode = new GridSourceNode();
 		filter = new TextField();
 		newSourceNode = new Button(LABEL_NEW_SOURCE_NODE);
 		layoutFilterButton = new HorizontalLayout(filter, newSourceNode);
+		layoutFilterButton.setPadding(false);
+		layoutFilterButton.setWidthFull();
 		layoutFilterButton.setVerticalComponentAlignment(Alignment.START, filter);
 		layoutFilterButton.expand(filter);
 
@@ -97,7 +102,7 @@ public class SourceView extends VerticalLayout {
 	}
 
 	private void setButtonNewDestinationDICOM() {
-		newSourceNode.getElement().setAttribute("title", "New source of type dicom");
+		newSourceNode.getElement().setAttribute("title", "新建源节点");
 		newSourceNode.addThemeVariants(ButtonVariant.PRIMARY);
 		newSourceNode.setIcon(VaadinIcon.PLUS_CIRCLE.create());
 	}

@@ -60,7 +60,7 @@ public class TransferSyntaxComponent extends VerticalLayout {
 		transferSyntaxSelect.setItems(Arrays.stream(UIDType.values()).map(UIDType::getCode).toList());
 
 		// Labels
-		transferSyntaxSelect.setLabel("Transfer Syntax");
+		transferSyntaxSelect.setLabel("传输语法");
 		transferSyntaxSelect.setItemLabelGenerator(UIDType::descriptionOf);
 	}
 

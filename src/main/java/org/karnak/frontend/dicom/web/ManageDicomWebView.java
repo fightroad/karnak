@@ -85,13 +85,13 @@ public class ManageDicomWebView extends AbstractView {
 		mainLayout.setSpacing(true);
 		mainLayout.getStyle().set("min-height", "0");
 
-		H6 title = new H6("DICOMweb Endpoint Management");
+		H6 title = new H6("DICOMweb 端点管理");
 		title.getStyle().set("margin-top", "0px");
 
-		Button addBtn = new Button("Add Endpoint", VaadinIcon.PLUS.create(), event -> openEditor(null));
+		Button addBtn = new Button("添加端点", VaadinIcon.PLUS.create(), event -> openEditor(null));
 		addBtn.addThemeVariants(ButtonVariant.PRIMARY);
 
-		Button importExportBtn = new Button("Import / Export", VaadinIcon.EXCHANGE.create(),
+		Button importExportBtn = new Button("导入/导出", VaadinIcon.EXCHANGE.create(),
 				event -> openImportExportDialog());
 
 		HorizontalLayout toolbar = new HorizontalLayout(addBtn, importExportBtn);
@@ -148,11 +148,11 @@ public class ManageDicomWebView extends AbstractView {
 				service.save(event.getDescription(), event.getUrl(), event.getServices(), event.getGroup());
 			}
 			refresh();
-			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOMweb endpoint saved"));
+			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOMweb 端点已保存"));
 		}
 		catch (Exception ex) {
 			displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot save the DICOMweb endpoint: " + ex.getMessage()));
+					"无法保存 DICOMweb 端点：" + ex.getMessage()));
 		}
 	}
 
@@ -163,24 +163,24 @@ public class ManageDicomWebView extends AbstractView {
 		try {
 			service.delete(endpoint.getId());
 			refresh();
-			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOMweb endpoint deleted"));
+			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, "DICOMweb 端点已删除"));
 		}
 		catch (Exception ex) {
 			displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot delete the DICOMweb endpoint: " + ex.getMessage()));
+					"无法删除 DICOMweb 端点：" + ex.getMessage()));
 		}
 	}
 
 	private void openImportExportDialog() {
 		List<String> knownGroups = service.getKnownGroups();
 
-		ComboBox<String> importGroup = groupCombo("Import into group", "blank = use the file's own group column",
+		ComboBox<String> importGroup = groupCombo("导入到分组", "留空 = 使用文件中的分组列",
 				knownGroups);
 		importGroup.setAllowCustomValue(true);
 		importGroup.addCustomValueSetListener(event -> importGroup.setValue(event.getDetail()));
-		Checkbox replace = new Checkbox("Replace existing in scope");
+		Checkbox replace = new Checkbox("替换范围内的现有项");
 
-		ComboBox<String> exportGroup = groupCombo("Export group", "blank = every group", knownGroups);
+		ComboBox<String> exportGroup = groupCombo("导出分组", "留空 = 所有分组", knownGroups);
 
 		Upload importUpload = new Upload((UploadHandler) event -> {
 			byte[] bytes;
@@ -197,8 +197,8 @@ public class ManageDicomWebView extends AbstractView {
 				doImport(bytes, targetGroup, replaceExisting);
 			}
 		});
-		importUpload.setDropLabel(new Span("Drop a CSV file here"));
-		importUpload.setUploadButton(new Button("Import CSV", VaadinIcon.UPLOAD.create()));
+		importUpload.setDropLabel(new Span("将 CSV 文件拖放到此处"));
+		importUpload.setUploadButton(new Button("导入 CSV", VaadinIcon.UPLOAD.create()));
 		importUpload.setAcceptedFileTypes(".csv", "text/csv");
 		importUpload.setMaxFiles(1);
 
@@ -207,12 +207,12 @@ public class ManageDicomWebView extends AbstractView {
 				new ByteArrayInputStream(service.exportCsv(emptyToNull(exportGroup.getValue()))),
 				"dicomweb-endpoints.csv", "text/csv", -1)));
 		exportAnchor.getElement().setAttribute("download", true);
-		exportAnchor.add(new Button("Export CSV", VaadinIcon.DOWNLOAD.create()));
+		exportAnchor.add(new Button("导出 CSV", VaadinIcon.DOWNLOAD.create()));
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Import / Export DICOMweb Endpoints");
+		dialog.setHeaderTitle("DICOMweb 端点导入/导出");
 		dialog.add(importExportContent(importGroup, replace, importUpload, exportGroup, exportAnchor));
-		dialog.getFooter().add(new Button("Close", event -> dialog.close()));
+		dialog.getFooter().add(new Button("关闭", event -> dialog.close()));
 		dialog.open();
 	}
 
@@ -223,8 +223,8 @@ public class ManageDicomWebView extends AbstractView {
 		HorizontalLayout exportRow = new HorizontalLayout(exportGroup, exportAnchor);
 		exportRow.setAlignItems(Alignment.BASELINE);
 
-		VerticalLayout content = new VerticalLayout(sectionTitle("Import"), importOptions, importUpload,
-				sectionTitle("Export"), exportRow);
+		VerticalLayout content = new VerticalLayout(sectionTitle("导入"), importOptions, importUpload,
+				sectionTitle("导出"), exportRow);
 		content.setPadding(false);
 		content.setSpacing(true);
 		content.setWidth("30em");
@@ -240,7 +240,7 @@ public class ManageDicomWebView extends AbstractView {
 	private static ComboBox<String> groupCombo(String label, String helper, List<String> groups) {
 		ComboBox<String> field = new ComboBox<>(label);
 		field.setItems(groups);
-		field.setPlaceholder("All groups");
+		field.setPlaceholder("所有分组");
 		field.setClearButtonVisible(true);
 		field.setHelperText(helper);
 		return field;
@@ -257,14 +257,14 @@ public class ManageDicomWebView extends AbstractView {
 		}
 		catch (Exception ex) {
 			runOnUi(() -> displayMessage(new Message(MessageLevel.ERROR, MessageFormat.TEXT,
-					"Cannot import the CSV file: " + ex.getMessage())));
+					"无法导入 CSV 文件：" + ex.getMessage())));
 		}
 	}
 
 	private void showImportReport(String targetGroup, WebDestinationConfigService.ImportReport report) {
-		String scope = (targetGroup != null) ? "group '" + targetGroup + "'" : "all groups";
-		String removed = (report.removed() > 0) ? " (" + report.removed() + " removed)" : "";
-		String summary = report.imported() + " DICOMweb endpoint(s) imported into " + scope + removed;
+		String scope = (targetGroup != null) ? "分组 '" + targetGroup + "'" : "所有分组";
+		String removed = (report.removed() > 0) ? "（已删除 " + report.removed() + " 个）" : "";
+		String summary = "已导入 " + report.imported() + " 个 DICOMweb 端点到 " + scope + removed;
 
 		if (report.errors().isEmpty()) {
 			displayMessage(new Message(MessageLevel.INFO, MessageFormat.TEXT, summary));
@@ -272,23 +272,22 @@ public class ManageDicomWebView extends AbstractView {
 		}
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Import report");
-		dialog.add(new Div(summary + " - " + report.errors().size() + " row(s) skipped or adjusted:"));
+		dialog.setHeaderTitle("导入报告");
+		dialog.add(new Div(summary + " - " + report.errors().size() + " 行已跳过："));
 		UnorderedList list = new UnorderedList();
 		report.errors().forEach(message -> list.add(new ListItem(message)));
 		dialog.add(list);
-		dialog.getFooter().add(new Button("Close", event -> dialog.close()));
+		dialog.getFooter().add(new Button("关闭", event -> dialog.close()));
 		dialog.open();
 	}
 
 	private void confirmReplaceAll(Runnable onConfirm) {
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Replace all DICOMweb endpoints?");
-		dialog.add(new Div(
-				"This deletes every existing DICOMweb endpoint before importing the file. This cannot be undone."));
+		dialog.setHeaderTitle("替换所有 DICOMweb 端点？");
+		dialog.add(new Div("此操作将在导入前删除所有现有 DICOMweb 端点，且无法撤销。"));
 
-		Button cancel = new Button("Cancel", event -> dialog.close());
-		Button confirm = new Button("Delete all & import", event -> {
+		Button cancel = new Button("取消", event -> dialog.close());
+		Button confirm = new Button("全部删除并导入", event -> {
 			dialog.close();
 			onConfirm.run();
 		});

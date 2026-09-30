@@ -32,28 +32,28 @@ public class ProfileElementView extends Div {
 	public void setView() {
 		removeAll();
 		if (profileElementEntity.getCodename() != null) {
-			add(setProfileValue("Codename : " + profileElementEntity.getCodename()));
+			add(setProfileValue("代号：" + profileElementEntity.getCodename()));
 		}
 		if (profileElementEntity.getAction() != null) {
-			add(setProfileValue("Action : " + profileElementEntity.getAction()));
+			add(setProfileValue("动作：" + profileElementEntity.getAction()));
 		}
 		if (profileElementEntity.getOption() != null) {
-			add(setProfileValue("Option : " + profileElementEntity.getOption()));
+			add(setProfileValue("选项：" + profileElementEntity.getOption()));
 		}
 		if (profileElementEntity.getArgumentEntities() != null
 				&& !profileElementEntity.getArgumentEntities().isEmpty()) {
-			add(setProfileValue("Arguments"));
+			add(setProfileValue("参数"));
 			add(setProfileArguments(profileElementEntity.getArgumentEntities()));
 		}
 		if (profileElementEntity.getCondition() != null) {
-			add(setProfileValue("Condition : " + profileElementEntity.getCondition()));
+			add(setProfileValue("条件：" + profileElementEntity.getCondition()));
 		}
 		if (!profileElementEntity.getIncludedTagEntities().isEmpty()) {
-			add(setProfileValue("Tags"));
+			add(setProfileValue("Tag"));
 			add(setProfileTags(profileElementEntity.getIncludedTagEntities()));
 		}
 		if (!profileElementEntity.getExcludedTagEntities().isEmpty()) {
-			add(setProfileValue("Excluded tags"));
+			add(setProfileValue("排除的 Tag"));
 			add(setProfileTags(profileElementEntity.getExcludedTagEntities()));
 		}
 	}

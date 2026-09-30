@@ -43,10 +43,12 @@ public class NewUpdateDestination extends VerticalLayout {
 	@Setter
 	private DestinationEntity currentDestinationEntity;
 
-	public static final String TRANSFER_IN_PROGRESS = "Transfer in progress";
+	public static final String TRANSFER_IN_PROGRESS = "传输进行中";
 
 	public NewUpdateDestination() {
 		setSizeFull();
+		setPadding(false);
+		setSpacing(true);
 
 		this.formDICOM = new FormDICOM();
 		this.formSTOW = new FormSTOW();

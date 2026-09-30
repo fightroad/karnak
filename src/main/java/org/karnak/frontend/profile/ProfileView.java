@@ -38,13 +38,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.weasis.core.util.annotations.Generated;
 
 @Route(value = ProfileView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - Profiles")
+@PageTitle("Karnak - 配置文件")
 @RolesAllowed("admin")
 @Generated()
 @NullUnmarked
 public class ProfileView extends HorizontalLayout implements HasUrlParameter<String> {
 
-	public static final String VIEW_NAME = "Profiles";
+	public static final String VIEW_NAME = "配置文件";
 
 	public static final String ROUTE = "profile";
 
@@ -102,7 +102,7 @@ public class ProfileView extends HorizontalLayout implements HasUrlParameter<Str
 		setPadding(false);
 		setSpacing(false);
 
-		Button newProfileButton = ButtonFactory.createAddButton("New profile");
+		Button newProfileButton = ButtonFactory.createAddButton("新建配置文件");
 		newProfileButton.addClickListener(event -> openNewProfileDialog());
 		Button addGroupButton = profileGrid.createAddGroupButton();
 		barAndGridLayout = new VerticalLayout();
@@ -161,21 +161,22 @@ public class ProfileView extends HorizontalLayout implements HasUrlParameter<Str
 				ui.access(() -> profileLogic.setProfileComponent(inputStream));
 			}
 		});
-		uploadProfile.setDropLabel(new Span("Drag and drop your profile here"));
+		uploadProfile.setDropLabel(new Span("将配置文件拖放到此处"));
+		uploadProfile.setUploadButton(new Button("上传文件..."));
 	}
 
 	private void openNewProfileDialog() {
-		TextField name = new TextField("Name");
-		TextField version = new TextField("Version");
-		TextField minVersion = new TextField("Min Karnak version (optional)");
+		TextField name = new TextField("名称");
+		TextField version = new TextField("版本");
+		TextField minVersion = new TextField("最低 Karnak 版本（可选）");
 		name.setWidthFull();
 		version.setWidthFull();
 		minVersion.setWidthFull();
-		NewItemDialog dialog = new NewItemDialog("New profile", "Create", name, version, minVersion);
+		NewItemDialog dialog = new NewItemDialog("新建配置文件", "创建", name, version, minVersion).formSized();
 		dialog.setOnConfirm(() -> {
 			if (name.getValue() == null || name.getValue().isBlank()) {
 				name.setInvalid(true);
-				name.setErrorMessage("A name is required");
+				name.setErrorMessage("名称为必填项");
 				return false;
 			}
 			profileLogic.createProfile(name.getValue().trim(), version.getValue(), minVersion.getValue());

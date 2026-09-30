@@ -62,9 +62,9 @@ public class PseudonymFromApi extends Div {
 	}
 
 	public void setElements() {
-		body = new TextArea("Body (JSON)");
+		body = new TextArea("请求体 (JSON)");
 		body.setVisible(false);
-		url = new TextField("Url");
+		url = new TextField("URL");
 		url.setRequired(true);
 		method = new Select<>(e -> {
 			if (e.getValue() != null) {
@@ -74,13 +74,13 @@ public class PseudonymFromApi extends Div {
 		method.setItems("GET", "POST");
 		method.setEmptySelectionAllowed(false);
 		method.setValue("GET");
-		method.setLabel("Method");
+		method.setLabel("方法");
 		method.setRequiredIndicatorVisible(true);
-		responsePath = new TextField("JSON Response Path");
+		responsePath = new TextField("JSON 响应路径");
 		responsePath.setRequired(true);
 		// Pick the authentication config from the existing identifiers rather than typing
 		// a free-text code; items are populated by the parent view.
-		authConfig = new ComboBox<>("Authentication Config Code");
+		authConfig = new ComboBox<>("认证配置代码");
 	}
 
 	public void clear() {

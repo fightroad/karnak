@@ -52,22 +52,22 @@ public class GridSwitchingAlbums extends Grid<KheopsAlbumsEntity> {
 		TextField textCondition = textFieldsBindSwitchingAlbum.getTextCondition();
 		editButtons = Collections.newSetFromMap(new WeakHashMap<>());
 
-		addColumn(KheopsAlbumsEntity::getUrlAPI).setHeader("URL API")
+		addColumn(KheopsAlbumsEntity::getUrlAPI).setHeader("API 地址")
 			.setFlexGrow(15)
 			.setSortable(true)
 			.setEditorComponent(textUrlAPI);
 
-		addColumn(KheopsAlbumsEntity::getAuthorizationDestination).setHeader("Token destination")
+		addColumn(KheopsAlbumsEntity::getAuthorizationDestination).setHeader("目的令牌")
 			.setFlexGrow(15)
 			.setSortable(true)
 			.setEditorComponent(textAuthorizationDestination);
 
-		addColumn(KheopsAlbumsEntity::getAuthorizationSource).setHeader("Token source")
+		addColumn(KheopsAlbumsEntity::getAuthorizationSource).setHeader("来源令牌")
 			.setFlexGrow(15)
 			.setSortable(true)
 			.setEditorComponent(textAuthorizationSource);
 
-		addColumn(KheopsAlbumsEntity::getCondition).setHeader("Condition")
+		addColumn(KheopsAlbumsEntity::getCondition).setHeader("条件")
 			.setFlexGrow(15)
 			.setSortable(true)
 			.setEditorComponent(textCondition);
@@ -81,11 +81,11 @@ public class GridSwitchingAlbums extends Grid<KheopsAlbumsEntity> {
 		editor.setBuffered(true);
 
 		Column<KheopsAlbumsEntity> editorColumn = addComponentColumn(kheopsAlbums -> {
-			Button edit = new Button("Edit");
+			Button edit = new Button("编辑");
 			edit.addClickListener(e -> editor.editItem(kheopsAlbums));
 			edit.setEnabled(!editor.isOpen());
 
-			Button remove = new Button("Remove");
+			Button remove = new Button("移除");
 			remove.addThemeVariants(ButtonVariant.ERROR, ButtonVariant.PRIMARY);
 			remove.addClickListener(e -> {
 				dataProvider.getItems().remove(kheopsAlbums);
@@ -101,7 +101,7 @@ public class GridSwitchingAlbums extends Grid<KheopsAlbumsEntity> {
 		editor.addOpenListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
 		editor.addCloseListener(e -> editButtons.forEach(button -> button.setEnabled(!editor.isOpen())));
 
-		Button save = new Button("Validate");
+		Button save = new Button("确认");
 		save.addClickListener(event -> {
 			// Get the current edited Kheops album
 			KheopsAlbumsEntity currentEditedKheopsAlbumsEntity = new KheopsAlbumsEntity();
@@ -113,7 +113,7 @@ public class GridSwitchingAlbums extends Grid<KheopsAlbumsEntity> {
 				}
 				else {
 					// Show a notification
-					Span content = new Span("Already existing");
+					Span content = new Span("已存在");
 					content.addClassName("karnak-error-text");
 					Notification notification = new Notification(content);
 					notification.setDuration(3000);
@@ -124,7 +124,7 @@ public class GridSwitchingAlbums extends Grid<KheopsAlbumsEntity> {
 		});
 		save.addThemeVariants(ButtonVariant.PRIMARY);
 
-		Button cancel = new Button("Cancel", e -> editor.cancel());
+		Button cancel = new Button("取消", e -> editor.cancel());
 
 		Div buttons = new Div(save, cancel);
 		editorColumn.setEditorComponent(buttons);

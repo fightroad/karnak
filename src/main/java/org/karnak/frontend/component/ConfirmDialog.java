@@ -96,7 +96,7 @@ public class ConfirmDialog extends Composite<Dialog> {
 	}
 
 	private void createTitleText() {
-		titleText = new Span("Confirmation");
+		titleText = new Span("确认");
 		titleText.getStyle().set("font-size", "24px");
 		titleText.getStyle().set("font-weight", "400");
 	}
@@ -125,7 +125,7 @@ public class ConfirmDialog extends Composite<Dialog> {
 		yesBtn = new Button();
 		yesBtn.addClassName("stroked-button");
 		yesBtn.addClassName("primary");
-		yesBtn.setText("Confirm");
+		yesBtn.setText("确认");
 		yesBtn.setWidth("90px");
 
 		yesBtn.focus();
@@ -141,7 +141,7 @@ public class ConfirmDialog extends Composite<Dialog> {
 	private void createNoBtn() {
 		noBtn = new Button();
 		noBtn.addClassName("primary");
-		noBtn.setText("Cancel");
+		noBtn.setText("取消");
 		noBtn.setWidth("90px");
 
 		noBtn.addClickListener(e -> dialog.close());

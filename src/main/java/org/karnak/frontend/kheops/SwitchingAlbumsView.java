@@ -46,7 +46,7 @@ public class SwitchingAlbumsView extends CustomField<List<KheopsAlbumsEntity>> {
 		newSwitchingAlbumBinder = newSwitchingAlbum.getBinder();
 		kheopsAlbumsEntityList = new ArrayList<>();
 		layout = new VerticalLayout();
-		checkboxSwitchingAlbums = new Checkbox("Switching in different KHEOPS albums");
+		checkboxSwitchingAlbums = new Checkbox("在不同 KHEOPS 相册间切换");
 		add(checkboxSwitchingAlbums, layout);
 		setEventCheckBox();
 		setEventButtonAdd();
@@ -91,7 +91,7 @@ public class SwitchingAlbumsView extends CustomField<List<KheopsAlbumsEntity>> {
 				}
 				else {
 					// Otherwise error message already existing
-					newSwitchingAlbum.getTextErrorConditionMsg().setText("Already existing");
+					newSwitchingAlbum.getTextErrorConditionMsg().setText("已存在");
 				}
 			}
 		});

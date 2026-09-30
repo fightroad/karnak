@@ -19,7 +19,7 @@ import java.util.Locale;
 public class HStringToIntegerConverter extends StringToIntegerConverter {
 
 	public HStringToIntegerConverter() {
-		super(0, "Could not convert value to " + Integer.class.getName() + ".");
+		super(0, "无法将值转换为 " + Integer.class.getName() + "。");
 	}
 
 	@Override

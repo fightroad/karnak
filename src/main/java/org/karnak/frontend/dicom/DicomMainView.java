@@ -39,13 +39,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.weasis.core.util.annotations.Generated;
 
 @Route(value = DicomMainView.ROUTE, layout = MainLayout.class)
-@PageTitle("Karnak - DICOM Web Tools")
+@PageTitle("Karnak - DICOM 工具")
 @RolesAllowed("admin")
 @Generated()
 @NullUnmarked
 public class DicomMainView extends VerticalLayout {
 
-	public static final String VIEW_NAME = "DICOM Web Tools";
+	public static final String VIEW_NAME = "DICOM 工具";
 
 	public static final String ROUTE = "dicom";
 
@@ -103,12 +103,12 @@ public class DicomMainView extends VerticalLayout {
 		dicomEchoView = new DicomEchoView(dicomNodeUtil, dicomNodeCheckService, dicomCapabilitiesCheckService,
 				dicomNodeCheckHistoryService);
 		pages.put(new Tab("DICOM Echo"), dicomEchoView);
-		pages.put(new Tab("DICOM Worklist"), new DicomWorkListView(dicomNodeUtil));
-		pages.put(new Tab("Manage DICOM Nodes"), new ManageDicomNodesView(dicomNodeConfigService, dicomNodeUtil));
+		pages.put(new Tab("工作列表"), new DicomWorkListView(dicomNodeUtil));
+		pages.put(new Tab("DICOM 节点"), new ManageDicomNodesView(dicomNodeConfigService, dicomNodeUtil));
 		pages.put(new Tab("DICOMweb"),
 				new DicomWebView(dicomWebCheckService, webDestinationConfigService, dicomNodeUtil));
-		pages.put(new Tab("Manage DICOMweb"), new ManageDicomWebView(webDestinationConfigService, dicomNodeUtil));
-		pages.put(new Tab("Monitor"), new MonitorView(dicomNodeUtil, webDestinationConfigService, dicomNodeCheckService,
+		pages.put(new Tab("端点管理"), new ManageDicomWebView(webDestinationConfigService, dicomNodeUtil));
+		pages.put(new Tab("连通监控"), new MonitorView(dicomNodeUtil, webDestinationConfigService, dicomNodeCheckService,
 				dicomCapabilitiesCheckService, dicomWebCheckService));
 
 		tabsToPages = pages;

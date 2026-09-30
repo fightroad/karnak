@@ -30,14 +30,15 @@ public class FilterBySOPClassesForm extends HorizontalLayout {
 	private Binder<DestinationEntity> binder;
 
 	public FilterBySOPClassesForm() {
-		this.filterBySOPClassesCheckbox = new Checkbox("Authorized SOPs");
+		this.filterBySOPClassesCheckbox = new Checkbox("授权的 SOP");
 		this.sopFilter = new MultiSelectComboBox<>();
 	}
 
 	public void init(Binder<DestinationEntity> binder) {
 		this.binder = binder;
 		setElements();
-		setPadding(true);
+		setPadding(false);
+		getStyle().set("padding", "0.5rem 0.75rem");
 		add(filterBySOPClassesCheckbox, sopFilter);
 	}
 

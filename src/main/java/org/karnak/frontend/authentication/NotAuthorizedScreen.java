@@ -45,16 +45,16 @@ import org.weasis.core.util.annotations.Generated;
  * view of the navigation access control when the access to a view is denied.
  */
 @Route(NotAuthorizedScreen.ROUTE)
-@PageTitle("Karnak - Not authorized")
+@PageTitle("Karnak - 未授权")
 @AnonymousAllowed
 @Generated()
 public class NotAuthorizedScreen extends FlexLayout implements HasErrorParameter<AccessDeniedException> {
 
 	public static final String ROUTE = "not-authorized";
 
-	private static final String NOT_AUTHORIZED_TITLE = "Not Authorized";
+	private static final String NOT_AUTHORIZED_TITLE = "未授权";
 
-	private static final String LOGOUT_LABEL = "Logout";
+	private static final String LOGOUT_LABEL = "退出登录";
 
 	// Views to evaluate when looking for a fallback view the user may access
 	private static final List<Class<? extends Component>> FALLBACK_VIEWS = List.of(ForwardNodeView.class,

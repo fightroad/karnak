@@ -27,9 +27,9 @@ public class AuthHeadersGenerationDialog extends Dialog {
 
 	public static final String AUTHORIZATION_TAG = "<key>Authorization</key>";
 
-	public static final String TITLE = "Generate Authorization Header";
+	public static final String TITLE = "生成 Authorization 请求头";
 
-	private static final String BASIC_AUTH = "Basic Auth";
+	private static final String BASIC_AUTH = "Basic 认证";
 
 	private static final String OAUTH2 = "OAuth 2";
 
@@ -63,7 +63,7 @@ public class AuthHeadersGenerationDialog extends Dialog {
 
 	private final FormSTOW parentForm;
 
-	private static final String REQUIRED_MESSAGE = "This field is required";
+	private static final String REQUIRED_MESSAGE = "此字段为必填项";
 
 	public AuthHeadersGenerationDialog(FormSTOW parentForm) {
 		this.parentForm = parentForm;
@@ -89,22 +89,22 @@ public class AuthHeadersGenerationDialog extends Dialog {
 		divSelectBox = new Div();
 		authTypeSelect = new Select<>();
 		authTypeSelect.setItems(authTypeSelectValues);
-		authTypeSelect.setLabel("Authorization Type");
-		authTypeSelect.setErrorMessage("This field is mandatory");
+		authTypeSelect.setLabel("授权类型");
+		authTypeSelect.setErrorMessage("此字段为必填项");
 		// authTypeSelect.setWidth(FIELD_WIDTH);
 		authTypeSelect.setEmptySelectionAllowed(false);
 		authTypeSelect.addValueChangeListener(value -> displayAuthTypeForm(value.getValue()));
 
 		divSelectBox.add(authTypeSelect);
 
-		generateButton = new Button("Generate Headers", event -> {
+		generateButton = new Button("生成请求头", event -> {
 			if (validateFields(authTypeSelect.getValue())) {
 				generateAuthHeaders(authTypeSelect.getValue());
 			}
 		});
 		generateButton.addThemeVariants(ButtonVariant.PRIMARY);
 		generateButton.setWidth(BUTTON_WIDTH);
-		cancelButton = new Button("Cancel", event -> close());
+		cancelButton = new Button("取消", event -> close());
 		cancelButton.setWidth(BUTTON_WIDTH);
 
 		buildForms();
@@ -176,14 +176,14 @@ public class AuthHeadersGenerationDialog extends Dialog {
 		basicUsername.setRequiredIndicatorVisible(true);
 		basicUsername.setErrorMessage(REQUIRED_MESSAGE);
 		basicUsername.setRequired(true);
-		basicUsername.setLabel("Username");
+		basicUsername.setLabel("用户名");
 
 		basicPassword = new TextField();
 		basicPassword.setWidth(FIELD_WIDTH);
 		basicPassword.setRequiredIndicatorVisible(true);
 		basicPassword.setErrorMessage(REQUIRED_MESSAGE);
 		basicPassword.setRequired(true);
-		basicPassword.setLabel("Password");
+		basicPassword.setLabel("密码");
 
 		basicForm.add(basicUsername);
 		basicForm.add(basicPassword);
@@ -201,7 +201,7 @@ public class AuthHeadersGenerationDialog extends Dialog {
 		oauthToken.setWidth(FIELD_WIDTH);
 		oauthToken.setRequiredIndicatorVisible(true);
 		oauthToken.setErrorMessage(REQUIRED_MESSAGE);
-		oauthToken.setLabel("OAuth 2 Token");
+		oauthToken.setLabel("OAuth 2 令牌");
 
 		oauthForm.add(oauthToken);
 	}

@@ -67,11 +67,11 @@ public class AuthConfigComponent extends VerticalLayout {
 		layout.setWidthFull();
 
 		url = new TextField();
-		url.setLabel("Access Token URL");
+		url.setLabel("访问令牌 URL");
 		url.setWidthFull();
 		layout.add(url);
 		scope = new TextField();
-		scope.setLabel("Scope");
+		scope.setLabel("范围");
 		scope.setWidthFull();
 		layout.add(scope);
 		clientSecret = new PasswordField();
@@ -86,9 +86,9 @@ public class AuthConfigComponent extends VerticalLayout {
 		add(layout);
 
 		HorizontalLayout buttons = new HorizontalLayout();
-		saveBtn = new Button("Save");
+		saveBtn = new Button("保存");
 		buttons.add(saveBtn);
-		cancelBtn = new Button("Cancel");
+		cancelBtn = new Button("取消");
 		buttons.add(cancelBtn);
 
 		add(buttons);
@@ -101,19 +101,19 @@ public class AuthConfigComponent extends VerticalLayout {
 	public void setBinder() {
 		binder = new BeanValidationBinder<>(AuthConfigEntity.class);
 		binder.forField(clientId)
-			.withValidator(StringUtils::isNotBlank, "Client ID is required")
+			.withValidator(StringUtils::isNotBlank, "Client ID 为必填项")
 			.bind(AuthConfigEntity::getClientId, AuthConfigEntity::setClientId);
 
 		binder.forField(clientSecret)
-			.withValidator(StringUtils::isNotBlank, "Client Secret is required")
+			.withValidator(StringUtils::isNotBlank, "Client Secret 为必填项")
 			.bind(AuthConfigEntity::getClientSecret, AuthConfigEntity::setClientSecret);
 
 		binder.forField(url)
-			.withValidator(StringUtils::isNotBlank, "Url is required")
+			.withValidator(StringUtils::isNotBlank, "URL 为必填项")
 			.bind(AuthConfigEntity::getAccessTokenUrl, AuthConfigEntity::setAccessTokenUrl);
 
 		binder.forField(scope)
-			.withValidator(StringUtils::isNotBlank, "Scope is required")
+			.withValidator(StringUtils::isNotBlank, "Scope 为必填项")
 			.bind(AuthConfigEntity::getScope, AuthConfigEntity::setScope);
 
 		binder.bindInstanceFields(this);

@@ -61,7 +61,7 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class DicomEchoView extends AbstractView implements HasUrlParameter<String> {
 
-	public static final String VIEW_NAME = "Dicom Echo";
+	public static final String VIEW_NAME = "DICOM Echo 测试";
 
 	private static final String PARAMETER_CALLING_AET = "callingAET";
 
@@ -75,7 +75,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 
 	private static final String ACTION_ECHO = "echo";
 
-	public static final String ERROR_MESSAGE = "This filed is mandatory";
+	public static final String ERROR_MESSAGE = "此字段为必填项";
 
 	// CONTROLLER
 	private final DicomEchoLogic logic;
@@ -185,7 +185,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 		List<DicomNodeCheckHistory> history = historyService.getRecentChecks();
 		historyCount = history.size();
 		historyGrid.setItems(history);
-		historyTitle.setText("History (" + historyCount + ")");
+		historyTitle.setText("历史 (" + historyCount + ")");
 		historyLayout.setVisible(historyCount > 0);
 	}
 
@@ -235,7 +235,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 	}
 
 	private void buildFormLayoutTitle() {
-		formLayoutTitle = new H6("Dicom Echo");
+		formLayoutTitle = new H6("DICOM Echo 测试");
 		formLayoutTitle.getStyle().set("margin-top", "0px");
 		formLayoutTitle.getStyle().set("margin-bottom", "10px");
 	}
@@ -262,18 +262,18 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 	}
 
 	private void buildCalledAetFld() {
-		calledAetFld = new AETField("Called AE Title");
+		calledAetFld = new AETField("被叫 AE Title");
 		calledAetFld.setValueChangeMode(ValueChangeMode.EAGER);
 	}
 
 	private void buildCalledHostnameFld() {
-		calledHostnameFld = new TextField("Called Hostname");
+		calledHostnameFld = new TextField("被叫主机名");
 		calledHostnameFld.setValueChangeMode(ValueChangeMode.EAGER);
 	}
 
 	private void buildCalledPortFld() {
 		calledPortFld = new PortField();
-		calledPortFld.setLabel("Called Port");
+		calledPortFld.setLabel("被叫端口");
 		calledPortFld.setValueChangeMode(ValueChangeMode.EAGER);
 	}
 
@@ -292,14 +292,14 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 	}
 
 	private void buildClearBtn() {
-		clearBtn = new Button("Reset Form");
+		clearBtn = new Button("重置表单");
 		clearBtn.getStyle().set("cursor", "pointer");
 
 		clearBtn.addClickListener(event -> binder.readBean(dicomEchoQueryData));
 	}
 
 	private void buildSelectDicomNodeBtn() {
-		selectDicomNodeBtn = new Button("Select DICOM Node");
+		selectDicomNodeBtn = new Button("选择 DICOM 节点");
 		selectDicomNodeBtn.getStyle().set("cursor", "pointer");
 
 		selectDicomNodeBtn.addClickListener(event -> openDicomNodeSelectionDialog());
@@ -307,7 +307,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 
 	private void openDicomNodeSelectionDialog() {
 		DicomNodeSelectionDialog dialog = new DicomNodeSelectionDialog(dicomNodeUtil.getAllNodeTypesIncludingWorklist(),
-				"Select DICOM Node", "DICOM nodes");
+				"选择 DICOM 节点", "DICOM 节点");
 
 		dialog.addSelectDicomNodeListener((ComponentEventListener<SelectDicomNodeEvent>) event -> {
 			ConfigNode selectedDicomNode = event.getSelectedDicomNode();
@@ -321,7 +321,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 	}
 
 	private void buildDicomEchoBtn() {
-		dicomEchoBtn = new Button("Check DICOM Node");
+		dicomEchoBtn = new Button("检查 DICOM 节点");
 		dicomEchoBtn.getStyle().set("cursor", "pointer");
 		dicomEchoBtn.addThemeVariants(ButtonVariant.PRIMARY);
 		dicomEchoBtn.setEnabled(false);
@@ -340,11 +340,11 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 		currentResultLayout.getStyle().set("border-radius", "4px");
 		currentResultLayout.setVisible(false);
 
-		H6 resultTitle = new H6("Result");
+		H6 resultTitle = new H6("结果");
 		resultTitle.getStyle().set("margin-top", "0px");
 		resultTitle.getStyle().set("padding-bottom", "0px");
 
-		Div resultNote = new Div("Select the row to view the details, or probe the node capabilities");
+		Div resultNote = new Div("选择行查看详情，或探测节点能力");
 		resultNote.getStyle().set("font-size", "var(--aura-font-size-xs)");
 		resultNote.getStyle().set("font-style", "italic");
 
@@ -370,11 +370,11 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 		historyLayout.getStyle().set("min-height", "0");
 		historyLayout.setVisible(false);
 
-		historyTitle = new H6("History");
+		historyTitle = new H6("历史");
 		historyTitle.getStyle().set("margin-top", "0px");
 		historyTitle.getStyle().set("padding-bottom", "0px");
 
-		Div historyNote = new Div("Previous checks, most recent first - select a row to view the details");
+		Div historyNote = new Div("历史检查记录，最新在前 - 选择行查看详情");
 		historyNote.getStyle().set("font-size", "var(--aura-font-size-xs)");
 		historyNote.getStyle().set("font-style", "italic");
 
@@ -390,7 +390,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 
 	private void openCapabilitiesDialog(DicomNodeCheckResult result) {
 		if (callingAetFld.isEmpty()) {
-			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "A calling AE Title is required"));
+			displayMessage(new Message(MessageLevel.WARN, MessageFormat.TEXT, "必须填写 Calling AE Title"));
 			return;
 		}
 
@@ -401,10 +401,10 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 		panel.display(capabilities);
 
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("DICOM Capabilities — " + result.getCalledNodeDescription());
+		dialog.setHeaderTitle("DICOM 能力 — " + result.getCalledNodeDescription());
 		dialog.setWidth("900px");
 		dialog.add(panel);
-		Button closeBtn = new Button("Close", (event) -> dialog.close());
+		Button closeBtn = new Button("关闭", (event) -> dialog.close());
 		dialog.getFooter().add(closeBtn);
 		dialog.open();
 	}
@@ -424,7 +424,7 @@ public class DicomEchoView extends AbstractView implements HasUrlParameter<Strin
 
 		binder.forField(calledPortFld)
 			.asRequired(ERROR_MESSAGE)
-			.withValidator(new IntegerRangeValidator("Invalid port number", 1, 65535))
+			.withValidator(new IntegerRangeValidator("端口号无效", 1, 65535))
 			.bind(DicomEchoQueryData::getCalledPort, DicomEchoQueryData::setCalledPort);
 
 		binder.readBean(dicomEchoQueryData);

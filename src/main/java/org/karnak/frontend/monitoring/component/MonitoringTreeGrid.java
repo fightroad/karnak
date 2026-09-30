@@ -55,18 +55,18 @@ public class MonitoringTreeGrid extends TreeGrid<MonitoringNode> {
 		this.dataProvider = new MonitoringTreeDataProvider(monitoringLogic, filterSupplier);
 
 		// The first column absorbs all extra width; the rest only take what they need.
-		addComponentHierarchyColumn(this::nameComponent).setHeader("Destination / Study / Series").setFlexGrow(1);
-		addColumn(node -> node instanceof DestinationNode d ? Long.toString(d.studies()) : "").setHeader("Studies")
+		addComponentHierarchyColumn(this::nameComponent).setHeader("目的地 / 检查 / 序列").setFlexGrow(1);
+		addColumn(node -> node instanceof DestinationNode d ? Long.toString(d.studies()) : "").setHeader("检查")
 			.setFlexGrow(0)
 			.setAutoWidth(true);
-		addColumn(this::seriesText).setHeader("Series").setFlexGrow(0).setAutoWidth(true);
-		addColumn(this::instancesText).setHeader("Instances").setFlexGrow(0).setAutoWidth(true);
-		addColumn(this::retriesText).setHeader("Retries").setFlexGrow(0).setAutoWidth(true);
-		addColumn(this::errorsText).setHeader("Errors").setFlexGrow(0).setAutoWidth(true);
+		addColumn(this::seriesText).setHeader("序列").setFlexGrow(0).setAutoWidth(true);
+		addColumn(this::instancesText).setHeader("实例").setFlexGrow(0).setAutoWidth(true);
+		addColumn(this::retriesText).setHeader("重试").setFlexGrow(0).setAutoWidth(true);
+		addColumn(this::errorsText).setHeader("错误").setFlexGrow(0).setAutoWidth(true);
 		// Auto-width so the column grows to its widest rendered badge (e.g. "N excluded")
 		// rather than a fixed reserve. A deferred recalculation runs after every attach /
 		// reload / expand so the width tracks the badges once they have rendered.
-		addComponentColumn(this::statusBadge).setHeader("Status").setFlexGrow(0).setAutoWidth(true);
+		addComponentColumn(this::statusBadge).setHeader("状态").setFlexGrow(0).setAutoWidth(true);
 
 		setSelectionMode(SelectionMode.SINGLE);
 		asSingleSelect().addValueChangeListener(event -> {
@@ -148,7 +148,7 @@ public class MonitoringTreeGrid extends TreeGrid<MonitoringNode> {
 			case DestinationNode d -> d.displayName();
 			case StudyNode s -> s.studyUid() + (isBlank(s.description()) ? "" : " — " + s.description());
 			case SeriesNode se -> se.serieUid() + (isBlank(se.modality()) ? "" : " [" + se.modality() + "]");
-			case ErrorNode e -> isBlank(e.reason()) ? "(no reason)" : e.reason();
+			case ErrorNode e -> isBlank(e.reason()) ? "（无原因）" : e.reason();
 		};
 		Icon icon = iconType.create();
 		icon.setSize("var(--aura-font-size-l)");
@@ -221,16 +221,16 @@ public class MonitoringTreeGrid extends TreeGrid<MonitoringNode> {
 	private Badge statusBadge(long sent, long errors, long excluded, long retries) {
 		Badge badge;
 		if (errors > 0) {
-			badge = badge(errors + " error(s)", BadgeVariant.ERROR);
+			badge = badge(errors + " 个错误", BadgeVariant.ERROR);
 		}
 		else if (excluded > 0) {
-			badge = badge(excluded + " excluded", BadgeVariant.WARNING);
+			badge = badge(excluded + " 已排除", BadgeVariant.WARNING);
 		}
 		else {
-			badge = badge("OK", BadgeVariant.SUCCESS);
+			badge = badge("正常", BadgeVariant.SUCCESS);
 		}
 		UIS.setTooltip(badge,
-				"Sent: " + sent + " · Excluded: " + excluded + " · Errors: " + errors + " · Retries: " + retries);
+				"已发送: " + sent + " · 已排除: " + excluded + " · 错误: " + errors + " · 重试: " + retries);
 		return badge;
 	}
 

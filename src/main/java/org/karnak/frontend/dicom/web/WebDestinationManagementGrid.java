@@ -59,10 +59,10 @@ public class WebDestinationManagementGrid extends Grid<WebDestinationConfigEntit
 	}
 
 	private void init() {
-		setEmptyStateText("No DICOMweb endpoints configured");
+		setEmptyStateText("未配置 DICOMweb 端点");
 		setSelectionMode(SelectionMode.NONE);
 
-		addColumn(WebDestinationConfigEntity::getDescription).setHeader("Description")
+		addColumn(WebDestinationConfigEntity::getDescription).setHeader("描述")
 			.setFlexGrow(2)
 			.setWidth("90px")
 			.setSortable(true);
@@ -70,17 +70,17 @@ public class WebDestinationManagementGrid extends Grid<WebDestinationConfigEntit
 			.setFlexGrow(3)
 			.setWidth("150px")
 			.setSortable(true);
-		addColumn(WebDestinationManagementGrid::servicesDisplay).setHeader("Services").setFlexGrow(2).setWidth("90px");
-		addColumn(WebDestinationConfigEntity::getGroupName).setHeader("Group")
+		addColumn(WebDestinationManagementGrid::servicesDisplay).setHeader("服务").setFlexGrow(2).setWidth("90px");
+		addColumn(WebDestinationConfigEntity::getGroupName).setHeader("分组")
 			.setFlexGrow(1)
 			.setWidth("60px")
 			.setSortable(true);
-		addColumn(createActionsRenderer()).setHeader("Actions").setFlexGrow(0).setWidth("100px");
+		addColumn(createActionsRenderer()).setHeader("操作").setFlexGrow(0).setWidth("100px");
 	}
 
 	private static String servicesDisplay(WebDestinationConfigEntity endpoint) {
 		var services = WebDestinationConfigService.decodeServices(endpoint.getServices());
-		return services.isEmpty() ? "All services"
+		return services.isEmpty() ? "所有服务"
 				: services.stream().map(DicomWebServiceType::getDisplayName).collect(Collectors.joining(", "));
 	}
 
@@ -92,11 +92,11 @@ public class WebDestinationManagementGrid extends Grid<WebDestinationConfigEntit
 
 			Button editBtn = new Button(VaadinIcon.EDIT.create(), event -> editHandler.accept(endpoint));
 			editBtn.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.SMALL);
-			editBtn.setAriaLabel("Edit");
+			editBtn.setAriaLabel("编辑");
 
 			Button deleteBtn = new Button(VaadinIcon.TRASH.create(), event -> deleteHandler.accept(endpoint));
 			deleteBtn.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.SMALL, ButtonVariant.ERROR);
-			deleteBtn.setAriaLabel("Delete");
+			deleteBtn.setAriaLabel("删除");
 
 			actions.add(editBtn, deleteBtn);
 			if (!editablePredicate.test(endpoint)) {

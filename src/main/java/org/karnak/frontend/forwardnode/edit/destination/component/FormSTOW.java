@@ -84,6 +84,8 @@ public class FormSTOW extends VerticalLayout {
 
 	public void init(Binder<DestinationEntity> binder, ButtonSaveDeleteCancel buttonSaveDeleteCancel) {
 		setSizeFull();
+		setPadding(false);
+		setSpacing(true);
 		buttonSaveDeleteCancel.getStyle().set("padding-bottom", "var(--vaadin-gap-l)");
 		this.binder = binder;
 		this.deIdentificationComponent.init(this.binder);
@@ -95,13 +97,13 @@ public class FormSTOW extends VerticalLayout {
 		this.transferSyntaxComponent.init(this.binder);
 		this.transcodeOnlyUncompressedComponent.init(this.binder);
 
-		this.description = new TextField("Description");
+		this.description = new TextField("描述");
 		this.url = new TextField("URL");
 		this.generateAuthorizationHeaderButton = new Button(AuthHeadersGenerationDialog.TITLE);
-		this.headers = new TextArea("Headers");
+		this.headers = new TextArea("请求头");
 		this.switchingAlbumsView = new SwitchingAlbumsView();
-		this.activate = new Checkbox("Enable destination");
-		this.http2 = new Checkbox("Use HTTP/2");
+		this.activate = new Checkbox("启用目的地");
+		this.http2 = new Checkbox("使用 HTTP/2");
 
 		// Define layout
 		VerticalLayout destinationLayout = new VerticalLayout(UIS.setWidthFull(new HorizontalLayout(description)),
@@ -112,11 +114,7 @@ public class FormSTOW extends VerticalLayout {
 		VerticalLayout activateLayout = new VerticalLayout(activate);
 		VerticalLayout switchingLayout = new VerticalLayout(switchingAlbumsView);
 
-		// Set padding
-		transferLayout.setPadding(true);
-		destinationLayout.setPadding(true);
-		activateLayout.setPadding(true);
-		activateLayout.setPadding(true);
+		compactCardPadding(destinationLayout, transferLayout, activateLayout, switchingLayout);
 
 		// Add components
 		add(UIS.setWidthFull(new BoxShadowComponent(UIS.setWidthFull(destinationLayout))));
@@ -170,12 +168,19 @@ public class FormSTOW extends VerticalLayout {
 		return Boolean.TRUE.equals(conformanceReportComponent.getVirtualDestination().getValue());
 	}
 
+	private static void compactCardPadding(VerticalLayout... layouts) {
+		for (VerticalLayout layout : layouts) {
+			layout.setPadding(false);
+			layout.getStyle().set("padding", "0.5rem 0.75rem");
+		}
+	}
+
 	private void configureGenerateHeadersButton() {
 		this.generateAuthorizationHeaderButton.addClickListener(e -> {
 			if (this.headers.getValue().contains(AuthHeadersGenerationDialog.AUTHORIZATION_TAG)) {
-				WarningDialog wd = new WarningDialog("Cannot generate Authorization Header",
-						"The Headers already contain an Authorization tag. Please remove it if you want to generate it.",
-						"Ok");
+				WarningDialog wd = new WarningDialog("无法生成 Authorization 请求头",
+						"请求头中已包含 Authorization 标签。如需重新生成，请先将其移除。",
+						"确定");
 				wd.open();
 			}
 			else {
@@ -189,7 +194,7 @@ public class FormSTOW extends VerticalLayout {
 		description.setWidth("100%");
 
 		url.setWidth("70%");
-		UIS.setTooltip(url, "The destination STOW-RS URL");
+		UIS.setTooltip(url, "目的地 STOW-RS URL");
 
 		generateAuthorizationHeaderButton.setWidth("30%");
 		generateAuthorizationHeaderButton.getStyle().setAlignSelf(Style.AlignSelf.FLEX_END);
@@ -198,10 +203,10 @@ public class FormSTOW extends VerticalLayout {
 		headers.setWidth("100%");
 		headers.getStyle().set("padding", "0px");
 		UIS.setTooltip(headers,
-				"Headers for HTTP request. Example of format:\n<key>Authorization</key>\n<value>Bearer 1v1pwxT4Ww4DCFzyaMt0NP</value>");
+				"HTTP 请求头。格式示例：\n<key>Authorization</key>\n<value>Bearer 1v1pwxT4Ww4DCFzyaMt0NP</value>");
 
 		UIS.setTooltip(http2,
-				"Use HTTP/2 for STOW-RS uploads. Leave unchecked (HTTP/1.1) when the archive is behind a reverse proxy that caps HTTP/2 requests per connection (e.g. KHEOPS / nginx http2_max_requests=1000), which silently drops instances beyond the limit.");
+				"STOW-RS 上传使用 HTTP/2。当归档位于限制每连接 HTTP/2 请求数的反向代理之后时（例如 KHEOPS / nginx http2_max_requests=1000），超出限制的实例会被静默丢弃，此时请保持未勾选（HTTP/1.1）。");
 	}
 
 	private void setBinder() {
@@ -209,7 +214,7 @@ public class FormSTOW extends VerticalLayout {
 		// A virtual (report-only) destination forwards nothing, so the URL is not
 		// mandatory while "virtual" is checked.
 		binder.forField(url)
-			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "URL is mandatory")
+			.withValidator(value -> isVirtual() || StringUtils.isNotBlank(value), "URL 为必填项")
 			.bind(DestinationEntity::getUrl, DestinationEntity::setUrl);
 
 		binder.forField(headers).bind(DestinationEntity::getHeaders, DestinationEntity::setHeaders);

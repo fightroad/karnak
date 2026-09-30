@@ -28,19 +28,19 @@ import org.weasis.core.util.annotations.Generated;
 @NullUnmarked
 public class ProjectSecret extends Div {
 
-	private static final String WARNING_TEXT = "If you change the project secret, the consistency of previously de-identified DICOM files cannot be guaranteed anymore.";
+	private static final String WARNING_TEXT = "如果更改项目密钥，将无法再保证此前已去标识 DICOM 文件的一致性。";
 
-	private static final String REFER_LINK_TEXT = "For more details on the use of the project secret, please refer to the following link";
+	private static final String REFER_LINK_TEXT = "有关项目密钥用法的更多详情，请参阅以下链接";
 
 	private static final Anchor REFER_LINK = new Anchor(
 			"https://weasis.org/karnak-documentation/en/userguide/projects/index.html#5-project-secret",
-			"Project Secret Documentation");
+			"项目密钥文档");
 
 	private final Div messageWarningLayout = new Div();
 
 	private final ComboBox<SecretEntity> secretComboBox;
 
-	private final Button generateSecretButton = new Button("Generate Secret");
+	private final Button generateSecretButton = new Button("生成密钥");
 
 	private ProjectEntity projectEntity;
 
@@ -55,7 +55,7 @@ public class ProjectSecret extends Div {
 
 	private void addComponents() {
 		secretComboBox.getStyle().set("width", "80%");
-		secretComboBox.setPlaceholder("Project Secret");
+		secretComboBox.setPlaceholder("项目密钥");
 		secretComboBox.setAllowCustomValue(true);
 		generateSecretButton.getStyle().set("margin-left", "10px");
 		add(secretComboBox, generateSecretButton);
@@ -104,12 +104,12 @@ public class ProjectSecret extends Div {
 			// Already existing
 			if (alreadyExisting) {
 				secretComboBox.setInvalid(true);
-				secretComboBox.setErrorMessage("Secret is already existing");
+				secretComboBox.setErrorMessage("密钥已存在");
 			}
 			// Not valid
 			else if (!valid) {
 				secretComboBox.setInvalid(true);
-				secretComboBox.setErrorMessage("Secret is not valid");
+				secretComboBox.setErrorMessage("密钥无效");
 			}
 			else {
 				// Ok

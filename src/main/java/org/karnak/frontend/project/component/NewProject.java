@@ -50,10 +50,11 @@ public class NewProject extends HorizontalLayout {
 		this.profileDropDown = textFieldsBindProject.getProfileDropDown();
 		setElements();
 
-		this.dialog = new NewItemDialog("New project", "Add", this.textResearchName, this.profileDropDown);
+		this.dialog = new NewItemDialog("新建项目", "添加", this.textResearchName, this.profileDropDown);
 		this.dialog.setWidth("400px");
+		this.dialog.setHeight("280px");
 
-		this.buttonNewProject = ButtonFactory.createAddButton("New project");
+		this.buttonNewProject = ButtonFactory.createAddButton("新建项目");
 		this.buttonNewProject.addClickListener(click -> openDialog());
 
 		setPadding(false);
@@ -64,8 +65,8 @@ public class NewProject extends HorizontalLayout {
 	}
 
 	private void setElements() {
-		textResearchName.setLabel("Name");
-		textResearchName.setPlaceholder("Enter Name");
+		textResearchName.setLabel("名称");
+		textResearchName.setPlaceholder("请输入名称");
 		textResearchName.setWidthFull();
 		profileDropDown.setWidthFull();
 	}

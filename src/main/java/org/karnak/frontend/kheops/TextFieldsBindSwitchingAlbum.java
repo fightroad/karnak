@@ -64,25 +64,25 @@ public class TextFieldsBindSwitchingAlbum {
 	private Binder<KheopsAlbumsEntity> buildBinder() {
 		Binder<KheopsAlbumsEntity> b = new BeanValidationBinder<>(KheopsAlbumsEntity.class);
 		b.forField(textAuthorizationDestination)
-			.withValidator(StringUtils::isNotBlank, "Token destination is mandatory")
+			.withValidator(StringUtils::isNotBlank, "目的令牌为必填项")
 			.withValidator(value -> {
 				if (!textUrlAPI.getValue().isBlank()) {
 					return validateToken(value, textUrlAPI.getValue(), SwitchingAlbum.MIN_SCOPE_DESTINATION);
 				}
 				return true;
-			}, "Token can't be validate, minimum permissions: [write]")
+			}, "无法验证令牌，最低权限要求：[write]")
 			.bind(KheopsAlbumsEntity::getAuthorizationDestination, KheopsAlbumsEntity::setAuthorizationDestination);
 		b.forField(textAuthorizationSource)
-			.withValidator(StringUtils::isNotBlank, "Token source is mandatory")
+			.withValidator(StringUtils::isNotBlank, "来源令牌为必填项")
 			.withValidator(value -> {
 				if (!textUrlAPI.getValue().isBlank()) {
 					return validateToken(value, textUrlAPI.getValue(), SwitchingAlbum.MIN_SCOPE_SOURCE);
 				}
 				return true;
-			}, "Token can't be validate, minimum permissions: [read, send]")
+			}, "无法验证令牌，最低权限要求：[read, send]")
 			.bind(KheopsAlbumsEntity::getAuthorizationSource, KheopsAlbumsEntity::setAuthorizationSource);
 		b.forField(textUrlAPI)
-			.withValidator(StringUtils::isNotBlank, "Url API is mandatory")
+			.withValidator(StringUtils::isNotBlank, "API 地址为必填项")
 			.bind(KheopsAlbumsEntity::getUrlAPI, KheopsAlbumsEntity::setUrlAPI);
 		b.forField(textCondition).withValidator(value -> {
 			if (!textCondition.getValue().isEmpty()) {
@@ -93,7 +93,7 @@ public class TextFieldsBindSwitchingAlbum {
 			}
 			textErrorConditionMsg.setText("");
 			return true;
-		}, "Condition is not valid").bind(KheopsAlbumsEntity::getCondition, KheopsAlbumsEntity::setCondition);
+		}, "条件无效").bind(KheopsAlbumsEntity::getCondition, KheopsAlbumsEntity::setCondition);
 		return b;
 	}
 

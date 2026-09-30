@@ -70,6 +70,7 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 	private boolean suppressSelection;
 
 	protected GroupTreeGrid() {
+		addClassName("group-tree-grid");
 		setSelectionMode(SelectionMode.SINGLE);
 		setupDragAndDrop();
 		setupContextMenu();
@@ -180,10 +181,10 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 
 	/** A ready-made "Add group" button that views can place in their toolbar. */
 	public Button createAddGroupButton() {
-		Button button = new Button("Add group", VaadinIcon.FOLDER_ADD.create());
+		Button button = new Button("添加分组", VaadinIcon.FOLDER_ADD.create());
 		button.addThemeVariants(ButtonVariant.TERTIARY);
 		button.addClickListener(
-				event -> promptName("New group", "", name -> runAndReload(() -> controller.createGroup(name))));
+				event -> promptName("新建分组", "", name -> runAndReload(() -> controller.createGroup(name))));
 		return button;
 	}
 
@@ -296,14 +297,14 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 			menu.removeAll();
 			if (node instanceof GroupNode<?> groupNode) {
 				NamedGroupEntity group = groupNode.group();
-				menu.addItem("Rename group", event -> promptName("Rename group", group.getName(),
+				menu.addItem("重命名分组", event -> promptName("重命名分组", group.getName(),
 						name -> runAndReload(() -> controller.renameGroup(group, name))));
-				menu.addItem("Delete group", event -> confirmDeleteGroup(group));
+				menu.addItem("删除分组", event -> confirmDeleteGroup(group));
 				return true;
 			}
 			if (node instanceof ItemNode<T> itemNode && controller.groupOf(itemNode.item()) != null) {
 				T item = itemNode.item();
-				menu.addItem("Remove from group", event -> runAndReload(() -> controller.assign(item, null)));
+				menu.addItem("移出分组", event -> runAndReload(() -> controller.assign(item, null)));
 				return true;
 			}
 			return false;
@@ -311,8 +312,8 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 	}
 
 	private void confirmDeleteGroup(NamedGroupEntity group) {
-		ConfirmDialog dialog = new ConfirmDialog("Delete group \"" + group.getName()
-				+ "\"?<br>The items inside will move back to the root of the list.");
+		ConfirmDialog dialog = new ConfirmDialog("删除分组 \"" + group.getName()
+				+ "\"？<br>组内项目将移回列表根级。");
 		dialog.addConfirmationListener(event -> runAndReload(() -> controller.deleteGroup(group)));
 		dialog.open();
 	}
@@ -320,10 +321,12 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 	private void promptName(String title, String initial, SerializableConsumer<String> onSave) {
 		Dialog dialog = new Dialog();
 		dialog.setHeaderTitle(title);
-		TextField field = new TextField("Group name");
+		dialog.setWidth("360px");
+		dialog.setHeight("195px");
+		TextField field = new TextField("分组名称");
 		field.setValue(initial == null ? "" : initial);
 		field.setWidthFull();
-		Button save = new Button("Save", event -> {
+		Button save = new Button("保存", event -> {
 			String value = field.getValue() == null ? "" : field.getValue().trim();
 			if (!value.isEmpty()) {
 				onSave.accept(value);
@@ -331,7 +334,7 @@ public abstract class GroupTreeGrid<T> extends TreeGrid<GroupTreeNode<T>> {
 			}
 		});
 		save.addThemeVariants(ButtonVariant.PRIMARY);
-		Button cancel = new Button("Cancel", event -> dialog.close());
+		Button cancel = new Button("取消", event -> dialog.close());
 		dialog.add(field);
 		dialog.getFooter().add(cancel, save);
 		dialog.open();

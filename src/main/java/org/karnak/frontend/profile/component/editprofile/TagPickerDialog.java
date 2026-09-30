@@ -66,9 +66,9 @@ public class TagPickerDialog extends Dialog {
 
 	private final TextField searchField = new TextField();
 
-	private final ComboBox<String> moduleComboBox = new ComboBox<>("Browse by module");
+	private final ComboBox<String> moduleComboBox = new ComboBox<>("按模块浏览");
 
-	private final Checkbox showRetired = new Checkbox("Show retired");
+	private final Checkbox showRetired = new Checkbox("显示已弃用项");
 
 	private final RadioButtonGroup<TagScopes.TagScope> scopeGroup = new RadioButtonGroup<>();
 
@@ -80,7 +80,7 @@ public class TagPickerDialog extends Dialog {
 		this.onSelect = onSelect;
 		this.allowPaths = allowPaths;
 
-		setHeaderTitle("Add DICOM tags");
+		setHeaderTitle("添加 DICOM Tag");
 		setWidth("1240px");
 		setHeight(allowPaths ? "700px" : "640px");
 
@@ -97,9 +97,9 @@ public class TagPickerDialog extends Dialog {
 		body.setFlexGrow(1, grid);
 		add(body);
 
-		Button add = new Button("Add", event -> confirmSelection());
+		Button add = new Button("添加", event -> confirmSelection());
 		add.getElement().getThemeList().add("primary");
-		Button cancel = new Button("Cancel", event -> close());
+		Button cancel = new Button("取消", event -> close());
 		getFooter().add(cancel, add);
 
 		// Initial list so the grid is never empty when opened.
@@ -119,8 +119,8 @@ public class TagPickerDialog extends Dialog {
 	}
 
 	private void buildSearchControls() {
-		searchField.setLabel("Search");
-		searchField.setPlaceholder("Keyword, name or tag (e.g. PatientName, 0010,0010)");
+		searchField.setLabel("搜索");
+		searchField.setPlaceholder("关键字、名称或 Tag（如 PatientName、0010,0010）");
 		searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
 		searchField.setClearButtonVisible(true);
 		searchField.setValueChangeMode(ValueChangeMode.LAZY);
@@ -132,7 +132,7 @@ public class TagPickerDialog extends Dialog {
 		});
 
 		moduleComboBox.setItems(dicomStandardService.listModuleIds());
-		moduleComboBox.setPlaceholder("Select a module");
+		moduleComboBox.setPlaceholder("选择模块");
 		moduleComboBox.setClearButtonVisible(true);
 		moduleComboBox.setWidth("260px");
 		moduleComboBox.addValueChangeListener(event -> {
@@ -159,11 +159,11 @@ public class TagPickerDialog extends Dialog {
 	 * the grid shows search results.
 	 */
 	private void buildScopeSelector() {
-		scopeGroup.setLabel("Apply the selected tags to");
+		scopeGroup.setLabel("将所选 Tag 应用于");
 		scopeGroup.setItems(TagScopes.TagScope.values());
 		scopeGroup.setValue(TagScopes.TagScope.ANY_LEVEL);
-		scopeGroup.setHelperText("Any level matches the tag wherever it appears, including inside sequences. "
-				+ "Inside its sequence needs the module browse, which is where the hierarchy is known.");
+		scopeGroup.setHelperText("任意层级会在 Tag 出现的任何位置匹配，包括序列内部。"
+				+ "位于其序列内需要通过模块浏览确定层级结构。");
 		scopeGroup.setItemEnabledProvider(scope -> scope != TagScopes.TagScope.IN_SEQUENCE || isBrowsingModule());
 		refreshScopeAvailability();
 	}
@@ -193,19 +193,19 @@ public class TagPickerDialog extends Dialog {
 		grid.addColumn(TagRow::tagValue).setHeader("Tag").setWidth("105px").setFlexGrow(0);
 		grid.addColumn(this::displayNameWithIndent)
 			.setTooltipGenerator(this::displayName)
-			.setHeader("Attribute")
+			.setHeader("属性")
 			.setAutoWidth(true)
 			.setFlexGrow(1);
 		grid.addColumn(TagRow::vr).setHeader("VR").setWidth("85px").setFlexGrow(0);
 		if (allowPaths) {
 			grid.addColumn(this::enclosingSequences)
 				.setTooltipGenerator(this::enclosingSequences)
-				.setHeader("In sequence")
+				.setHeader("位于序列中")
 				.setAutoWidth(true)
 				.setFlexGrow(2);
 			// Create a hidden column containing the full path (ancestors + tag name) for
 			// sorting purposes
-			Grid.Column<TagRow> fullPath = grid.addColumn(this::generateFullPath).setHeader("Full path");
+			Grid.Column<TagRow> fullPath = grid.addColumn(this::generateFullPath).setHeader("完整路径");
 			fullPath.setVisible(false);
 			grid.sort(GridSortOrder.asc(fullPath).build());
 		}

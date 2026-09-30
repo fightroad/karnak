@@ -24,12 +24,12 @@ public class GridProject extends GroupTreeGrid<ProjectEntity> {
 	public GridProject() {
 		setWidthFull();
 
-		var projectNameColumn = addPrimaryColumn("Project Name", project -> new Span(project.getName()),
+		var projectNameColumn = addPrimaryColumn("项目名称", project -> new Span(project.getName()),
 				CollatorUtils.comparing(ProjectEntity::getName))
 			.setFlexGrow(15);
 
-		addItemTextColumn("De-identification profile",
-				project -> String.format("%s [version %s]", project.getProfileEntity().getName(),
+		addItemTextColumn("去标识配置文件",
+				project -> String.format("%s [版本 %s]", project.getProfileEntity().getName(),
 						project.getProfileEntity().getVersion()),
 				CollatorUtils.comparingThen(p -> CollatorUtils.nullSafe(p.getProfileEntity().getName()),
 						p -> CollatorUtils.nullSafe(p.getProfileEntity().getVersion())))

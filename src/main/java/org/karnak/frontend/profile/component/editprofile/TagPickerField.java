@@ -57,13 +57,12 @@ public class TagPickerField extends VerticalLayout {
 
 	}
 
-	private static final String PATH_HELPER = "A tag applies at any depth. Prefix with a dot for the root only "
-			+ "(.(0010,0010)), or name the enclosing sequences to scope it ((0040,0275).(0040,0009)). "
-			+ "Use * for one level and ** for one or more.";
+	private static final String PATH_HELPER = "Tag 可在任意深度匹配。前缀加点表示仅根级（.(0010,0010)），"
+			+ "或指定 enclosing 序列限定范围（(0040,0275).(0040,0009)）。"
+			+ "使用 * 匹配一层，** 匹配一层或多层。";
 
-	private static final String LITERAL_PATH_HELPER = "The tag is added to the top-level dataset, or inside the "
-			+ "sequences named before it ((0040,0275).(0040,0009)), which are created when the object does not "
-			+ "hold them. Wildcards are not accepted here.";
+	private static final String LITERAL_PATH_HELPER = "Tag 将添加到顶层数据集，或添加到其前面命名的序列中"
+			+ "（(0040,0275).(0040,0009)）；对象中不存在这些序列时会自动创建。此处不接受通配符。";
 
 	private final transient DicomStandardService dicomStandardService;
 
@@ -97,7 +96,7 @@ public class TagPickerField extends VerticalLayout {
 
 	/** The free-text entry of a tag or path, next to the browse button. */
 	private HorizontalLayout buildEntryBar() {
-		Button browse = new Button("Browse / search", VaadinIcon.SEARCH.create(), event -> openPicker());
+		Button browse = new Button("浏览 / 搜索", VaadinIcon.SEARCH.create(), event -> openPicker());
 		browse.addThemeVariants(ButtonVariant.TERTIARY);
 
 		manualEntry
@@ -110,7 +109,7 @@ public class TagPickerField extends VerticalLayout {
 		}
 		manualEntry.addKeyPressListener(Key.ENTER, event -> submitManualEntry());
 
-		Button addTyped = new Button("Add", VaadinIcon.PLUS.create(), event -> submitManualEntry());
+		Button addTyped = new Button("添加", VaadinIcon.PLUS.create(), event -> submitManualEntry());
 		addTyped.addThemeVariants(ButtonVariant.TERTIARY);
 
 		HorizontalLayout bar = new HorizontalLayout(manualEntry, addTyped, browse);
@@ -146,14 +145,13 @@ public class TagPickerField extends VerticalLayout {
 	private String validationError(String value) {
 		if (TagPathPattern.isPath(value)) {
 			if (!allowsPaths()) {
-				return "This profile element only accepts a tag of the top-level dataset, not a path";
+				return "此配置文件元素仅接受顶层数据集的 Tag，不接受路径";
 			}
 			if (!TagPathPattern.isValid(value)) {
-				return "Invalid tag path";
+				return "Tag 路径无效";
 			}
 			if (pathMode == PathMode.LITERAL && TagPathPattern.parse(value).literalTags().isEmpty()) {
-				return "This profile element needs every sequence named exactly, a wildcard does not say "
-						+ "where the tag would be added";
+				return "此配置文件元素需要精确命名每个序列，通配符无法指定 Tag 的添加位置";
 			}
 			return null;
 		}
@@ -161,7 +159,7 @@ public class TagPickerField extends VerticalLayout {
 		if (hex.matches("[0-9A-Fa-f]{8}") || TagActionMap.isValidPattern(hex)) {
 			return null;
 		}
-		return "Expected a tag such as (0010,0010) or a pattern such as 0010XXXX";
+		return "请输入 Tag，如 (0010,0010)，或模式如 0010XXXX";
 	}
 
 	private boolean allowsPaths() {
@@ -239,7 +237,7 @@ public class TagPickerField extends VerticalLayout {
 				label.append(" › ");
 			}
 			if (segment.isEmpty()) {
-				label.append("root");
+				label.append("根");
 				continue;
 			}
 			String name = attributeName(segment);

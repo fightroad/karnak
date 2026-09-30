@@ -148,6 +148,14 @@ label[disabled] {
   flex-shrink: 0;
   background: var(--aura-background-color);
   box-shadow: var(--overlay-box-shadow);
+  /* Nudge theme + logout up so the logout label is fully visible */
+  padding-bottom: 0.75rem;
+}
+
+.menu-logout-button {
+  margin-inline: 0.75rem;
+  width: calc(100% - 1.5rem);
+  box-sizing: border-box;
 }
 
 .menu-header {
@@ -175,6 +183,20 @@ label[disabled] {
 
 .menu-button {
   display: none;
+}
+
+/* Group TreeGrid leaf rows: hide unused expand-toggle gap so names align with headers */
+.group-tree-grid vaadin-grid-tree-toggle[leaf] {
+  --vaadin-grid-tree-toggle-level-offset: 0;
+  --vaadin-icon-size: 0px;
+  --vaadin-gap-s: 0px;
+}
+
+.group-tree-grid vaadin-grid-tree-toggle[leaf]::part(toggle) {
+  display: none;
+  margin-inline-end: 0;
+  width: 0;
+  min-width: 0;
 }
 
 .forwardnode-form {

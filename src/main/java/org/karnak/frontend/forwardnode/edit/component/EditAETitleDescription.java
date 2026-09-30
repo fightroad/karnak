@@ -54,9 +54,9 @@ public class EditAETitleDescription extends VerticalLayout {
 		setPadding(false);
 		setSpacing(false);
 
-		this.textFieldAETitle = new TextField("Forward AETitle");
-		this.textFieldDescription = new TextField("Description");
-		this.selectFolderButton = new Button("Upload local folder", VaadinIcon.FOLDER_OPEN.create());
+		this.textFieldAETitle = new TextField("转发 AE Title");
+		this.textFieldDescription = new TextField("描述");
+		this.selectFolderButton = new Button("上传本地文件夹", VaadinIcon.FOLDER_OPEN.create());
 		selectFolderButton.addClickListener(event -> {
 			ForwardNodeEntity forwardNode = binder.getBean();
 
@@ -70,19 +70,16 @@ public class EditAETitleDescription extends VerticalLayout {
 				selectFolder();
 			}
 			else {
-				Notification.show("No active destination configured for this forward node", 3000,
+				Notification.show("此转发节点未配置启用的目的地", 3000,
 						Notification.Position.MIDDLE);
 			}
 		});
 
-		// AE title and description are edited inline on the same row; action buttons
-		// (added
-		// via setActionButtons) sit on the same row and align with the fields.
+		// AE title and description on one row; keep description narrower so Save/Delete/Cancel fit.
 		textFieldAETitle.setWidth("30%");
-		textFieldDescription.setWidthFull();
+		textFieldDescription.setWidth("50%");
 		fieldsRow = new HorizontalLayout(textFieldAETitle, textFieldDescription);
 		fieldsRow.setWidthFull();
-		fieldsRow.expand(textFieldDescription);
 		fieldsRow.setAlignItems(Alignment.BASELINE);
 		add(fieldsRow);
 
@@ -103,7 +100,7 @@ public class EditAETitleDescription extends VerticalLayout {
 	/** The local-folder upload sits on its own line with a short explanation. */
 	private HorizontalLayout buildUploadFolderRow() {
 		Span explanation = new Span(
-				"Send DICOM files from a local folder to the active destinations of this forward node.");
+				"将本地文件夹中的 DICOM 文件发送到该转发节点的已启用目的地。");
 		explanation.getStyle()
 			.set("color", "var(--vaadin-text-color-secondary)")
 			.set("font-size", "var(--aura-font-size-s)");
@@ -115,23 +112,24 @@ public class EditAETitleDescription extends VerticalLayout {
 
 	private void selectFolder() {
 		Dialog dialog = new Dialog();
-		dialog.setHeaderTitle("Upload DICOM files from a local folder");
+		dialog.setHeaderTitle("从本地文件夹上传 DICOM 文件");
 
-		TextField pathField = new TextField("Folder Path");
-		pathField.setPlaceholder("Enter the absolute path to the folder (e.g., /home/user/documents)");
+		TextField pathField = new TextField("文件夹路径");
+		pathField.setPlaceholder("请输入文件夹的绝对路径（例如 /home/user/documents）");
 		pathField.setWidthFull();
 
 		Span errorMessage = new Span();
 		errorMessage.addClassName("karnak-error-text");
 		errorMessage.setVisible(false);
 
-		Button confirmButton = new Button("Confirm", e -> {
+		Button confirmButton = new Button("确认", e -> {
 			dicomSend(pathField, dialog, errorMessage);
 		});
 
 		dialog.add(pathField, errorMessage);
-		dialog.getFooter().add(new Button("Cancel", e -> dialog.close()), confirmButton);
+		dialog.getFooter().add(new Button("取消", e -> dialog.close()), confirmButton);
 		dialog.setWidth("500px");
+		dialog.setHeight("195px");
 		dialog.open();
 	}
 
@@ -148,12 +146,12 @@ public class EditAETitleDescription extends VerticalLayout {
 				CompletableFuture.runAsync(() -> CStore.process(callingNode, remoteNode, List.of(path), null));
 			}
 			else {
-				errorMessage.setText("The specified path is not a valid folder");
+				errorMessage.setText("指定路径不是有效的文件夹");
 				errorMessage.setVisible(true);
 			}
 		}
 		else {
-			errorMessage.setText("Please enter a folder path");
+			errorMessage.setText("请输入文件夹路径");
 			errorMessage.setVisible(true);
 		}
 	}
@@ -183,16 +181,16 @@ public class EditAETitleDescription extends VerticalLayout {
 
 	private void setBinder() {
 		binder.forField(textFieldAETitle)
-			.withValidator(value -> !value.isEmpty(), "Forward AE Title is mandatory")
-			.withValidator(value -> value.length() <= 16, "Forward AETitle has more than 16 characters")
+			.withValidator(value -> !value.isEmpty(), "转发 AE Title 为必填项")
+			.withValidator(value -> value.length() <= 16, "转发 AE Title 超过 16 个字符")
 			// Same constraint as the REST API: the AETitle reaches the DICOM gateway
 			// and its logs, where a pasted CR/LF would forge log records
 			.withValidator(value -> value.matches(ForwardNodeModel.AE_TITLE),
-					"Forward AETitle contains characters not allowed in an AETitle")
+					"转发 AE Title 包含不允许的字符")
 			.bind(ForwardNodeEntity::getFwdAeTitle, ForwardNodeEntity::setFwdAeTitle);
 		binder.forField(textFieldDescription)
 			.withValidator(value -> value.matches(ForwardNodeModel.NO_CONTROL_CHARACTERS),
-					"Forward description contains control characters")
+					"转发描述包含控制字符")
 			.bind(ForwardNodeEntity::getFwdDescription, ForwardNodeEntity::setFwdDescription);
 	}
 

@@ -32,30 +32,32 @@ public class GridDestination extends Grid<DestinationEntity> {
 	private UI attachedUi;
 
 	public GridDestination() {
-		setSizeFull();
+		setWidthFull();
+		// Height follows rows instead of stretching empty space under the table
+		setAllRowsVisible(true);
 
-		addColumn(DestinationEntity::getDescription).setHeader("Description").setFlexGrow(20).setSortable(true);
-		addColumn(DestinationEntity::getDestinationType).setHeader("Type").setFlexGrow(20).setSortable(true);
+		addColumn(DestinationEntity::getDescription).setHeader("描述").setFlexGrow(20).setSortable(true);
+		addColumn(DestinationEntity::getDestinationType).setHeader("类型").setFlexGrow(20).setSortable(true);
 
 		addComponentColumn(destination -> {
 			Span spanDot = new Span();
-			spanDot.getStyle().set("height", "30px");
-			spanDot.getStyle().set("width", "30px");
+			spanDot.getStyle().set("height", "12px");
+			spanDot.getStyle().set("width", "12px");
 			spanDot.getStyle().set("border-radius", "50%");
 			spanDot.getStyle().set("display", "inline-block");
 			spanDot.getStyle()
 				.set("background-color", destination.isActivate() ? "var(--aura-green)" : "var(--aura-red)");
 			return spanDot;
-		}).setHeader("Enabled").setFlexGrow(20);
+		}).setHeader("启用").setFlexGrow(20);
 
 		// Loading image - always create fresh based on entity state
 		addComponentColumn(destination -> {
-			LoadingImage loading = new LoadingImage("In progress", "30px");
+			LoadingImage loading = new LoadingImage("进行中", "16px");
 			loading.getStyle().set("display", "block");
 			loading.getStyle().set("margin", "0 auto");
 			loading.setVisible(destination.isTransferInProgress());
 			return loading;
-		}).setHeader("Activity");
+		}).setHeader("传输中");
 	}
 
 	@Override

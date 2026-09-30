@@ -38,11 +38,11 @@ public class GridForwardNode extends GroupTreeGrid<ForwardNodeEntity> {
 	public GridForwardNode() {
 		setSizeFull();
 
-		var forwardAeTitleColumn = addPrimaryColumn("Forward AETitle", this::buildAeTitleCell,
+		var forwardAeTitleColumn = addPrimaryColumn("转发 AE Title", this::buildAeTitleCell,
 				CollatorUtils.comparing(ForwardNodeEntity::getFwdAeTitle))
 			.setFlexGrow(20);
 
-		addItemTextColumn("Description", ForwardNodeEntity::getFwdDescription,
+		addItemTextColumn("描述", ForwardNodeEntity::getFwdDescription,
 				CollatorUtils.comparing(ForwardNodeEntity::getFwdDescription))
 			.setFlexGrow(20);
 
@@ -54,6 +54,8 @@ public class GridForwardNode extends GroupTreeGrid<ForwardNodeEntity> {
 		Button copyButton = createCopyButton(forwardNode);
 
 		HorizontalLayout layout = new HorizontalLayout(span, copyButton);
+		layout.setPadding(false);
+		layout.setMargin(false);
 		layout.setAlignItems(Alignment.CENTER);
 		layout.setSpacing(true);
 		return layout;
@@ -62,13 +64,13 @@ public class GridForwardNode extends GroupTreeGrid<ForwardNodeEntity> {
 	private Button createCopyButton(ForwardNodeEntity forwardNode) {
 		Button copyButton = new Button(VaadinIcon.COPY.create());
 		copyButton.addThemeVariants(ButtonVariant.TERTIARY, ButtonVariant.SMALL);
-		copyButton.getElement().setAttribute("aria-label", "Copy DICOM configuration");
+		copyButton.getElement().setAttribute("aria-label", "复制 DICOM 配置");
 
 		copyButton.addClickListener(event -> {
 			String config = buildDicomConfigTooltip(forwardNode);
 			copyButton.getElement().executeJs("navigator.clipboard.writeText($0).then(() => {}, () => {})", config);
 
-			Notification notification = Notification.show("DICOM configuration copied to clipboard");
+			Notification notification = Notification.show("DICOM 配置已复制到剪贴板");
 			notification.addThemeVariants(NotificationVariant.SUCCESS);
 			notification.setDuration(2000);
 			notification.setPosition(Position.MIDDLE);
@@ -79,17 +81,17 @@ public class GridForwardNode extends GroupTreeGrid<ForwardNodeEntity> {
 
 	private String buildDicomConfigTooltip(ForwardNodeEntity forwardNode) {
 		StringBuilder tooltip = new StringBuilder();
-		tooltip.append("DICOM Configuration\n");
+		tooltip.append("DICOM 配置\n");
 		tooltip.append("===================\n");
-		tooltip.append("Description: ").append(forwardNode.getFwdDescription()).append("\n");
+		tooltip.append("描述: ").append(forwardNode.getFwdDescription()).append("\n");
 		tooltip.append("AE Title: ").append(forwardNode.getFwdAeTitle()).append("\n");
 
 		String host = VaadinRequest.getCurrent().getRemoteHost();
-		tooltip.append("Host: ").append(host).append("\n");
+		tooltip.append("主机: ").append(host).append("\n");
 
 		Integer listenerPort = SystemPropertyUtil.retrieveIntegerSystemProperty("DICOM_LISTENER_PORT", 11119);
-		tooltip.append("Port: ").append(listenerPort).append("\n\n");
-		tooltip.append("Note: if necessary adapt the host to the visible address from the sending node.\n");
+		tooltip.append("端口: ").append(listenerPort).append("\n\n");
+		tooltip.append("注意：如有必要，请将主机地址调整为发送节点可见的地址。\n");
 		return tooltip.toString();
 	}
 
