@@ -47,14 +47,29 @@ public final class TransferSeriesSpecifications {
 
 	/** Restricts to rows for the given original study UID. */
 	public static Specification<TransferSeriesStatusEntity> hasStudyUidOriginal(String studyUid) {
-		return (root, query, criteriaBuilder) -> studyUid == null ? criteriaBuilder.conjunction()
-				: criteriaBuilder.equal(root.get("studyUidOriginal"), studyUid);
+		return uidEqualsOrMissing("studyUidOriginal", studyUid);
 	}
 
 	/** Restricts to rows for the given original series UID. */
 	public static Specification<TransferSeriesStatusEntity> hasSerieUidOriginal(String serieUid) {
-		return (root, query, criteriaBuilder) -> serieUid == null ? criteriaBuilder.conjunction()
-				: criteriaBuilder.equal(root.get("serieUidOriginal"), serieUid);
+		return uidEqualsOrMissing("serieUidOriginal", serieUid);
+	}
+
+	/**
+	 * Matches {@code attribute = uid}. A blank {@code uid} also matches SQL {@code NULL}
+	 * so drill-down after null-safe {@code groupingBy} still finds those rows.
+	 */
+	private static Specification<TransferSeriesStatusEntity> uidEqualsOrMissing(String attribute, String uid) {
+		return (root, query, criteriaBuilder) -> {
+			if (uid == null) {
+				return criteriaBuilder.conjunction();
+			}
+			if (uid.isEmpty()) {
+				return criteriaBuilder.or(criteriaBuilder.isNull(root.get(attribute)),
+						criteriaBuilder.equal(root.get(attribute), ""));
+			}
+			return criteriaBuilder.equal(root.get(attribute), uid);
+		};
 	}
 
 }

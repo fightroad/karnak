@@ -88,6 +88,8 @@ class MonitoringAggregationServiceTest {
 
 	private UUID destMorphUuid;
 
+	private DestinationEntity destDeid;
+
 	@BeforeEach
 	void seed() {
 		ForwardNodeEntity node = ForwardNodeEntity.ofEmpty();
@@ -114,6 +116,7 @@ class MonitoringAggregationServiceTest {
 		forwardNodeId = node.getId();
 		forwardNode = node;
 		forwardNodeUuid = node.getUuid();
+		destDeid = deid;
 		destDeidUuid = deid.getUuid();
 		destMorphUuid = morph.getUuid();
 
@@ -202,6 +205,23 @@ class MonitoringAggregationServiceTest {
 		assertEquals(1, study.excluded());
 		assertEquals(DAY1, study.firstSeen());
 		assertEquals(DAY2, study.lastSeen());
+	}
+
+	@Test
+	void list_studies_tolerates_null_study_uid() {
+		persistStatus(destDeid, null, "1.2.1.9", "CT", 3, 0, 0, 0, 3, DAY2);
+
+		List<StudyActivityModel> result = service.searchStudies(criteria(noFilter()).withDestinationUuid(destDeidUuid));
+
+		assertEquals(2, result.size());
+		StudyActivityModel blank = result.stream().filter(s -> s.studyUid().isEmpty()).findFirst().orElseThrow();
+		assertEquals(3, blank.instances());
+		assertEquals(3, blank.excluded());
+
+		List<SeriesActivityModel> series = service
+			.searchSeries(criteria(noFilter()).withDestinationUuid(destDeidUuid).withStudyUid(""));
+		assertEquals(1, series.size());
+		assertEquals("1.2.1.9", series.getFirst().serieUid());
 	}
 
 	@Test

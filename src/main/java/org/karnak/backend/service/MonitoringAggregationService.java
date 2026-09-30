@@ -123,8 +123,9 @@ public class MonitoringAggregationService {
 	@Transactional(readOnly = true)
 	public List<StudyActivityModel> searchStudies(MonitoringSearchCriteria criteria) {
 		List<TransferSeriesStatusEntity> rows = seriesStatusRepo.findAll(destinationScopedFilter(criteria));
+		// groupingBy rejects null keys; blank UID when metadata was never captured.
 		Map<String, List<TransferSeriesStatusEntity>> byStudy = rows.stream()
-			.collect(Collectors.groupingBy(TransferSeriesStatusEntity::getStudyUidOriginal));
+			.collect(Collectors.groupingBy(row -> StringUtils.defaultString(row.getStudyUidOriginal())));
 
 		return byStudy.entrySet().stream().map(entry -> {
 			String studyUid = entry.getKey();
@@ -160,7 +161,7 @@ public class MonitoringAggregationService {
 	public List<SeriesActivityModel> searchSeries(MonitoringSearchCriteria criteria) {
 		List<TransferSeriesStatusEntity> rows = seriesStatusRepo.findAll(studyScopedFilter(criteria));
 		Map<String, List<TransferSeriesStatusEntity>> bySeries = rows.stream()
-			.collect(Collectors.groupingBy(TransferSeriesStatusEntity::getSerieUidOriginal));
+			.collect(Collectors.groupingBy(row -> StringUtils.defaultString(row.getSerieUidOriginal())));
 
 		return bySeries.entrySet().stream().map(entry -> {
 			String serieUid = entry.getKey();
@@ -203,7 +204,7 @@ public class MonitoringAggregationService {
 
 		Map<String, List<TransferSeriesReasonEntity>> byReason = seriesReasonRepo.findBySeriesStatusIdIn(seriesIds)
 			.stream()
-			.collect(Collectors.groupingBy(TransferSeriesReasonEntity::getReason));
+			.collect(Collectors.groupingBy(row -> StringUtils.defaultString(row.getReason())));
 
 		return byReason.entrySet().stream().map(entry -> {
 			String reason = entry.getKey();

@@ -146,7 +146,10 @@ public class MonitoringTreeGrid extends TreeGrid<MonitoringNode> {
 		};
 		String text = switch (node) {
 			case DestinationNode d -> d.displayName();
-			case StudyNode s -> s.studyUid() + (isBlank(s.description()) ? "" : " — " + s.description());
+			case StudyNode s -> {
+				String label = isBlank(s.studyUid()) ? "（无检查 UID）" : s.studyUid();
+				yield label + (isBlank(s.description()) ? "" : " — " + s.description());
+			}
 			case SeriesNode se -> se.serieUid() + (isBlank(se.modality()) ? "" : " [" + se.modality() + "]");
 			case ErrorNode e -> isBlank(e.reason()) ? "（无原因）" : e.reason();
 		};
