@@ -1,9 +1,8 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 rem Starts Karnak portable with the settings of run.cfg.
-rem On the first launch, the optional OCR service used by the automatic pixel
-rem de-identification is proposed for download (see OCR_* in run.cfg). Once Karnak
-rem is ready, the web portal opens in the default browser (KARNAK_OPEN_BROWSER).
+rem OCR is off by default (OCR_ENABLED in run.cfg). Once Karnak is ready,
+rem the web portal opens in the default browser (KARNAK_OPEN_BROWSER).
 
 rem Defaults
 set "CONFIG_FILE=run.cfg"
@@ -49,7 +48,7 @@ rem Validate environment
 if not exist "%KARNAK_BIN%" (echo ERROR: Karnak executable not found & pause & exit /b 1)
 
 rem Install (on request) and start the de-identification image service (optional)
-if not defined OCR_ENABLED set "OCR_ENABLED=true"
+if not defined OCR_ENABLED set "OCR_ENABLED=false"
 set "DEIDENT_NAME=%OCR_SERVICE_NAME%"
 if not defined DEIDENT_NAME set "DEIDENT_NAME=image-ocr-identifier"
 if /i "%OCR_ENABLED%"=="true" (
@@ -84,7 +83,7 @@ exit /b 0
 
 :ensure_deidentify
 if exist "%APP_DIR%%DEIDENT_NAME%\%DEIDENT_NAME%.exe" exit /b 0
-if not defined OCR_AUTO_INSTALL set "OCR_AUTO_INSTALL=ask"
+if not defined OCR_AUTO_INSTALL set "OCR_AUTO_INSTALL=never"
 if /i "%OCR_AUTO_INSTALL%"=="never" (
   echo [run.bat] OCR service not installed ^(OCR_AUTO_INSTALL=never^)
   exit /b 0

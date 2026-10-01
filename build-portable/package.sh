@@ -170,8 +170,15 @@ else
   RES="${curPath}/resources/$machine"
 fi
 
-# Set custom JDK path (>= JDK 11)
-export JAVA_HOME=$JDK_PATH_UNIX
+# Set custom JDK path (>= JDK 11). On Windows, normalize to a Unix path so spaces
+# in "Program Files" / "Portable Program" do not break later command expansion.
+if [ "$machine" = "windows" ] ; then
+  case "$JDK_PATH_UNIX" in
+    /*) ;;
+    *) JDK_PATH_UNIX=$(cygpath -u "$JDK_PATH_UNIX") ;;
+  esac
+fi
+export JAVA_HOME="$JDK_PATH_UNIX"
 
 echo "System: ${ARC_OS}"
 echo "JDK path: ${JDK_PATH_UNIX}"
@@ -197,8 +204,8 @@ else
   die "JAVA_HOME is not set and no 'jpackage' command could be found in your PATH. Specify a jdk path >=$REQUIRED_TEXT_VERSION."
 fi
 
-# Then, get the installed version
-INSTALLED_VERSION=$($JAVACMD -version 2>&1 | awk '/version [0-9]*/ {print $3;}')
+# Then, get the installed version (quote the command: JDK paths may contain spaces)
+INSTALLED_VERSION=$("$JAVACMD" -version 2>&1 | awk '/version [0-9]*/ {print $3;}')
 echo "Found java version $INSTALLED_VERSION"
 echo "Java command path: $JAVACMD"
 
@@ -278,7 +285,7 @@ if [ ! -d "$JDK_PATH_UNIX/jmods" ]; then
   die "The JDK at '$JDK_PATH_UNIX' has no 'jmods' directory (packaged modules) required by jpackage/jlink.\nUse a full JDK >= ${REQUIRED_TEXT_VERSION} that ships jmods. Temurin 24+ enables JEP 493 and\ndistributes the jmods separately: install the 'jdk+jmods' package, or download the jmods\narchive from the Adoptium API and extract it as '$JDK_PATH_UNIX/jmods'."
 fi
 
-$JPKGCMD --type app-image --input "$INPUT_DIR" --dest "$OUTPUT_PATH" --name "$NAME" \
+"$JPKGCMD" --type app-image --input "$INPUT_DIR" --dest "$OUTPUT_PATH" --name "$NAME" \
 --main-jar karnak-"${KARNAK_VERSION}".jar --main-class org.springframework.boot.loader.launch.JarLauncher \
 --module-path "$JDK_PATH_UNIX/jmods" --add-modules ALL-MODULE-PATH \
 --resource-dir "$RES" --app-version "$KARNAK_CLEAN_VERSION" \

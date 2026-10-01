@@ -4,9 +4,8 @@
 #   --config <file>          Config file to source (default: ./run.cfg)
 #   --help                   Show this help message
 #
-# On the first launch, the optional OCR service used by the automatic pixel
-# de-identification is proposed for download (see OCR_* in run.cfg). Once Karnak
-# is ready, the web portal opens in the default browser (KARNAK_OPEN_BROWSER).
+# OCR is off by default (OCR_ENABLED in run.cfg). Once Karnak is ready,
+# the web portal opens in the default browser (KARNAK_OPEN_BROWSER).
 
 set -euo pipefail
 
@@ -77,11 +76,11 @@ install_deidentify() {
 
 # Proposes to download the OCR service when it is enabled but not installed
 ensure_deidentify() {
-  [[ "${OCR_ENABLED:-true}" == "true" ]] || return 0
+  [[ "${OCR_ENABLED:-false}" == "true" ]] || return 0
   local name="${OCR_SERVICE_NAME:-image-ocr-identifier}"
   [[ -x "$APP_DIR/$name/$name" ]] && return 0
 
-  local mode="${OCR_AUTO_INSTALL:-ask}"
+  local mode="${OCR_AUTO_INSTALL:-never}"
   if [[ "$mode" == "never" ]]; then
     log "OCR service not installed (OCR_AUTO_INSTALL=never)"
     return 0
@@ -120,7 +119,7 @@ ensure_deidentify() {
 }
 
 start_deidentify() {
-  if [[ "${OCR_ENABLED:-true}" != "true" ]]; then
+  if [[ "${OCR_ENABLED:-false}" != "true" ]]; then
     log "De-identification image service disabled (OCR_ENABLED)"
     return
   fi

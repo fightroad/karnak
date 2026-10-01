@@ -112,15 +112,23 @@ Execute the maven command `mvn clean install -Pportable` in the root directory o
 
 Note: on Windows the bash.exe must be specified: `mvn clean install -Pportable -Dbash.executable=${env.LOCALAPPDATA}\Programs\Git\bin\bash.exe`
 
+On Windows you can also use the helper script (locates Git Bash, checks `jpackage`/`jmods`, and builds the app-image):
+
+```powershell
+.\build-portable\build-windows.ps1
+```
+
+Or double-click / run `build-portable\build-windows.bat`. Add `-RunTests` to run unit tests. The portable folder is written under `target\karnak-windows-...` (run `run.bat` inside it).
+
 # Run Karnak
 
 ## Run with docker
 To configure and run Karnak with docker compose (Karnak + Postgres + Redis), follow the [installation guide](https://weasis.org/karnak-documentation/en/installation/). This is the recommended setup for production.
 
 ## Run portable package
-After building the portable package (see [Build for portable package](#build-for-portable-package)), go into the generated folder `build-portable/target/karnak-<os>-jdk<version>-<karnak-version>` (for example `karnak-linux-x86-64-jdk25-...`) and launch `run.bat` (Windows) or `./run.sh` from a terminal (Linux or macOS). On macOS there is no double-clickable launcher: Gatekeeper refuses to open a script downloaded from the Internet, so open a Terminal in the folder and run `./run.sh`.
+After building the portable package (see [Build for portable package](#build-for-portable-package)), go into the generated folder `target/karnak-<os>-jdk<version>-<karnak-version>` (for example `karnak-windows-x86-64-jdk25-...`) and launch `run.bat` (Windows) or `./run.sh` from a terminal (Linux or macOS). On macOS there is no double-clickable launcher: Gatekeeper refuses to open a script downloaded from the Internet, so open a Terminal in the folder and run `./run.sh`.
 
-Settings such as the web port and the DICOM listener can be adjusted in the `run.cfg` file located next to the executable. On the first launch the script proposes to download the optional OCR service used by the automatic pixel de-identification (release pinned by `OCR_VERSION` in `run.cfg`), then opens the web portal in the default browser (`KARNAK_OPEN_BROWSER=false` disables this).
+Settings such as the web port and the DICOM listener can be adjusted in the `run.cfg` file located next to the executable. The optional OCR service used by automatic pixel de-identification is **off by default** (`OCR_ENABLED=false`); set it to `true` when needed. The launcher opens the web portal in the default browser (`KARNAK_OPEN_BROWSER=false` disables this).
 
 Then open <http://localhost:8081> and log in (see [Accessing Karnak](#accessing-karnak)).
 
