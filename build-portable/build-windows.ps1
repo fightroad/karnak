@@ -143,12 +143,34 @@ if (-not $RunTests) {
 	$mvnArgs += "-DskipTests"
 }
 
-# If a previous portable build left Karnak.exe running, clean cannot delete it.
-Get-Process -Name "Karnak" -ErrorAction SilentlyContinue | ForEach-Object {
-	Write-Host "Stopping running Karnak.exe (PID $($_.Id)) so clean can delete the old package..."
-	Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+# Previous portable runs lock Karnak.exe / run-out.txt and break "mvn clean".
+function Clear-PortableOutput {
+	Get-Process -Name "Karnak" -ErrorAction SilentlyContinue | ForEach-Object {
+		Write-Host "Stopping Karnak.exe (PID $($_.Id))..."
+		Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+	}
+	Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object {
+		$_.CommandLine -and ($_.CommandLine -match 'karnak-windows|Karnak\\Karnak\.exe')
+	} | ForEach-Object {
+		Write-Host "Stopping PID $($_.ProcessId) ($($_.Name))..."
+		Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+	}
+	Start-Sleep -Seconds 1
+	$target = Join-Path $Root "target"
+	Get-ChildItem -LiteralPath $target -Directory -Filter "karnak-windows-*" -ErrorAction SilentlyContinue | ForEach-Object {
+		$old = $_.FullName
+		$bak = Join-Path $target ("_old_pkg_" + (Get-Date -Format "yyyyMMddHHmmss") + "_" + $_.Name)
+		Write-Host "Moving locked package aside: $($_.Name)"
+		try {
+			Rename-Item -LiteralPath $old -NewName (Split-Path $bak -Leaf) -ErrorAction Stop
+			Remove-Item -LiteralPath $bak -Recurse -Force -ErrorAction SilentlyContinue
+		} catch {
+			Write-Host "Warning: could not remove '$old' ($_). Close Karnak/Explorer windows using that folder and retry."
+		}
+	}
 }
-Start-Sleep -Milliseconds 500
+
+Clear-PortableOutput
 
 Write-Host ""
 Write-Host "Running: mvn $($mvnArgs -join ' ')"
@@ -158,7 +180,7 @@ $env:JAVA_HOME = $jdkHome
 & mvn @mvnArgs
 if ($LASTEXITCODE -ne 0) {
 	Write-Host ""
-	Write-Host "Hint: if clean failed deleting Karnak.exe, close any running portable Karnak and retry."
+	Write-Host "Hint: close any running portable Karnak (and folders under target\karnak-windows-*), then retry."
 	throw "Maven portable build failed with exit code $LASTEXITCODE"
 }
 

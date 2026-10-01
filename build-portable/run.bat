@@ -26,18 +26,12 @@ set "KARNAK_BIN=%APP_BIN%\Karnak.exe"
 rem Generate or load database password
 call :generate_db_password
 
-rem Load configuration file
+rem Load configuration file (KEY=VALUE lines only; comments may contain "|" which
+rem breaks "echo | findstr", so filter with findstr against the file itself)
 if exist "%CONFIG_FILE%" (
     echo [run.bat] Loading configuration from '%CONFIG_FILE%'
-    for /f "usebackq tokens=* delims=" %%a in ("%CONFIG_FILE%") do (
-        set "line=%%a"
-        rem Skip empty lines and comments
-        if defined line (
-            echo !line! | findstr /r "^[A-Z_][A-Z0-9_]*=" >nul
-            if !errorlevel! equ 0 (
-                set "%%a"
-            )
-        )
+    for /f "usebackq tokens=* delims=" %%a in (`findstr /r /c:"^[A-Z_][A-Z0-9_]*=" "%CONFIG_FILE%"`) do (
+        set "%%a"
     )
 ) else (
     echo [run.bat] No configuration file found at '%CONFIG_FILE%', using defaults
@@ -61,6 +55,12 @@ if /i "%OCR_ENABLED%"=="true" (
 
 rem Start Karnak
 echo [run.bat] Starting Karnak from '%KARNAK_BIN%'
+if not exist "%APP_BIN%\app\Karnak.cfg" (
+  echo ERROR: Portable package is incomplete ^(missing Karnak\app\Karnak.cfg^).
+  echo Rebuild with build-portable\build-windows.bat and try again.
+  pause
+  exit /b 1
+)
 start "Karnak" "%KARNAK_BIN%"
 
 echo.
@@ -68,10 +68,11 @@ echo Karnak is starting. The web portal is available at http://localhost:%KARNAK
 echo (default login: admin / karnak). Close the Karnak window to stop it.
 echo.
 
-rem Open the web portal in the default browser once Karnak answers on its port
+rem Open the web portal in the default browser once Karnak answers on its port.
+rem -WindowStyle Hidden avoids a blank PowerShell console while waiting.
 if not defined KARNAK_OPEN_BROWSER set "KARNAK_OPEN_BROWSER=true"
 if /i "%KARNAK_OPEN_BROWSER%"=="true" (
-  start "" /min powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  start "" /b powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command ^
     "$url = 'http://localhost:%KARNAK_WEB_PORT%';" ^
     "for ($i = 0; $i -lt 120; $i++) {" ^
     "  try { Invoke-WebRequest -UseBasicParsing -Uri $url -TimeoutSec 2 | Out-Null; Start-Process $url; break }" ^
@@ -79,6 +80,8 @@ if /i "%KARNAK_OPEN_BROWSER%"=="true" (
     "}"
 )
 
+echo This launcher window can be closed; Karnak keeps running in its own window.
+pause
 exit /b 0
 
 :ensure_deidentify
@@ -133,7 +136,7 @@ set "PWD_FILE=%APP_DIR%.db_pwd"
 if not exist "%PWD_FILE%" (
     echo [run.bat] Generating database password...
     rem Generate random password using PowerShell
-    powershell -NoProfile -Command ^
+    powershell -NoProfile -WindowStyle Hidden -Command ^
       "$path = '%PWD_FILE%';" ^
       "$bytes = New-Object byte[] 32;" ^
       "(New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes);" ^
